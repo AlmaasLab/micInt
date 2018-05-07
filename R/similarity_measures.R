@@ -10,9 +10,19 @@ score_names=function(){
        mutual_information='mutual_information')
 }
 #*************************************************************
-# Similarity measures passed as functions to ccrepe and
-# output_ccrepe_data
+
 #*************************************************************
+#' @title similarity_measures
+#'
+#' @description
+#' Similarity measures passed as functions to ccrepe and
+#' output_ccrepe_data
+#'
+#' @import vegan
+#' @import ccrepe
+#' @import infotheo
+#' @importFrom stats cor
+#' @export
 similarity_measures=function(subset=NULL){
 measures=list()
 score_names=score_names()
@@ -39,7 +49,6 @@ measures$kendall$string='kendall'
 #*************************************************************
 # We must transform the disimilarities into similarities
 bray_curtis_cor=function(x,y=NULL){
-  library(vegan)
   if (is.null(y)){
     ones=rep(1,dim(x)[2])
     res=ones%*%t(ones)-as.matrix(vegdist(t(x),method='bray',upper=TRUE))
@@ -57,7 +66,6 @@ measures$bray_curtis$string='bray_curtis'
 # Jaccard index
 #*************************************************************
 jaccard_cor=function(x,y=NULL){
-  library(vegan)
   if (is.null(y)){
     ones=rep(1,dim(x)[2])
     res=ones%*%t(ones)-as.matrix(vegdist(t(x),method='jaccard',binary = TRUE,upper=TRUE))
@@ -73,7 +81,6 @@ measures$jaccard$string='jaccard_index'
 # Generalized Jaccard
 #*************************************************************
 gen_jaccard_cor=function(x,y=NULL){
-  library(vegan)
   if (is.null(y)){
     ones=rep(1,dim(x)[2])
     res=ones%*%t(ones)-as.matrix(designdist(t(x),method='1-J/(A+B-J)',terms='minimum'))
@@ -89,7 +96,6 @@ measures$gen_jaccard$string='generalized_jaccard_index'
 # Mutual information
 #*************************************************************
 mutual_information=function(x,y=NULL){
-  library(infotheo)
   if(is.null(y)){
     disc=discretize(x)
     res=mutinformation(disc)
@@ -105,7 +111,6 @@ measures$mutual_information$string='mutual_information'
 # nc.score
 #******************************************************************************
 measures$nc.score$FUN=function(x,y=NULL){
-                                                library(ccrepe)
                                                 nc.score(x,y)
 }
 measures$nc.score$string='nc_score'
@@ -116,9 +121,9 @@ if(!is.null(subset)){
 return(measures)
 }
 
-#*************************************************************
-# Creates ccrepe jobs out of sim.score functions
-#*************************************************************
+#' @title create_ccrepe_jobs
+#'
+#' Creates ccrepe jobs out of sim.score functions
 create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_defaultargs=NULL,prefix='significant_interactions'
                             ,postfix='.csv')
 {
@@ -140,6 +145,21 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
 # at certain magnitude to the data before calculating
 # the similarity score
 #*************************************************************
+#' @title Noisify
+#'
+#' @description
+#' Creates similarity measure functions which adds random noise
+#' at certain magnitude to the data before calculating
+#' the similarity score
+#'
+#' @param sim.scores The list of similarity measures to nosify
+#'
+#' @return A list of \code{sim.score} functions corresponding to the input where noise have been
+#' added
+#'
+#' @importFrom stats rnorm runif
+#'
+#' @export
 noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none','uniform','normal')){
   res=list()
   if('none' %in% noise){
@@ -155,10 +175,10 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
                                string=paste0(sim.score$string,'_uniform')
                                )
     )
-                               
+
     names(uniform_functions)=sapply(names(sim.scores),
                                     function(name) paste0(name,'_uniform'))
-    res=c(res,uniform_functions)                      
+    res=c(res,uniform_functions)
                              }
   if('normal' %in% noise){
     noiseFUN=function(n){
@@ -176,7 +196,7 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
   }
   return(res)
   }
-  
+
 #*************************************************************
 # Helper function for nosify, creates the acutual noised
 # functions

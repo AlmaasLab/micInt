@@ -3,12 +3,18 @@
 # The output is by default a cvs file displaying the different significant
 # OTU correlations, their correlations, p-value, q-value and taxonomy.
 #****************************************************************************
+#' ccrepe_analysis
+#'
+#' @description
+#' A wrapper around the \code{ccrepe} function
+#'
+#' @import ccrepe
+#' @import tictoc
+#' @import parallel
+#' @importFrom utils modifyList
+#' @export
 ccrepe_analysis=function(ccrepe_job,
                          parallel=TRUE,verbose=TRUE){
-library(tictoc)
-library(ccrepe)
-library(methods)
-library(parallel)
 if(parallel){
 n_cores=detectCores()
 cluster=makeCluster(n_cores)
@@ -17,7 +23,6 @@ clusterExport(cluster,c('ccrepe'))
 else{
     n_cores=1
 }
-source('similarity_measures.R')
 ccrepe_res=list()
 start=Sys.time()
 # ccrepe_res=mclapply(ccrepe_job,

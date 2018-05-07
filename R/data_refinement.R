@@ -1,7 +1,8 @@
 #*********************************************************
-# Removes metadata from OTU table and cuts off the least abundant
-# species, defined by the cutoff parameter
 # ********************************************************
+#' @title remove_metadata
+#' @description
+#' Removes metadata columns from dataset
 remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   options(stringsAsFactors = FALSE)
   metadata=which(metadataCols == names(OTU_table))
@@ -10,8 +11,13 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   colnames(refined_table)=OTU_table$`OTU Id`
   return(refined_table)
 }
+#' @title cut_abundances
+#'
+#' @description
+#' Removes metadata columns from dataset
+#'
+#' @import matrixStats
 cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize=TRUE){
-  library('matrixStats')
   m_refined_table=as.matrix(refined_table)
   abundances=switch(type,
          mean=colMeans(refined_table),
@@ -27,6 +33,11 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
   }
   return(refined_table)
 }
+#' @title refine_data
+#' @description
+#' Removes metadata from OTU table and cuts off the least abundant
+#' species, defined by the cutoff parameter
+#' @export
 refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE)
   {
   refined_table=remove_metadata(OTU_table)
@@ -40,9 +51,13 @@ renormalize=function(table)
   table[,]=res
   return(table)
 }
-#*******************************************************************************************************************
-# Takes input from ccrepe and transforms it into a convenient table
-#********************************************************************************************************************
+#' @title output_ccrepe_data
+#' @description
+#' Takes input from ccrepe and transforms it into a convenient table
+#'
+#' @importFrom utils modifyList write.csv write.csv2
+#'
+#' @export
 output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,output.file=FALSE,filename=NULL,
                    return.value=TRUE,csv_option='2',removeDuplicates=TRUE){
                     options(stringsAsFactors = FALSE)

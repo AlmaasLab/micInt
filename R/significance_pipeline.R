@@ -1,11 +1,13 @@
-source('ccrepe_analysis.R')
-source('data_refinement.R')
-source('OTU_stats.R')
-source('outputargs.R')
-source('similarity_measures.R')
+#' @title runAnalysis
+#'
+#' @description
+#' Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results
+#'
+#'
+#' @import stringr
+#' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     returnVariables=NULL,subset=NULL){
-library(stringr)
 prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
                                                           scientific = TRUE),sep = '')
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
@@ -38,6 +40,12 @@ else{
   return(mget(returnVariables))
 }
 }
+#' @title significanceDiganostics
+#'
+#' Makes interaction density plots and abundance product plots for significant interations
+#'
+#' @importFrom graphics par plot
+#' @export
 significanceDiganostics=function(similarity_measures_significance,refined_table,OTU_table,
                                  type='q',score.name='pearson'){
 OTU_stat=OTU_stats(OTU_table)
@@ -87,7 +95,10 @@ abundance_product=lapply(similarity_measures_significance,
   )
 }
 }
-# Finds the Jaccard index of number of shared interactions between the similarity measures
+
+#' Finds the Jaccard index of number of shared interactions between the similarity measures
+#'
+#' @export
 ratio_shared_interactions=function(similarity_measures_significance){
   to_include=unlist(lapply(similarity_measures_significance,function(x) nrow(x)!= 0))
   OTU_pairs=lapply(similarity_measures_significance[to_include],extract_OTUs)

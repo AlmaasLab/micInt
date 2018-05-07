@@ -2,14 +2,12 @@ Package: microbialInteractions
 Type: Package
 Title: Find microbial interactions
 Version: 1.0
-Imports: ccrepe, vegan, tictoc,ggplot2,ggdendro,infotheo, tictoc,
- stringr, magrittr, ggfortify, readxl, matrixStats, kableExtra, cluster, ggrepel
+Imports: ccrepe, vegan, tictoc,ggplot2,ggdendro,infotheo, tictoc, stringr, magrittr, ggfortify, readxl, matrixStats, kableExtra, cluster, ggrepel
 Date: 2018-04-23
 Author: Jakob Peder Pettersen
 Maintainer: Jakob Peder Pettersen <jakobpeder.pettersen@gmail.com>
-Description: This packages utilizes different similarity measures and bootstrapping-
-permutations to find singificant correlations between different OTUs in a
-microbiome data set.
+Description: This packages utilizes different similarity measures and bootstrapping-permutations to find singificant correlations between different OTUs in a microbiome data set.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.0.1
