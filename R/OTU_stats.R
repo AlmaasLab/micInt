@@ -1,6 +1,5 @@
 #' @import matrixStats
 OTU_stats=function(OTU_table){
-source('data_refinement.R')
 ID=OTU_table$`OTU Id`
 refined_data=as.matrix(remove_metadata(OTU_table))
 meanAbundance=colMeans(refined_data)

@@ -25,7 +25,7 @@ ccrepe_analysis=function(ccrepe_job,
 if(parallel){
 n_cores=detectCores()
 cluster=makeCluster(n_cores)
-clusterExport(cluster,c('ccrepe'))
+clusterEvalQ(cluster,require(ccrepe))
 }
 else{
     n_cores=1
