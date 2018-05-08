@@ -6,6 +6,13 @@
 \usage{
 ccrepe_analysis(ccrepe_job, parallel = TRUE, verbose = TRUE)
 }
+\arguments{
+\item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}}
+
+\item{parallel}{Should the jobs be run in parallel?}
+
+\item{verbose}{Should the function display how much time it spent?}
+}
 \description{
-A wrapper around the \code{ccrepe} function
+A wrapper around the \code{ccrepe} function, provides parallel analysis
 }

@@ -22,7 +22,7 @@ if(!is.null(subset))
   }
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
 # Removes the nc.score jobs as the tend to be unreliable on Cruncher
-ccrepe_job=ccrepe_job[!str_detect(names(ccrepe_job),'nc.score')]
+# ccrepe_job=ccrepe_job[!str_detect(names(ccrepe_job),'nc.score')]
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
 outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=FALSE,
                           threshold.value=q_crit,

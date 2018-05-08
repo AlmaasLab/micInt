@@ -3,10 +3,17 @@
 # The output is by default a cvs file displaying the different significant
 # OTU correlations, their correlations, p-value, q-value and taxonomy.
 #****************************************************************************
+#' @title
 #' ccrepe_analysis
 #'
 #' @description
-#' A wrapper around the \code{ccrepe} function
+#' A wrapper around the \code{ccrepe} function, provides parallel analysis
+#'
+#' @param ccrepe_job A list of jobs to be passed to \code{ccrepe}
+#'
+#' @param parallel Should the jobs be run in parallel?
+#'
+#' @param verbose Should the function display how much time it spent?
 #'
 #' @import ccrepe
 #' @import tictoc
