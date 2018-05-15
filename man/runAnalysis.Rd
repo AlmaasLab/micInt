@@ -5,7 +5,7 @@
 \title{runAnalysis}
 \usage{
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
-  parallel = TRUE, returnVariables = NULL, subset = NULL,
+  parallel = TRUE, returnVariables = NULL, subset = NULL, file = FALSE,
   magnitude_factor = 10)
 }
 \arguments{

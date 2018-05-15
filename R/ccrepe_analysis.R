@@ -65,7 +65,7 @@ stop=Sys.time()
 if(verbose){
   print(toc.outmsg(start,stop,'Time to execute the ccrepe analysis'))
 }
-for (i in 1:length(similarity_measures)){
+for (i in 1:length(ccrepe_job)){
   ccrepe_res[[i]]=modifyList(ccrepe_res[[i]],ccrepe_job[[i]]$output_args)
 }
 return(ccrepe_res)

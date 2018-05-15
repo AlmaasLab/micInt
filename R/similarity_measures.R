@@ -132,7 +132,7 @@ euclidean_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$euclidean$FUN=mutual_information
+measures$euclidean$FUN=euclidean_similarity
 measures$euclidean$string='squared_euclidean_similarity'
 
 #*******************************************************************************
@@ -148,7 +148,7 @@ cosine_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$cosine$FUN=mutual_information
+measures$cosine$FUN=cosine_similarity
 measures$cosine$string='cosine_similarity'
 
 score_names=lapply(measures,function(x)x$string)

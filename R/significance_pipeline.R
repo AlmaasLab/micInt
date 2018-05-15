@@ -11,7 +11,7 @@
 #' @import stringr
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL,magnitude_factor=10){
+                    returnVariables=NULL,subset=NULL,file=FALSE,magnitude_factor=10){
 prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
                                                           scientific = TRUE),sep = '')
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
@@ -22,13 +22,12 @@ ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores =noisify(magnitude =
                                prefix=prefix)
 if(!is.null(subset))
 {ccrepe_job=ccrepe_job[subset]
-
   }
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
 # Removes the nc.score jobs as the tend to be unreliable on Cruncher
 # ccrepe_job=ccrepe_job[!str_detect(names(ccrepe_job),'nc.score')]
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
-outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=FALSE,
+outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
