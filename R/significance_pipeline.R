@@ -3,17 +3,21 @@
 #' @description
 #' Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results
 #'
+#' @param OTU_table The raw OTU table to be treated
+#'
+#' @param abundance_cutoff The mean abundance cutoff for the OTUs
+#'
 #'
 #' @import stringr
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL){
+                    returnVariables=NULL,subset=NULL,magnitude_factor=10){
 prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
                                                           scientific = TRUE),sep = '')
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
-magnitude=10*min_dataset
+magnitude=magnitude_factor*min_dataset
 ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores =noisify(magnitude = magnitude),
                                prefix=prefix)
 if(!is.null(subset))

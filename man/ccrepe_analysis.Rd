@@ -13,6 +13,13 @@ ccrepe_analysis(ccrepe_job, parallel = TRUE, verbose = TRUE)
 
 \item{verbose}{Should the function display how much time it spent?}
 }
+\value{
+A list of the results of the various jobs.
+Each element of this list containings the ccrepe results in addition to the outputargs passed as the jobs
+}
 \description{
 A wrapper around the \code{ccrepe} function, provides parallel analysis
+}
+\seealso{
+\link{ccrepe}
 }

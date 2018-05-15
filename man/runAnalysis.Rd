@@ -5,7 +5,13 @@
 \title{runAnalysis}
 \usage{
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
-  parallel = TRUE, returnVariables = NULL, subset = NULL)
+  parallel = TRUE, returnVariables = NULL, subset = NULL,
+  magnitude_factor = 10)
+}
+\arguments{
+\item{OTU_table}{The raw OTU table to be treated}
+
+\item{abundance_cutoff}{The mean abundance cutoff for the OTUs}
 }
 \description{
 Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results

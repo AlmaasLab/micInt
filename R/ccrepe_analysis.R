@@ -15,6 +15,13 @@
 #'
 #' @param verbose Should the function display how much time it spent?
 #'
+#' @return  A list of the results of the various jobs.
+#' Each element of this list containings the ccrepe results in addition to the outputargs passed as the jobs
+#'
+#' @seealso
+#'
+#' \link{ccrepe}
+#'
 #' @import ccrepe
 #' @import tictoc
 #' @import parallel

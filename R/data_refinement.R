@@ -55,6 +55,8 @@ renormalize=function(table)
 #' @description
 #' Takes input from ccrepe and transforms it into a convenient table
 #'
+#' @param data The results from ccrepe
+#'
 #' @importFrom utils modifyList write.csv write.csv2
 #'
 #' @export

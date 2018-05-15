@@ -6,6 +6,13 @@
 \usage{
 similarity_measures(subset = NULL)
 }
+\arguments{
+\item{subset}{The subset of the similarity measures to be returned. \
+By default, all similarity measures are returned}
+}
+\value{
+A list of the similarity measures with the function ifself (\code{FUN}), and its human reable name (\code{string})
+}
 \description{
 Similarity measures passed as functions to ccrepe and
 output_ccrepe_data

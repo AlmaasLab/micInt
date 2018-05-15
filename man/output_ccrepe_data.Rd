@@ -8,6 +8,9 @@ output_ccrepe_data(data, OTU_table = NULL, threshold.type = "q",
   threshold.value = 0.05, output.file = FALSE, filename = NULL,
   return.value = TRUE, csv_option = "2", removeDuplicates = TRUE)
 }
+\arguments{
+\item{data}{The results from ccrepe}
+}
 \description{
 Takes input from ccrepe and transforms it into a convenient table
 }

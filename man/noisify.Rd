@@ -9,6 +9,16 @@ noisify(sim.scores = similarity_measures(), magnitude = 1e-05,
 }
 \arguments{
 \item{sim.scores}{The list of similarity measures to nosify}
+
+\item{magnitude}{The magnitude of the noise to add. This is: The standard deviation for normal noise and the
+radius for the interval for uniform noise}
+
+\item{noise}{The type of noise to add.
+\code{'none'} just returns the similarity measure without doing anything.
+\code{'uniform'} adds uniformly distributed noise
+\code{'normal'} adds normaly distributed  noise
+Any combination of the options can be passes as a character vector.
+In this case, sim.score functions are returned for the selected types of noise.}
 }
 \value{
 A list of \code{sim.score} functions corresponding to the input where noise have been

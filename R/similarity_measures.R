@@ -18,6 +18,11 @@ score_names=function(){
 #' Similarity measures passed as functions to ccrepe and
 #' output_ccrepe_data
 #'
+#' @param subset The subset of the similarity measures to be returned. \
+#' By default, all similarity measures are returned
+#'
+#' @return A list of the similarity measures with the function ifself (\code{FUN}), and its human reable name (\code{string})
+#'
 #' @import vegan
 #' @import ccrepe
 #' @import infotheo
@@ -114,6 +119,38 @@ measures$nc.score$FUN=function(x,y=NULL){
                                                 nc.score(x,y)
 }
 measures$nc.score$string='nc_score'
+#*******************************************************************************
+# Euclidian distance
+#******************************************************************************
+euclidean_similarity=function(x,y=NULL){
+  if (is.null(y)){
+    ones=rep(1,dim(x)[2])
+    res=ones%*%t(ones)-as.matrix(designdist(t(x),method='(A+B-2*J)/(1+A+B-2*J)',terms='quadratic'))
+  }
+  else{
+    res=euclidean_similarity(cbind(x,y))[1,2]
+  }
+  return(res)
+}
+measures$euclidean$FUN=mutual_information
+measures$euclidean$string='squared_euclidean_similarity'
+
+#*******************************************************************************
+# Cosine distance
+#******************************************************************************
+cosine_similarity=function(x,y=NULL){
+  if (is.null(y)){
+    ones=rep(1,dim(x)[2])
+    res=as.matrix(designdist(t(x),method='J/sqrt(A*B)',terms='quadratic'))
+  }
+  else{
+    res=cosine_similarity(cbind(x,y))[1,2]
+  }
+  return(res)
+}
+measures$cosine$FUN=mutual_information
+measures$cosine$string='cosine_similarity'
+
 score_names=lapply(measures,function(x)x$string)
 if(!is.null(subset)){
   measures=measures[score_names %in% subset]
@@ -154,6 +191,16 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
 #'
 #' @param sim.scores The list of similarity measures to nosify
 #'
+#' @param magnitude The magnitude of the noise to add. This is: The standard deviation for normal noise and the
+#' radius for the interval for uniform noise
+#'
+#' @param noise The type of noise to add.
+#' \code{'none'} just returns the similarity measure without doing anything.
+#' \code{'uniform'} adds uniformly distributed noise
+#' \code{'normal'} adds normaly distributed  noise
+#' Any combination of the options can be passes as a character vector.
+#' In this case, sim.score functions are returned for the selected types of noise.
+#'
 #' @return A list of \code{sim.score} functions corresponding to the input where noise have been
 #' added
 #'
@@ -167,7 +214,7 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
   }
   if('uniform' %in% noise){
     noiseFUN=function(n){
-      runif(n,min=-magnitude,max=mangnitude)
+      runif(n,min=-magnitude,max=magnitude)
     }
     uniform_functions=lapply(sim.scores,
                              function(sim.score) list(
