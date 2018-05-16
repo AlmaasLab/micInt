@@ -1,5 +1,3 @@
-#*********************************************************
-# ********************************************************
 #' @title remove_metadata
 #' @description
 #' Removes metadata columns from dataset

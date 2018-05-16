@@ -17,6 +17,7 @@
 #' \item \code{min_dataset}: The smallest non-zero entity in the refined table
 #' }
 #' In addition, all paramerters for this function are available
+#' If \code{NULL}, all variables in the function will be returned
 #'
 #' @param magnitude_factor When making noisified functions, the magnitude of the noise
 #' will be this number multiplied with \code{min_dataset}
@@ -48,10 +49,7 @@ similarity_measures_significance=lapply(outputargs,
        function(x)do.call(microbialInteractions::output_ccrepe_data,
                           x))
 if(is.null(returnVariables)){
-save(OTU_table,abundance_cutoff,magnitude,min_dataset,q_crit,
-            similarity_measures_significance,refined_table,
-     file=paste(prefix,'.RData',sep='')
-)
+  return(mget(ls()))
 }
 else{
   return(mget(returnVariables))

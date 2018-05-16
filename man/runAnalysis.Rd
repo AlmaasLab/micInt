@@ -22,7 +22,8 @@ The \code{interactions_table} of significant interactions
 \item \code{refined_table}: The processed  OTU table
 \item \code{min_dataset}: The smallest non-zero entity in the refined table
 }
-In addition, all paramerters for this function are available}
+In addition, all paramerters for this function are available
+If \code{NULL}, all variables in the function will be returned}
 
 \item{magnitude_factor}{When making noisified functions, the magnitude of the noise
 will be this number multiplied with \code{min_dataset}}
