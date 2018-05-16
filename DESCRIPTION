@@ -1,8 +1,8 @@
 Package: microbialInteractions
 Type: Package
 Title: Find microbial interactions
-Version: 0.0.2
-Imports: ccrepe,infotheo, vegan, tictoc, parallel, infotheo, stringr, matrixStats, graphics, utils
+Version: 0.0.3
+Imports: ccrepe,infotheo, vegan, tictoc, parallel, stringr, matrixStats, graphics, utils
 Suggests: readxl, ggrepel, ggplot2, ggdendro, magrittr, kableExtra, cluster, ggfortify
 Date: 2018-04-23
 Author: Jakob Peder Pettersen

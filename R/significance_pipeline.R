@@ -7,6 +7,20 @@
 #'
 #' @param abundance_cutoff The mean abundance cutoff for the OTUs
 #'
+#' @param parallel Should the analysis be run in parallel?
+#'
+#' @param returnVariables Which variables should the function return (character vector)?
+#' Available options are: \itemize{
+#' \item \code{similarity_measures_significance}:
+#' The \code{interactions_table} of significant interactions
+#' \item \code{refined_table}: The processed  OTU table
+#' \item \code{min_dataset}: The smallest non-zero entity in the refined table
+#' }
+#' In addition, all paramerters for this function are available
+#'
+#' @param magnitude_factor When making noisified functions, the magnitude of the noise
+#' will be this number multiplied with \code{min_dataset}
+#'
 #'
 #' @import stringr
 #' @export
@@ -31,7 +45,7 @@ outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
-       function(x)do.call(output_ccrepe_data,
+       function(x)do.call(microbialInteractions::output_ccrepe_data,
                           x))
 if(is.null(returnVariables)){
 save(OTU_table,abundance_cutoff,magnitude,min_dataset,q_crit,
@@ -45,7 +59,11 @@ else{
 }
 #' @title significanceDiganostics
 #'
-#' Makes interaction density plots and abundance product plots for significant interations
+#' @description
+#' Makes interaction density plots and abundance
+#' product plots for significant interations
+#'
+#' @param similarity_measures_significance A list over interaction tables, see \link{output_ccrepe_data}.
 #'
 #' @importFrom graphics par plot
 #' @export

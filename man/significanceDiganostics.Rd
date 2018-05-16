@@ -2,10 +2,15 @@
 % Please edit documentation in R/significance_pipeline.R
 \name{significanceDiganostics}
 \alias{significanceDiganostics}
-\title{significanceDiganostics
-
-Makes interaction density plots and abundance product plots for significant interations}
+\title{significanceDiganostics}
 \usage{
 significanceDiganostics(similarity_measures_significance, refined_table,
   OTU_table, type = "q", score.name = "pearson")
+}
+\arguments{
+\item{similarity_measures_significance}{A list over interaction tables, see \link{output_ccrepe_data}.}
+}
+\description{
+Makes interaction density plots and abundance
+product plots for significant interations
 }

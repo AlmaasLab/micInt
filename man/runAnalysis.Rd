@@ -12,6 +12,20 @@ runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
 \item{OTU_table}{The raw OTU table to be treated}
 
 \item{abundance_cutoff}{The mean abundance cutoff for the OTUs}
+
+\item{parallel}{Should the analysis be run in parallel?}
+
+\item{returnVariables}{Which variables should the function return (character vector)?
+Available options are: \itemize{
+\item \code{similarity_measures_significance}:
+The \code{interactions_table} of significant interactions
+\item \code{refined_table}: The processed  OTU table
+\item \code{min_dataset}: The smallest non-zero entity in the refined table
+}
+In addition, all paramerters for this function are available}
+
+\item{magnitude_factor}{When making noisified functions, the magnitude of the noise
+will be this number multiplied with \code{min_dataset}}
 }
 \description{
 Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results

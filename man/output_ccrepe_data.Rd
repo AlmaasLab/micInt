@@ -10,6 +10,27 @@ output_ccrepe_data(data, OTU_table = NULL, threshold.type = "q",
 }
 \arguments{
 \item{data}{The results from ccrepe}
+
+\item{OTU_table}{The original OTU table}
+
+\item{threshold.type}{The type of threshold to be used \code{'q'} denotes q-value,
+while \code{'p'} denotes p-value}
+
+\item{threshold.value}{The critical significance value for including an interaction}
+
+\item{output.file}{Should the function write the date to a csv-file?}
+
+\item{filename}{What is the name of the output file (including path). Ignored if \code{output.file} is \code{TRUE}}
+
+\item{return.value}{Should the function return the interaction table as a return value?}
+
+\item{csv_option}{If assigned the value \code{'2'}, the function will use the \code{write.csv2} function which print
+the numbers if comma as decimal delimer and semicolon as the delimer between numbers.
+Else, the decimal delimer is point and comma the delimer between numbers.}
+
+\item{removeDuplicates}{If \code{TRUE}, the function ensures that no OTU pair is listed twice in the results.
+Else, two interacting OTUs may show up twice in reverse order
+(a pair where OTU A is listed as \code{OTU_1} and OTU B is listed was \code{OTU_2} and vice versa for the other pair)}
 }
 \description{
 Takes input from ccrepe and transforms it into a convenient table
