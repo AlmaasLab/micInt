@@ -5,7 +5,7 @@
 \title{refine_data}
 \usage{
 refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
-  renormalize = TRUE)
+  renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
 }
 \description{
 Removes metadata from OTU table and cuts off the least abundant

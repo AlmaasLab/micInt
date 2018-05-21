@@ -1,6 +1,9 @@
 #' @title remove_metadata
 #' @description
 #' Removes metadata columns from dataset
+#' @param OTU_table The raw OTU table
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table
 remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   options(stringsAsFactors = FALSE)
   metadata=which(metadataCols == names(OTU_table))
@@ -9,6 +12,7 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   colnames(refined_table)=OTU_table$`OTU Id`
   return(refined_table)
 }
+
 #' @title cut_abundances
 #'
 #' @description
@@ -36,9 +40,9 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
 #' @export
-refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE)
+refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE,metadataCols=c('OTU Id','taxonomy'))
   {
-  refined_table=remove_metadata(OTU_table)
+  refined_table=remove_metadata(OTU_table,metadataCols = meatadataCols)
   # Cuts away the least abundant species
   cut_abundances(refined_table,abundance_cutoff,type=cutoff_type,renormalize=renormalize)
 }

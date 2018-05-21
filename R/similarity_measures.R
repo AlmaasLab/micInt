@@ -1,17 +1,32 @@
-#*************************************************************
-# Outputs the file name specifications for the similarity measures
-# This must be updated as the similarity scores are added
-#*************************************************************
-score_names=function(){
-  # The sim score names without noise
-  basic=list(pearson='pearson',spearman='spearman',bray_curtis='bray_curtis',
-       kendall='kendall',bray_curtis='bray_curtis',jaccard='jaccard_index',
-       gen_jaccard='generalized_jaccard_index',nc.score='nc_score',
-       mutual_information='mutual_information')
-}
-#*************************************************************
+#' @name sim.measure
+#' @title sim.measure
+#' @description
+#' A similarity measure structure with the function ifself, and metadata fields
+#'
+#' @slot FUN The similarity measure function to use, of the form \code{f(x,y)}.
+#' The function must satisfy the following: \itemize{
+#' \item If \code{x} and \code{y} are both given, they are treated as vectors and the
+#' similarity score between them is returned
+#' \item If only \code{x} is given, it is treated as a matrix (or data frame) where the
+#' features are in columns and sample in the rows. The function must then return
+#' the matrix of pairwise similarities
+#' \item The function must return a similarity score in the interval \eqn{[0,1]}, where 1 is
+#' perfect similarity and 0 is perfect dissimilarity. Alternativly, signed similarity scores
+#' in the interval \eqn{[-1,1]} can also be used.
+#' }
+#' @slot string The similarity score's human readable name.
+#'
+#'
+#' @export
+setClass(Class="sim.measure",slots=c(FUN="function",string="character"))
 
-#*************************************************************
+#' @name sim.measure
+#'@rdname sim.measure
+sim.measure=function(FUN,string){
+ new("sim.measure",FUN=FUN,string=string)
+}
+
+
 #' @title similarity_measures
 #'
 #' @description
@@ -21,7 +36,7 @@ score_names=function(){
 #' @param subset The subset of the similarity measures to be returned. \
 #' By default, all similarity measures are returned
 #'
-#' @return A list of the similarity measures with the function ifself (\code{FUN}), and its human reable name (\code{string})
+#' @return A list of the \link{sim.measure} objects defined by the function
 #'
 #' @import vegan
 #' @import ccrepe
@@ -35,20 +50,17 @@ score_names=score_names()
 # Pearson linear correlation
 #***********************************************************
 pearson_cor=function(x,y=NULL){cor(x=x,y=y,method='pearson')}
-measures$pearson$FUN=pearson_cor
-measures$pearson$string='pearson'
+measures$pearson=sim.measure(FUN=pearson_cor,string='pearson')
 #************************************************************
 # Spearman correlation
 #***********************************************************
 spearman_cor=function(x,y=NULL){cor(x=x,y=y,method='spearman')}
-measures$spearman$FUN=spearman_cor
-measures$spearman$string='spearman'
+measures$spearman=sim.measure(FUN=spearman_cor,string='spearman')
 #************************************************************
 # Kendall's tau
 #***********************************************************
 kendall_cor=function(x,y=NULL){cor(x=x,y=y,method='kendall')}
-measures$kendall$FUN=kendall_cor
-measures$kendall$string='kendall'
+measures$kendall=sim.measure(FUN=kendall_cor,string='kendall')
 #************************************************************
 # Bray-Curtis
 #*************************************************************
@@ -65,8 +77,7 @@ bray_curtis_cor=function(x,y=NULL){
   }
   return(res)
 }
-measures$bray_curtis$FUN=bray_curtis_cor
-measures$bray_curtis$string='bray_curtis'
+measures$bray_curtis=sim.measure(FUN=bray_curtis_cor,string='bray_curtis')
 #************************************************************
 # Jaccard index
 #*************************************************************
@@ -80,8 +91,7 @@ jaccard_cor=function(x,y=NULL){
   }
   return(res)
 }
-measures$jaccard$FUN=jaccard_cor
-measures$jaccard$string='jaccard_index'
+measures$jaccard=sim.measure(FUN=jaccard_cor,string='jaccard_index')
 #************************************************************
 # Generalized Jaccard
 #*************************************************************
@@ -95,8 +105,7 @@ else{
 }
 return(res)
 }
-measures$gen_jaccard$FUN=gen_jaccard_cor
-measures$gen_jaccard$string='generalized_jaccard_index'
+measures$gen_jaccard(FUN=gen_jaccard_cor,string='generalized_jaccard_index')
 #************************************************************
 # Mutual information
 #*************************************************************
@@ -110,31 +119,27 @@ mutual_information=function(x,y=NULL){
   }
   return(res)
 }
-measures$mutual_information$FUN=mutual_information
-measures$mutual_information$string='mutual_information'
+measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_information')
 #*******************************************************************************
 # nc.score
 #******************************************************************************
-measures$nc.score$FUN=function(x,y=NULL){
-                                                nc.score(x,y)
-}
-measures$nc.score$string='nc_score'
+measures$nc.score=sim.measure(FUN=function(x,y=NULL){
+  nc.score(x,y)
+},string='nc_score')
 #*******************************************************************************
-# Euclidian distance
+# Euclidean distance
 #******************************************************************************
 euclidean_similarity=function(x,y=NULL){
   if (is.null(y)){
     ones=rep(1,dim(x)[2])
-    res=ones%*%t(ones)-as.matrix(designdist(t(x),method='(A+B-2*J)/(1+A+B-2*J)',terms='quadratic'))
+    res=ones%*%t(ones)-as.matrix(designdist(t(x),method='((A+B-2*J)/P)/(1+(A+B-2*J)/P)',terms='quadratic'))
   }
   else{
     res=euclidean_similarity(cbind(x,y))[1,2]
   }
   return(res)
 }
-measures$euclidean$FUN=euclidean_similarity
-measures$euclidean$string='squared_euclidean_similarity'
-
+measures$euclidean=sim.measure(FUN=euclidean_similarity,string='squared_euclidean_similarity')
 #*******************************************************************************
 # Cosine distance
 #******************************************************************************
@@ -148,10 +153,9 @@ cosine_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$cosine$FUN=cosine_similarity
-measures$cosine$string='cosine_similarity'
+measures$cosine=sim.measure(FUN=cosine_similarity,string='cosine_similarity')
 
-score_names=lapply(measures,function(x)x$string)
+score_names=lapply(measures,function(x)x@string)
 if(!is.null(subset)){
   measures=measures[score_names %in% subset]
 }
@@ -171,9 +175,9 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
     ccrepe_defaultargs=list(x=data,min.subj = 10,verbose = TRUE)
   }
   jobs=lapply(sim.scores, function(sim.score) list(ccrepe_args=c(ccrepe_defaultargs,
-                                                            sim.score=sim.score$FUN),
-                                              output_args=list(filename =paste(prefix,'_',sim.score$string,postfix,sep=''))
-                                              ,string=sim.score$string
+                                                            sim.score=sim.score@FUN),
+                                              output_args=list(filename =paste0(prefix,'_',sim.score@string,postfix))
+                                              ,string=sim.score@string
   )
   )
 }
@@ -189,7 +193,7 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
 #' at certain magnitude to the data before calculating
 #' the similarity score
 #'
-#' @param sim.scores The list of similarity measures to nosify
+#' @param sim.scores The list of objects of class \link{sim.measure} to nosify
 #'
 #' @param magnitude The magnitude of the noise to add. This is: The standard deviation for normal noise and the
 #' radius for the interval for uniform noise
@@ -201,7 +205,7 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
 #' Any combination of the options can be passes as a character vector.
 #' In this case, sim.score functions are returned for the selected types of noise.
 #'
-#' @return A list of \code{sim.score} functions corresponding to the input where noise have been
+#' @return A list of \link{sim.measure} objects corresponding to the input where noise have been
 #' added
 #'
 #' @importFrom stats rnorm runif
@@ -218,8 +222,8 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
     }
     uniform_functions=lapply(sim.scores,
                              function(sim.score) list(
-                               FUN=noisificationTemplate(sim.score$FUN,noiseFUN),
-                               string=paste0(sim.score$string,'_uniform')
+                               FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
+                               string=paste0(sim.score@string,'_uniform')
                                )
     )
 
@@ -233,8 +237,8 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
     }
     normal_functions=lapply(sim.scores,
                                       function(sim.score) list(
-                                        FUN=noisificationTemplate(sim.score$FUN,noiseFUN),
-                                        string=paste0(sim.score$string,'_normal')
+                                        FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
+                                        string=paste0(sim.score@string,'_normal')
                                       )
     )
     names(normal_functions)=sapply(names(sim.scores),

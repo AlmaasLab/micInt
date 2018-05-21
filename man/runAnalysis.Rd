@@ -25,6 +25,10 @@ The \code{interactions_table} of significant interactions
 In addition, all paramerters for this function are available
 If \code{NULL}, all variables in the function will be returned}
 
+\item{subset}{The subset of similarity measures to use}
+
+\item{file}{Should the tables of significant interactions be printed to a file?}
+
 \item{magnitude_factor}{When making noisified functions, the magnitude of the noise
 will be this number multiplied with \code{min_dataset}}
 }

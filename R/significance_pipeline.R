@@ -9,6 +9,9 @@
 #'
 #' @param parallel Should the analysis be run in parallel?
 #'
+#' @param subset The subset of similarity measures to use
+#'
+#' @param file Should the tables of significant interactions be printed to a file?
 #' @param returnVariables Which variables should the function return (character vector)?
 #' Available options are: \itemize{
 #' \item \code{similarity_measures_significance}:
