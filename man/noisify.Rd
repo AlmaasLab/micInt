@@ -4,8 +4,8 @@
 \alias{noisify}
 \title{Noisify}
 \usage{
-noisify(sim.scores = similarity_measures(), magnitude = 1e-05,
-  noise = c("none", "uniform", "normal"))
+noisify(sim.scores = mean_scale(), magnitude = 1e-05, noise = c("none",
+  "uniform", "normal"))
 }
 \arguments{
 \item{sim.scores}{The list of objects of class \link{sim.measure} to nosify}

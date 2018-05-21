@@ -16,14 +16,23 @@
 #' }
 #' @slot string The similarity score's human readable name.
 #'
+#' @slot categorical Logical value indicating whether the function only
+#' considers presense-absense of an OTU. If \code{TRUE}, the function will not be
+#' noisified as there is no point in adding noise to the data.
+#'
+#' @slot mean_scaleable Logical value telling whether it makes sense to scale the input by its
+#' mean before applying this function
+#'
+#' @seealso noisify
 #'
 #' @export
-setClass(Class="sim.measure",slots=c(FUN="function",string="character"))
+setClass(Class="sim.measure",slots=c(FUN="function",string="character",
+                                     categorical="logical",mean_scaleable="logical"))
 
 #' @name sim.measure
 #'@rdname sim.measure
-sim.measure=function(FUN,string){
- new("sim.measure",FUN=FUN,string=string)
+sim.measure=function(FUN,string,categorical=FALSE,mean_scaleable=TRUE){
+ new("sim.measure",FUN=FUN,string=string,categorical=categorical)
 }
 
 
@@ -45,7 +54,6 @@ sim.measure=function(FUN,string){
 #' @export
 similarity_measures=function(subset=NULL){
 measures=list()
-score_names=score_names()
 #************************************************************
 # Pearson linear correlation
 #***********************************************************
@@ -55,12 +63,12 @@ measures$pearson=sim.measure(FUN=pearson_cor,string='pearson')
 # Spearman correlation
 #***********************************************************
 spearman_cor=function(x,y=NULL){cor(x=x,y=y,method='spearman')}
-measures$spearman=sim.measure(FUN=spearman_cor,string='spearman')
+measures$spearman=sim.measure(FUN=spearman_cor,string='spearman',mean_scaleable = TRUE)
 #************************************************************
 # Kendall's tau
 #***********************************************************
 kendall_cor=function(x,y=NULL){cor(x=x,y=y,method='kendall')}
-measures$kendall=sim.measure(FUN=kendall_cor,string='kendall')
+measures$kendall=sim.measure(FUN=kendall_cor,string='kendall',mean_scaleable = TRUE)
 #************************************************************
 # Bray-Curtis
 #*************************************************************
@@ -77,7 +85,7 @@ bray_curtis_cor=function(x,y=NULL){
   }
   return(res)
 }
-measures$bray_curtis=sim.measure(FUN=bray_curtis_cor,string='bray_curtis')
+measures$bray_curtis=sim.measure(FUN=bray_curtis_cor,string='bray_curtis',mean_scaleable = TRUE)
 #************************************************************
 # Jaccard index
 #*************************************************************
@@ -91,7 +99,7 @@ jaccard_cor=function(x,y=NULL){
   }
   return(res)
 }
-measures$jaccard=sim.measure(FUN=jaccard_cor,string='jaccard_index')
+measures$jaccard=sim.measure(FUN=jaccard_cor,string='jaccard_index',categorical=TRUE)
 #************************************************************
 # Generalized Jaccard
 #*************************************************************
@@ -105,7 +113,8 @@ else{
 }
 return(res)
 }
-measures$gen_jaccard(FUN=gen_jaccard_cor,string='generalized_jaccard_index')
+measures$gen_jaccard=sim.measure(FUN=gen_jaccard_cor,string='generalized_jaccard_index',
+                                 mean_scaleable = TRUE)
 #************************************************************
 # Mutual information
 #*************************************************************
@@ -119,13 +128,13 @@ mutual_information=function(x,y=NULL){
   }
   return(res)
 }
-measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_information')
+measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_information',mean_scaleable = TRUE)
 #*******************************************************************************
 # nc.score
 #******************************************************************************
 measures$nc.score=sim.measure(FUN=function(x,y=NULL){
   nc.score(x,y)
-},string='nc_score')
+},string='nc_score',mean_scaleable = TRUE)
 #*******************************************************************************
 # Euclidean distance
 #******************************************************************************
@@ -139,7 +148,7 @@ euclidean_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$euclidean=sim.measure(FUN=euclidean_similarity,string='squared_euclidean_similarity')
+measures$euclidean=sim.measure(FUN=euclidean_similarity,string='squared_euclidean_similarity',mean_scaleable = TRUE)
 #*******************************************************************************
 # Cosine distance
 #******************************************************************************
@@ -211,19 +220,24 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
 #' @importFrom stats rnorm runif
 #'
 #' @export
-noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none','uniform','normal')){
+noisify=function(sim.scores=mean_scale(),magnitude=1e-5,noise=c('none','uniform','normal')){
   res=list()
   if('none' %in% noise){
     res=c(res,sim.scores)
   }
+  # Keeps only the similarity measures which can be noisified (presense-absense
+  # detecting functions excluded)
+  is.noisifiable=lapply(sim.scores,function(x) !x@categorical)
+  sim.scores=sim.scores[is.noisifiable]
   if('uniform' %in% noise){
     noiseFUN=function(n){
       runif(n,min=-magnitude,max=magnitude)
     }
     uniform_functions=lapply(sim.scores,
-                             function(sim.score) list(
+                             function(sim.score) sim.measure(
                                FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
-                               string=paste0(sim.score@string,'_uniform')
+                               string=paste0(sim.score@string,'_uniform'),
+                               mean_scaleable = FALSE
                                )
     )
 
@@ -236,9 +250,10 @@ noisify=function(sim.scores=similarity_measures(),magnitude=1e-5,noise=c('none',
       rnorm(n,mean=0,sd=magnitude)
     }
     normal_functions=lapply(sim.scores,
-                                      function(sim.score) list(
+                                      function(sim.score) sim.measure(
                                         FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
-                                        string=paste0(sim.score@string,'_normal')
+                                        string=paste0(sim.score@string,'_normal'),
+                                        mean_scaleable = FALSE
                                       )
     )
     names(normal_functions)=sapply(names(sim.scores),
@@ -268,4 +283,51 @@ noisificationTemplate=function(FUN,noiseFUN)
       noisedY=addNoise(y)
       return(FUN(noisedX,noisedY))
     }
+}
+
+#' @title mean_scale
+#'
+#' @param sim.scores A list of \code{sim.measure} objects
+#'
+#' @param append Logical, should the \code{sim.scores} passed to the function also be returned?
+#'
+#' @description Creates \code{sim.measure} objects which devide each compontent of by its mean before performing
+#' the calculations
+#' @export
+mean_scale=function(sim.scores=similarity_measures(),append=TRUE){
+scaled_scores=list()
+is.mean_scalable=lapply(sim.scores,function(x) x@mean_scaleable)
+measures_to_scale=sim.scores[is.mean_scalable]
+scaled_scores=lapply(measures_to_scale,
+  function(sim.score) sim.measure(
+    FUN=scalationTemplate(sim.score@FUN),
+    string=paste0(sim.score@string,'_scaled'),
+    mean_scaleable = FALSE
+)
+)
+names(scaled_scores)=sapply(names(measures_to_scale),
+                            function(name) paste0(name,'_scaled'))
+if(append)
+{
+  return(c(sim.scores,scaled_scores))
+}
+else{
+  return(scaled_scores)
+}
+
+}
+
+scalationTemplate=function(FUN){
+  function(x,y=NULL){
+  if(is.null(y)){
+    x=x/colMeans(x)
+  res=FUN(x)
+  }
+    else{
+ x=x/mean(x)
+ y=y/mean(y)
+ res=FUN(x,y)
+    }
+return(res)
+  }
 }

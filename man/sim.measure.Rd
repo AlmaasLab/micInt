@@ -6,7 +6,7 @@
 \alias{sim.measure}
 \title{sim.measure}
 \usage{
-sim.measure(FUN, string)
+sim.measure(FUN, string, categorical = FALSE, mean_scaleable = TRUE)
 }
 \description{
 A similarity measure structure with the function ifself, and metadata fields
@@ -27,5 +27,15 @@ in the interval \eqn{[-1,1]} can also be used.
 }}
 
 \item{\code{string}}{The similarity score's human readable name.}
+
+\item{\code{categorical}}{Logical value indicating whether the function only
+considers presense-absense of an OTU. If \code{TRUE}, the function will not be
+noisified as there is no point in adding noise to the data.}
+
+\item{\code{mean_scaleable}}{Logical value telling whether it makes sense to scale the input by its
+mean before applying this function}
 }}
 
+\seealso{
+noisify
+}

@@ -2,6 +2,7 @@
 
 export(ccrepe_analysis)
 export(create_interaction_table)
+export(mean_scale)
 export(noisify)
 export(output_ccrepe_data)
 export(ratio_shared_interactions)
