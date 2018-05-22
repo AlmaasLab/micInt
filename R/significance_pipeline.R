@@ -55,7 +55,7 @@ outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
-       function(x)do.call(microbialInteractions::output_ccrepe_data,
+       function(x)do.call(micInt::output_ccrepe_data,
                           x))
 if(is.null(returnVariables)){
   return(mget(ls()))
