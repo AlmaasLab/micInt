@@ -6,7 +6,8 @@
 \alias{sim.measure}
 \title{sim.measure}
 \usage{
-sim.measure(FUN, string, categorical = FALSE, mean_scaleable = TRUE)
+sim.measure(FUN, string, categorical = FALSE, mean_scaleable = FALSE,
+  signed = FALSE, type = "parametric")
 }
 \description{
 A similarity measure structure with the function ifself, and metadata fields
@@ -21,19 +22,30 @@ similarity score between them is returned
 \item If only \code{x} is given, it is treated as a matrix (or data frame) where the
 features are in columns and sample in the rows. The function must then return
 the matrix of pairwise similarities
-\item The function must return a similarity score in the interval \eqn{[0,1]}, where 1 is
+\item The function must return a similarity score in the interval [0,1], where 1 is
 perfect similarity and 0 is perfect dissimilarity. Alternativly, signed similarity scores
-in the interval \eqn{[-1,1]} can also be used.
+in the interval [-1,1] can also be used.
 }}
 
 \item{\code{string}}{The similarity score's human readable name.}
 
 \item{\code{categorical}}{Logical value indicating whether the function only
-considers presense-absense of an OTU. If \code{TRUE}, the function will not be
+considers presence-absence of an OTU. If \code{TRUE}, the function will not be
 noisified as there is no point in adding noise to the data.}
 
 \item{\code{mean_scaleable}}{Logical value telling whether it makes sense to scale the input by its
 mean before applying this function}
+
+\item{\code{signed}}{If \code{TRUE}, the similarity measures gives signed results in the interval [-1,1],
+else they are in the interval [0,1].}
+
+\item{\code{type}}{Character; the way the similarity measure processes the information. On of: \itemize{
+\item \code{"presence-absence"} Measures the similarity of OTUs solely by their presence-absence
+pattern
+#' \item \code{"non-parametric"} Measures the similarity based on the rank pattern, but besides this,
+no other information on the abudandances are used
+\item \code{"parameteric"} The actual values of the abundances matter in the calulations
+}}
 }}
 
 \seealso{
