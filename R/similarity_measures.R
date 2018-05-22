@@ -31,8 +31,9 @@ setClass(Class="sim.measure",slots=c(FUN="function",string="character",
 
 #' @name sim.measure
 #'@rdname sim.measure
-sim.measure=function(FUN,string,categorical=FALSE,mean_scaleable=TRUE){
- new("sim.measure",FUN=FUN,string=string,categorical=categorical)
+sim.measure=function(FUN,string,categorical=FALSE,mean_scaleable=FALSE){
+ new("sim.measure",FUN=FUN,string=string,categorical=categorical,
+     mean_scaleable=mean_scaleable)
 }
 
 
