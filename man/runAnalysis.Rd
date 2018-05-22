@@ -5,8 +5,8 @@
 \title{runAnalysis}
 \usage{
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
-  parallel = TRUE, returnVariables = NULL, subset = NULL, file = FALSE,
-  magnitude_factor = 10)
+  parallel = TRUE, returnVariables = NULL, subset = NULL,
+  sim.scores = NULL, file = FALSE, magnitude_factor = 10)
 }
 \arguments{
 \item{OTU_table}{The raw OTU table to be treated}
@@ -26,6 +26,10 @@ In addition, all paramerters for this function are available
 If \code{NULL}, all variables in the function will be returned}
 
 \item{subset}{The subset of similarity measures to use}
+
+\item{sim.scores}{The similarity measures of class \link{sim.measure}
+to use. If it is \code{NULL}, all measures available in the package
+will be used (recommanded for most purposes).}
 
 \item{file}{Should the tables of significant interactions be printed to a file?}
 

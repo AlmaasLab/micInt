@@ -228,7 +228,7 @@ noisify=function(sim.scores=mean_scale(),magnitude=1e-5,noise=c('none','uniform'
   # Keeps only the similarity measures which can be noisified (presense-absense
   # detecting functions excluded)
   is.noisifiable=lapply(sim.scores,function(x) !x@categorical)
-  sim.scores=sim.scores[is.noisifiable]
+  sim.scores=sim.scores[unlist(is.noisifiable)]
   if('uniform' %in% noise){
     noiseFUN=function(n){
       runif(n,min=-magnitude,max=magnitude)
@@ -297,7 +297,7 @@ noisificationTemplate=function(FUN,noiseFUN)
 mean_scale=function(sim.scores=similarity_measures(),append=TRUE){
 scaled_scores=list()
 is.mean_scalable=lapply(sim.scores,function(x) x@mean_scaleable)
-measures_to_scale=sim.scores[is.mean_scalable]
+measures_to_scale=sim.scores[unlist(is.mean_scalable)]
 scaled_scores=lapply(measures_to_scale,
   function(sim.score) sim.measure(
     FUN=scalationTemplate(sim.score@FUN),

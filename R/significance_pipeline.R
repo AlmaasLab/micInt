@@ -9,6 +9,10 @@
 #'
 #' @param parallel Should the analysis be run in parallel?
 #'
+#' @param sim.scores The similarity measures of class \link{sim.measure}
+#' to use. If it is \code{NULL}, all measures available in the package
+#' will be used (recommanded for most purposes).
+#'
 #' @param subset The subset of similarity measures to use
 #'
 #' @param file Should the tables of significant interactions be printed to a file?
@@ -29,21 +33,23 @@
 #' @import stringr
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL,file=FALSE,magnitude_factor=10){
+                    returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10){
 prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
                                                           scientific = TRUE),sep = '')
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
 magnitude=magnitude_factor*min_dataset
-ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores =noisify(magnitude = magnitude),
-                               prefix=prefix)
+if(is.null(sim.scores)){
+  sim.scores =noisify(magnitude = magnitude)
+}
 if(!is.null(subset))
-{ccrepe_job=ccrepe_job[subset]
-  }
+{
+  ccrepe_job=ccrepe_job[subset]
+}
+ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
+                               prefix=prefix)
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
-# Removes the nc.score jobs as the tend to be unreliable on Cruncher
-# ccrepe_job=ccrepe_job[!str_detect(names(ccrepe_job),'nc.score')]
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
 outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
