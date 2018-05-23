@@ -7,7 +7,7 @@
 output_ccrepe_data(data, OTU_table = NULL, threshold.type = "q",
   threshold.value = 0.05, output.file = FALSE, filename = NULL,
   return.value = TRUE, csv_option = "2", removeDuplicates = TRUE,
-  score_attributes = NULL)
+  sim.measure.attributes = NULL)
 }
 \arguments{
 \item{data}{The results from ccrepe}

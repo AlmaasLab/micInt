@@ -88,10 +88,10 @@ renormalize=function(table)
 #'
 #' @export
 output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,output.file=FALSE,filename=NULL,
-                   return.value=TRUE,csv_option='2',removeDuplicates=TRUE,score_attributes=NULL){
+                   return.value=TRUE,csv_option='2',removeDuplicates=TRUE,sim.measure.attributes=NULL){
                     significant_interactions=create_interaction_table(data=data,OTU_table = OTU_table,threshold.type = threshold.type,
                                                                       threshold.value = threshold.value,
-                                                                      removeDuplicates = removeDuplicates,score_attributes=score_attributes)
+                                                                      removeDuplicates = removeDuplicates,score_attributes=sim.measure.attributes)
                     if(output.file){
                     write.interactions_table(significant_interactions, filename=filename,
                                              csv_option=csv_option)
@@ -108,7 +108,7 @@ output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.val
 #' @description Performs the actual process of making the table.
 #' For documentation of parameters, see \link{output_ccrepe_data}
 #'
-#' @return
+#' @return An \code{interactions_table}
 #'
 #' @export
 create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,removeDuplicates=TRUE,score_attributes=NULL){
@@ -170,14 +170,14 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
   }
   class(significant_interactions)=c('interaction_table',class(significant_interactions))
   if(is.null(score_attributes)){
-  attributes(significant_interactions)=list(measure_name=NA,
-                                          signed=ifelse(!all(sim.score >=0),TRUE,NA),
-                                          measure_type=NA)
+  attr(significant_interactions,"measure_name")=NA
+  attr(significant_interactions,"signed")=ifelse(!all(significant_interactions$sim.score >=0),TRUE,NA)
+  attr(significant_interactions,"measure_type")=NA
   }
   else{
-    attributes(significant_interactions)=list(measure_name=score_attributes@string,
-                                              signed=score_attributes@signed,
-                                              measure_type=score_attributes@type_measure)
+    attr(significant_interactions,"measure_name")=score_attributes@string
+    attr(significant_interactions,"signed")=signed=score_attributes@signed
+    attr(significant_interactions,"measure_type")=score_attributes@type_measure
   }
   return(significant_interactions)
 }
@@ -197,12 +197,17 @@ write.interactions_table=function(significant_interactions,filename,
     write.csv(significant_interactions,file = filename)
   }
 }
-
+#' @name summary.interaction_table
+#'
+#' @title Create summary of \code{interaction_table}
+#'
+#' @param table An interaction table returned from \link{create_interaction_table}
+#'
 #' @export
 summary.interaction_table=function(table){
   proportion_negative=sum(table$sim.score < 0)/nrow(table)
   number_significant=nrow(table)
-  c(attributes(table),
+  c(attributes(table)[c("measure_name","signed","measure_type")],
     list(number_significant=number_significant,proportion_negative=proportion_negative))
 }
 
