@@ -206,8 +206,10 @@ create_ccrepe_jobs=function(data=NULL,sim.scores=similarity_measures(),ccrepe_de
   }
   jobs=lapply(sim.scores, function(sim.score) list(ccrepe_args=c(ccrepe_defaultargs,
                                                             sim.score=sim.score@FUN),
-                                              output_args=list(filename =paste0(prefix,'_',sim.score@string,postfix))
-                                              ,string=sim.score@string,type_measure=sim.score@type,signed=sim.score@signed
+                                              output_args=list(filename =paste0(prefix,'_',sim.score@string,postfix),
+                                                               string=sim.score@string,type_measure=sim.score@type,signed=sim.score@signed)
+
+
   )
   )
 }
