@@ -42,7 +42,7 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' @export
 refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE,metadataCols=c('OTU Id','taxonomy'))
   {
-  refined_table=remove_metadata(OTU_table,metadataCols = meatadataCols)
+  refined_table=remove_metadata(OTU_table,metadataCols = metadataCols)
   # Cuts away the least abundant species
   cut_abundances(refined_table,abundance_cutoff,type=cutoff_type,renormalize=renormalize)
 }

@@ -42,13 +42,13 @@ min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
 magnitude=magnitude_factor*min_dataset
 if(is.null(sim.scores)){
   sim.scores =noisify(magnitude = magnitude)
+  ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
+                                prefix=prefix)
 }
 if(!is.null(subset))
 {
   ccrepe_job=ccrepe_job[subset]
 }
-ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
-                               prefix=prefix)
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
 outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,

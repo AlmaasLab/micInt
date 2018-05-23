@@ -78,13 +78,13 @@ measures$pearson=sim.measure(FUN=pearson_cor,string='pearson',signed = TRUE,
 # Spearman correlation
 #***********************************************************
 spearman_cor=function(x,y=NULL){cor(x=x,y=y,method='spearman')}
-measures$spearman=sim.measure(FUN=spearman_cor,string='spearman',mean_scaleable = TRUE,
+measures$spearman=sim.measure(FUN=spearman_cor,string='spearman',mean_scaleable = FALSE,
                               signed = TRUE,type="non-parametric")
 #************************************************************
 # Kendall's tau
 #***********************************************************
 kendall_cor=function(x,y=NULL){cor(x=x,y=y,method='kendall')}
-measures$kendall=sim.measure(FUN=kendall_cor,string='kendall',mean_scaleable = TRUE,
+measures$kendall=sim.measure(FUN=kendall_cor,string='kendall',mean_scaleable = FALSE,
                              signed = TRUE,type="non-parametric")
 #************************************************************
 # Bray-Curtis
@@ -118,7 +118,7 @@ jaccard_cor=function(x,y=NULL){
   return(res)
 }
 measures$jaccard=sim.measure(FUN=jaccard_cor,string='jaccard_index',categorical=TRUE,
-                             singed=FALSE,type="presence-absence")
+                             signed=FALSE,type="presence-absence")
 #************************************************************
 # Generalized Jaccard
 #*************************************************************
@@ -133,7 +133,7 @@ else{
 return(res)
 }
 measures$gen_jaccard=sim.measure(FUN=gen_jaccard_cor,string='generalized_jaccard_index',
-                                 mean_scaleable = TRUE,singed=FALSE,type="parametric")
+                                 mean_scaleable = TRUE,signed=FALSE,type="parametric")
 #************************************************************
 # Mutual information
 #*************************************************************
@@ -154,7 +154,7 @@ measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_in
 #******************************************************************************
 measures$nc.score=sim.measure(FUN=function(x,y=NULL){
   nc.score(x,y)
-},string='nc_score',mean_scaleable = TRUE,singed=TRUE)
+},string='nc_score',mean_scaleable = TRUE,signed=TRUE)
 #*******************************************************************************
 # Euclidean distance
 #******************************************************************************
@@ -183,7 +183,7 @@ cosine_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$cosine=sim.measure(FUN=cosine_similarity,string='cosine_similarity',singed=TRUE,type="parametric")
+measures$cosine=sim.measure(FUN=cosine_similarity,string='cosine_similarity',signed=TRUE,type="parametric")
 
 score_names=lapply(measures,function(x)x@string)
 if(!is.null(subset)){
@@ -274,7 +274,7 @@ noisify=function(sim.scores=mean_scale(),magnitude=1e-5,noise=c('none','uniform'
                                       function(sim.score) sim.measure(
                                         FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
                                         string=paste0(sim.score@string,'_normal'),
-                                        mean_scaleable = FALSE,singed=sim.score@signed
+                                        mean_scaleable = FALSE,signed=sim.score@signed
                                       )
     )
     names(normal_functions)=sapply(names(sim.scores),
