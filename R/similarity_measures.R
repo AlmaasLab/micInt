@@ -95,14 +95,14 @@ mutual_information=function(x,y=NULL){
   }
   return(res)
 }
-measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_information',mean_scaleable = TRUE,
-                                        signed=FALSE,type="parametric")
+measures$mutual_information=sim.measure(FUN=mutual_information,string='mutual_information',mean_scaleable = FALSE,
+                                        signed=FALSE,type="non-parametric")
 #*******************************************************************************
 # nc.score
 #******************************************************************************
 measures$nc.score=sim.measure(FUN=function(x,y=NULL){
   nc.score(x,y)
-},string='nc_score',mean_scaleable = TRUE,signed=TRUE)
+},string='nc_score',mean_scaleable = FALSE,signed=TRUE,type="non-parametric")
 #*******************************************************************************
 # Euclidean distance
 #******************************************************************************
@@ -116,7 +116,7 @@ euclidean_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$euclidean=sim.measure(FUN=euclidean_similarity,string='squared_euclidean_similarity',mean_scaleable = TRUE,
+measures$euclidean=sim.measure(FUN=euclidean_similarity,string='squared_euclidean',mean_scaleable = TRUE,
                                signed=FALSE,type="parametric")
 #*******************************************************************************
 # Cosine distance
@@ -131,7 +131,7 @@ cosine_similarity=function(x,y=NULL){
   }
   return(res)
 }
-measures$cosine=sim.measure(FUN=cosine_similarity,string='cosine_similarity',signed=TRUE,type="parametric")
+measures$cosine=sim.measure(FUN=cosine_similarity,string='cosine',signed=TRUE,type="parametric")
 
 score_names=lapply(measures,function(x)x@string)
 if(!is.null(subset)){
@@ -208,7 +208,9 @@ noisify=function(sim.scores=mean_scale(),magnitude=1e-5,noise=c('none','uniform'
                              function(sim.score) sim.measure(
                                FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
                                string=paste0(sim.score@string,'_uniform'),
-                               mean_scaleable = FALSE,signed=sim.score@signed
+                               mean_scaleable = FALSE,signed=sim.score@signed,
+                               type=sim.score@type
+
                                )
     )
 
@@ -224,7 +226,9 @@ noisify=function(sim.scores=mean_scale(),magnitude=1e-5,noise=c('none','uniform'
                                       function(sim.score) sim.measure(
                                         FUN=noisificationTemplate(sim.score@FUN,noiseFUN),
                                         string=paste0(sim.score@string,'_normal'),
-                                        mean_scaleable = FALSE,signed=sim.score@signed
+                                        mean_scaleable = FALSE,signed=sim.score@signed,
+                                        type=sim.score@type
+
                                       )
     )
     names(normal_functions)=sapply(names(sim.scores),
@@ -274,7 +278,8 @@ scaled_scores=lapply(measures_to_scale,
     FUN=scalationTemplate(sim.score@FUN),
     string=paste0(sim.score@string,'_scaled'),
     mean_scaleable = FALSE,
-    signed=sim.score@signed
+    signed=sim.score@signed,
+    type=sim_score@type
 )
 )
 names(scaled_scores)=sapply(names(measures_to_scale),
