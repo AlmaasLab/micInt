@@ -279,7 +279,7 @@ scaled_scores=lapply(measures_to_scale,
     string=paste0(sim.score@string,'_scaled'),
     mean_scaleable = FALSE,
     signed=sim.score@signed,
-    type=sim_score@type
+    type=sim.score@type
 )
 )
 names(scaled_scores)=sapply(names(measures_to_scale),
