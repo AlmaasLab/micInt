@@ -191,10 +191,10 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
 write.interactions_table=function(significant_interactions,filename,
                                   csv_option='2'){
   if (csv_option=='2'){
-    write.csv2(significant_interactions,file = filename)
+    write.csv2(significant_interactions,file = filename,row.names = FALSE)
   }
   else{
-    write.csv(significant_interactions,file = filename)
+    write.csv(significant_interactions,file = filename,row.names = FALSE)
   }
 }
 #' @name summary.interaction_table

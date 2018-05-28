@@ -38,7 +38,7 @@ abundance_1*abundance_2
 #' @param similarity_measures_significance List of \code{interaction_table} objects returned from
 #' \link{create_interaction_table}
 #' @param outputargs The corresponding outputargs list sendt to \link{create_interaction_table}
-#' @ A \code{data.frame} consisting of the following fields: \itemize{
+#' @param A \code{data.frame} consisting of the following fields: \itemize{
 #' \item \code{name} The name of the similarity measure
 #' \item \code{type} The type of similarity measure, equal to the one in the \code{type}
 #' slot in it \code{sim.measure} object

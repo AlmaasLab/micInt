@@ -11,6 +11,14 @@ overall_stats(similarity_measures_significance)
 \link{create_interaction_table}}
 
 \item{outputargs}{The corresponding outputargs list sendt to \link{create_interaction_table}}
+
+\item{A}{\code{data.frame} consisting of the following fields: \itemize{
+\item \code{name} The name of the similarity measure
+\item \code{type} The type of similarity measure, equal to the one in the \code{type}
+slot in it \code{sim.measure} object
+\item \code{num_significant} The number of significant interaction
+
+}}
 }
 \description{
 Compiles a summary of significant interactions for the given similarity measures

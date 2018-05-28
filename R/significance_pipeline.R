@@ -29,13 +29,25 @@
 #' @param magnitude_factor When making noisified functions, the magnitude of the noise
 #' will be this number multiplied with \code{min_dataset}
 #'
+#' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
+#'
+#' @details
+#' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
+#' \code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)},
+#' where all numbers are in scientific notation. Then the sim.score name follows and then the postfix
+#' The postfix is by default empty.
+#'
+#'
 #'
 #' @import stringr
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10){
-prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
-                                                          scientific = TRUE),sep = '')
+                    returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10,prefix=NULL,
+                    postfix=""){
+if(is.null(prefix))
+prefix=paste0('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
+                                                          scientific = TRUE),"_magfac=",format(magnitude_factor,
+                                                                                             scientific = TRUE))
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
@@ -43,7 +55,7 @@ magnitude=magnitude_factor*min_dataset
 if(is.null(sim.scores)){
   sim.scores =noisify(magnitude = magnitude)
   ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
-                                prefix=prefix)
+                                prefix=prefix,postfix=paste0(postfix,".csv"))
 }
 if(!is.null(subset))
 {

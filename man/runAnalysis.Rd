@@ -6,7 +6,8 @@
 \usage{
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
   parallel = TRUE, returnVariables = NULL, subset = NULL,
-  sim.scores = NULL, file = FALSE, magnitude_factor = 10)
+  sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
+  postfix = "")
 }
 \arguments{
 \item{OTU_table}{The raw OTU table to be treated}
@@ -35,7 +36,15 @@ will be used (recommanded for most purposes).}
 
 \item{magnitude_factor}{When making noisified functions, the magnitude of the noise
 will be this number multiplied with \code{min_dataset}}
+
+\item{prefix}{The prefix of the file names being written. Ignored if \code{file=FALSE}.}
 }
 \description{
 Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results
+}
+\details{
+If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
+\code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)},
+where all numbers are in scientific notation. Then the sim.score name follows and then the postfix
+The postfix is by default empty.
 }
