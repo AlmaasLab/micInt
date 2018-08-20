@@ -7,7 +7,7 @@
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
   parallel = TRUE, returnVariables = NULL, subset = NULL,
   sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
-  postfix = "")
+  metadataCols = c("OTU Id", "taxonomy"), postfix = "")
 }
 \arguments{
 \item{OTU_table}{The raw OTU table to be treated}
@@ -38,6 +38,9 @@ will be used (recommanded for most purposes).}
 will be this number multiplied with \code{min_dataset}}
 
 \item{prefix}{The prefix of the file names being written. Ignored if \code{file=FALSE}.}
+
+\item{metadataCols}{The names (character vector) or position (integer) of the
+metadata columns to remove from the table before analyzing it}
 }
 \description{
 Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results

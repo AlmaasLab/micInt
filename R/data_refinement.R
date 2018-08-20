@@ -18,6 +18,18 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
 #' @description
 #' Removes metadata columns from dataset
 #'
+#' @param abundance_cutoff
+#' Numeric, the threshold cutoff value
+#'
+#' @param type
+#' The type of measure to base the cutoff on. Can be any
+#' of \code{'mean'}, \code{median}, \code{max} which cuts away
+#' OTUs based on mean, median and maximum abundance, repectivly
+#'
+#' @param renormalize
+#' Logical, should the abundances be renormalized after the procedyre?
+#'
+#'
 #' @import matrixStats
 cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize=TRUE){
   m_refined_table=as.matrix(refined_table)
@@ -39,6 +51,11 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' @description
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
+#'
+#' @param OTU_table The raw OTU table
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table
+#'
 #' @export
 refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE,metadataCols=c('OTU Id','taxonomy'))
   {

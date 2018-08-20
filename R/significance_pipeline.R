@@ -31,6 +31,9 @@
 #'
 #' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
 #'
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table before analyzing it
+#'
 #' @details
 #' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
 #' \code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)},
@@ -43,12 +46,13 @@
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10,prefix=NULL,
+                    metadataCols=c('OTU Id','taxonomy'),
                     postfix=""){
 if(is.null(prefix))
 prefix=paste0('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
                                                           scientific = TRUE),"_magfac=",format(magnitude_factor,
                                                                                              scientific = TRUE))
-refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
+refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff,metadataCols = metadataCols)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
 magnitude=magnitude_factor*min_dataset
