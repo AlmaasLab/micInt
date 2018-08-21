@@ -6,7 +6,13 @@
 #' metadata columns to remove from the table
 remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   options(stringsAsFactors = FALSE)
+  if(is.character(metadataCols))
+  {
   metadata=which(metadataCols == names(OTU_table))
+  }
+  else{
+    metadata = metadataCols
+  }
   # Removes the metadata for the data set
   refined_table=as.data.frame(t(OTU_table[,-metadata]))
   colnames(refined_table)=OTU_table$`OTU Id`

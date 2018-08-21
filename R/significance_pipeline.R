@@ -37,7 +37,8 @@
 #' @details
 #' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
 #' \code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)},
-#' where all numbers are in scientific notation. Then the sim.score name follows and then the postfix
+#' where all numbers are in scientific notation. Then the sim.score name follows, then the postfix and finally the csv
+#' extention.
 #' The postfix is by default empty.
 #'
 #'
