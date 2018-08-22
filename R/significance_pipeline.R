@@ -13,7 +13,10 @@
 #' to use. If it is \code{NULL}, all measures available in the package
 #' will be used (recommanded for most purposes).
 #'
-#' @param subset The subset of similarity measures to use
+#' @param subset Character, the subset of similarity measures to use, denoted by
+#' the its name in the list (not necessarly its string) returned from \link{similarity_measures} or similarity
+#' measure modiftying function such as \link{noisify}
+#'If \code{NULL}, all available measures will be used
 #'
 #' @param file Should the tables of significant interactions be printed to a file?
 #' @param returnVariables Which variables should the function return (character vector)?
@@ -40,6 +43,23 @@
 #' where all numbers are in scientific notation. Then the sim.score name follows, then the postfix and finally the csv
 #' extention.
 #' The postfix is by default empty.
+#'
+#' In order for an OTU-table to be valid, the following criteria must hold:
+#'
+#' \itemize{
+#' \item
+#' The data points (sample) are in columns, the abundances for each
+#' OTU is in rows.
+#' \item
+#' The rows may only hold OTU abundances
+#' \item
+#' There may be as many metadata colums as preferable. However, the all
+#' need to be declared in the \code{metadataCols} argument and the column
+#' \code{taxonomy} has be there in order for the output file to contain the
+#' taxonomy.
+#' \item The row names of the table are the OTU names and the column names are the
+#' sample names
+#' }
 #'
 #'
 #'

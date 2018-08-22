@@ -15,7 +15,7 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   }
   # Removes the metadata for the data set
   refined_table=as.data.frame(t(OTU_table[,-metadata]))
-  colnames(refined_table)=OTU_table$`OTU Id`
+  colnames(refined_table)=row.names(OTU_table)
   return(refined_table)
 }
 
@@ -182,8 +182,8 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
     }
     if (!is.null(OTU_table)){
       # Add taxonomy if available
-      significant_interactions$taxonomy_1=OTU_table[match(significant_interactions$OTU_1,as.character(OTU_table$`OTU Id`)),]$taxonomy
-      significant_interactions$taxonomy_2=OTU_table[match(significant_interactions$OTU_2,as.character(OTU_table$`OTU Id`)),]$taxonomy
+      significant_interactions$taxonomy_1=OTU_table[match(significant_interactions$OTU_1,as.character(row.names(OTU_table))),]$taxonomy
+      significant_interactions$taxonomy_2=OTU_table[match(significant_interactions$OTU_2,as.character(row.names(OTU_table))),]$taxonomy
     }
     # Sorts by dersired significance column
     if (threshold.type=='q')
