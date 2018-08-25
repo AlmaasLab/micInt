@@ -70,9 +70,7 @@ runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     metadataCols=c('OTU Id','taxonomy'),
                     postfix=""){
 if(is.null(prefix))
-prefix=paste0('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
-                                                          scientific = TRUE),"_magfac=",format(magnitude_factor,
-                                                                                             scientific = TRUE))
+prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = abundance_cutoff)
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff,metadataCols = metadataCols)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
