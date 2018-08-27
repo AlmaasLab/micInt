@@ -35,6 +35,8 @@
 #' \item \code{"parameteric"} The actual values of the abundances matter in the calulations
 #' }
 #'
+#' @import methods
+#'
 #' @seealso noisify
 #'
 #' @export

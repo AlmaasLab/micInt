@@ -8,7 +8,7 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   options(stringsAsFactors = FALSE)
   if(is.character(metadataCols))
   {
-  metadata=which(metadataCols == names(OTU_table))
+  metadata=which(colnames(OTU_table) %in% metadataCols)
   }
   else{
     metadata = metadataCols
