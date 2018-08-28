@@ -5,7 +5,7 @@
 \alias{as.edgelist.interaction_table}
 \title{as.edge_list.interaction_table}
 \usage{
-as.edgelist.interaction_table(table)
+\method{as.edgelist}{interaction_table}(table)
 }
 \description{
 Converts an interaction table to a two column character matrix

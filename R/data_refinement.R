@@ -246,8 +246,8 @@ summary.interaction_table=function(table){
     list(number_significant=number_significant,proportion_negative=proportion_negative))
 }
 
-#' @exportMethod
-as.edgelist.default = function(x){
+#' @export
+as.edgelist = function(x, ...){
  UseMethod("as.edgelist")
 }
 
@@ -256,7 +256,7 @@ as.edgelist.default = function(x){
 #' @description Converts an interaction table to a two column character matrix
 #' where each row represent an edge between the OTUs
 #'
-#' @exportMethod
+#' @export
 as.edgelist.interaction_table = function(table){
     as.matrix(table[,c('OTU_1','OTU_2')])
 }
