@@ -226,12 +226,39 @@ write.interactions_table=function(significant_interactions,filename,
 #'
 #' @param table An interaction table returned from \link{create_interaction_table}
 #'
+#' @return A list with the following fields (the first three are taken directly from
+#' the \code{interaction.table}):
+#' \itemize{
+#' \item \code{measure_name}
+#' \item \code{signed}
+#' \item \code{measure_type}
+#' \item \code{number_significant}: The number of significant interactions
+#' \item \code{proportion_negative}: The proprotion of significant interactions which
+#' are negative
+#' }
+#'
+#'
 #' @export
 summary.interaction_table=function(table){
   proportion_negative=sum(table$sim.score < 0)/nrow(table)
   number_significant=nrow(table)
   c(attributes(table)[c("measure_name","signed","measure_type")],
     list(number_significant=number_significant,proportion_negative=proportion_negative))
+}
+
+#' @exportMethod
+as.edgelist.default = function(x){
+ UseMethod("as.edgelist")
+}
+
+#' @name as.edge_list.interaction_table
+#' @title as.edge_list.interaction_table
+#' @description Converts an interaction table to a two column character matrix
+#' where each row represent an edge between the OTUs
+#'
+#' @exportMethod
+as.edgelist.interaction_table = function(table){
+    as.matrix(table[,c('OTU_1','OTU_2')])
 }
 
 

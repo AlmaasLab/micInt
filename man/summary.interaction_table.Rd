@@ -9,3 +9,15 @@
 \arguments{
 \item{table}{An interaction table returned from \link{create_interaction_table}}
 }
+\value{
+A list with the following fields (the first three are taken directly from
+the \code{interaction.table}):
+\itemize{
+\item \code{measure_name}
+\item \code{signed}
+\item \code{measure_type}
+\item \code{number_significant}: The number of significant interactions
+\item \code{proportion_negative}: The proprotion of significant interactions which
+are negative
+}
+}
