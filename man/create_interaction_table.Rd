@@ -5,10 +5,11 @@
 \title{create_interaction_table}
 \usage{
 create_interaction_table(data, OTU_table = NULL, threshold.type = "q",
-  threshold.value = 0.05, removeDuplicates = TRUE)
+  threshold.value = 0.05, removeDuplicates = TRUE,
+  score_attributes = NULL)
 }
 \value{
-
+An \code{interactions_table}
 }
 \description{
 Performs the actual process of making the table.

@@ -9,6 +9,16 @@
 #'
 #' @param parallel Should the analysis be run in parallel?
 #'
+#' @param sim.scores The similarity measures of class \link{sim.measure}
+#' to use. If it is \code{NULL}, all measures available in the package
+#' will be used (recommanded for most purposes).
+#'
+#' @param subset Character, the subset of similarity measures to use, denoted by
+#' the its name in the list (not necessarly its string) returned from \link{similarity_measures} or similarity
+#' measure modiftying function such as \link{noisify}
+#'If \code{NULL}, all available measures will be used
+#'
+#' @param file Should the tables of significant interactions be printed to a file?
 #' @param returnVariables Which variables should the function return (character vector)?
 #' Available options are: \itemize{
 #' \item \code{similarity_measures_significance}:
@@ -22,32 +32,67 @@
 #' @param magnitude_factor When making noisified functions, the magnitude of the noise
 #' will be this number multiplied with \code{min_dataset}
 #'
+#' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
+#'
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table before analyzing it
+#'
+#' @details
+#' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
+#' \code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)},
+#' where all numbers are in scientific notation. Then the sim.score name follows, then the postfix and finally the csv
+#' extention.
+#' The postfix is by default empty.
+#'
+#' In order for an OTU-table to be valid, the following criteria must hold:
+#'
+#' \itemize{
+#' \item
+#' The data points (sample) are in columns, the abundances for each
+#' OTU is in rows.
+#' \item
+#' The rows may only hold OTU abundances
+#' \item
+#' There may be as many metadata colums as preferable. However, the all
+#' need to be declared in the \code{metadataCols} argument and the column
+#' \code{taxonomy} has be there in order for the output file to contain the
+#' taxonomy.
+#' \item The row names of the table are the OTU names and the column names are the
+#' sample names
+#' }
+#'
+#'
 #'
 #' @import stringr
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL,file=FALSE,magnitude_factor=10){
-prefix=paste('q_crit=',format(q_crit,scientific = TRUE),'_cutoff=',format(abundance_cutoff,
-                                                          scientific = TRUE),sep = '')
-refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff)
+                    returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10,prefix=NULL,
+                    metadataCols=c('OTU Id','taxonomy'),
+                    postfix=""){
+if(is.null(prefix))
+prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
+refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff,metadataCols = metadataCols)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
 magnitude=magnitude_factor*min_dataset
-ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores =noisify(magnitude = magnitude),
-                               prefix=prefix)
+if(is.null(sim.scores)){
+  sim.scores =noisify(magnitude = magnitude)
+  ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
+                                prefix=prefix,postfix=paste0(postfix,".csv"))
+}
 if(!is.null(subset))
-{ccrepe_job=ccrepe_job[subset]
-  }
+{
+  ccrepe_job=ccrepe_job[subset]
+}
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
-# Removes the nc.score jobs as the tend to be unreliable on Cruncher
-# ccrepe_job=ccrepe_job[!str_detect(names(ccrepe_job),'nc.score')]
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
 outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
-       function(x)do.call(microbialInteractions::output_ccrepe_data,
-                          x))
+       function(x)(R.utils::doCall(.fcn=micInt::output_ccrepe_data,
+                          args=x))
+)
 if(is.null(returnVariables)){
   return(mget(ls()))
 }

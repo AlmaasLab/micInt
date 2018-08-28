@@ -23,7 +23,6 @@
 #' \link{ccrepe}
 #'
 #' @import ccrepe
-#' @import tictoc
 #' @import parallel
 #' @importFrom utils modifyList
 #' @export
@@ -63,7 +62,8 @@ else{
 }
 stop=Sys.time()
 if(verbose){
-  print(toc.outmsg(start,stop,'Time to execute the ccrepe analysis'))
+  print('Time to execute the ccrepe analysis')
+  print(stop-start)
 }
 for (i in 1:length(ccrepe_job)){
   ccrepe_res[[i]]=modifyList(ccrepe_res[[i]],ccrepe_job[[i]]$output_args)

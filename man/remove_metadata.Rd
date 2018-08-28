@@ -6,6 +6,12 @@
 \usage{
 remove_metadata(OTU_table, metadataCols = c("OTU Id", "taxonomy"))
 }
+\arguments{
+\item{OTU_table}{The raw OTU table}
+
+\item{metadataCols}{The names (character vector) or position (integer) of the
+metadata columns to remove from the table}
+}
 \description{
 Removes metadata columns from dataset
 }

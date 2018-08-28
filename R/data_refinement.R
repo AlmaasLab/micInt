@@ -1,18 +1,40 @@
 #' @title remove_metadata
 #' @description
 #' Removes metadata columns from dataset
+#' @param OTU_table The raw OTU table
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table
 remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   options(stringsAsFactors = FALSE)
-  metadata=which(metadataCols == names(OTU_table))
+  if(is.character(metadataCols))
+  {
+  metadata=which(colnames(OTU_table) %in% metadataCols)
+  }
+  else{
+    metadata = metadataCols
+  }
   # Removes the metadata for the data set
   refined_table=as.data.frame(t(OTU_table[,-metadata]))
-  colnames(refined_table)=OTU_table$`OTU Id`
+  colnames(refined_table)=row.names(OTU_table)
   return(refined_table)
 }
+
 #' @title cut_abundances
 #'
 #' @description
 #' Removes metadata columns from dataset
+#'
+#' @param abundance_cutoff
+#' Numeric, the threshold cutoff value
+#'
+#' @param type
+#' The type of measure to base the cutoff on. Can be any
+#' of \code{'mean'}, \code{median}, \code{max} which cuts away
+#' OTUs based on mean, median and maximum abundance, repectivly
+#'
+#' @param renormalize
+#' Logical, should the abundances be renormalized after the procedyre?
+#'
 #'
 #' @import matrixStats
 cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize=TRUE){
@@ -35,10 +57,15 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' @description
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
+#'
+#' @param OTU_table The raw OTU table
+#' @param metadataCols The names (character vector) or position (integer) of the
+#' metadata columns to remove from the table
+#'
 #' @export
-refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE)
+refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE,metadataCols=c('OTU Id','taxonomy'))
   {
-  refined_table=remove_metadata(OTU_table)
+  refined_table=remove_metadata(OTU_table,metadataCols = metadataCols)
   # Cuts away the least abundant species
   cut_abundances(refined_table,abundance_cutoff,type=cutoff_type,renormalize=renormalize)
 }
@@ -76,16 +103,18 @@ renormalize=function(table)
 #' the numbers if comma as decimal delimer and semicolon as the delimer between numbers.
 #' Else, the decimal delimer is point and comma the delimer between numbers.
 #'
+#' @param score_attributes An object of class \link{sim.measure.attributes} belonging to the similarity measure being used
+#'
 #'
 #'
 #' @importFrom utils modifyList write.csv write.csv2
 #'
 #' @export
 output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,output.file=FALSE,filename=NULL,
-                   return.value=TRUE,csv_option='2',removeDuplicates=TRUE){
+                   return.value=TRUE,csv_option='2',removeDuplicates=TRUE,sim.measure.attributes=NULL){
                     significant_interactions=create_interaction_table(data=data,OTU_table = OTU_table,threshold.type = threshold.type,
                                                                       threshold.value = threshold.value,
-                                                                      removeDuplicates = removeDuplicates)
+                                                                      removeDuplicates = removeDuplicates,score_attributes=sim.measure.attributes)
                     if(output.file){
                     write.interactions_table(significant_interactions, filename=filename,
                                              csv_option=csv_option)
@@ -102,10 +131,10 @@ output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.val
 #' @description Performs the actual process of making the table.
 #' For documentation of parameters, see \link{output_ccrepe_data}
 #'
-#' @return
+#' @return An \code{interactions_table}
 #'
 #' @export
-create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,removeDuplicates=TRUE){
+create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,removeDuplicates=TRUE,score_attributes=NULL){
   options(stringsAsFactors = FALSE)
   p.values=as.data.frame(data$p.values)
   z.stat=as.data.frame(data$z.stat)
@@ -153,8 +182,8 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
     }
     if (!is.null(OTU_table)){
       # Add taxonomy if available
-      significant_interactions$taxonomy_1=OTU_table[match(significant_interactions$OTU_1,as.character(OTU_table$`OTU Id`)),]$taxonomy
-      significant_interactions$taxonomy_2=OTU_table[match(significant_interactions$OTU_2,as.character(OTU_table$`OTU Id`)),]$taxonomy
+      significant_interactions$taxonomy_1=OTU_table[match(significant_interactions$OTU_1,as.character(row.names(OTU_table))),]$taxonomy
+      significant_interactions$taxonomy_2=OTU_table[match(significant_interactions$OTU_2,as.character(row.names(OTU_table))),]$taxonomy
     }
     # Sorts by dersired significance column
     if (threshold.type=='q')
@@ -163,6 +192,16 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
       significant_interactions=significant_interactions[order(significant_interactions$p.value),]
   }
   class(significant_interactions)=c('interaction_table',class(significant_interactions))
+  if(is.null(score_attributes)){
+  attr(significant_interactions,"measure_name")=NA
+  attr(significant_interactions,"signed")=ifelse(!all(significant_interactions$sim.score >=0),TRUE,NA)
+  attr(significant_interactions,"measure_type")=NA
+  }
+  else{
+    attr(significant_interactions,"measure_name")=score_attributes@string
+    attr(significant_interactions,"signed")=signed=score_attributes@signed
+    attr(significant_interactions,"measure_type")=score_attributes@type_measure
+  }
   return(significant_interactions)
 }
 #'
@@ -175,11 +214,53 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
 write.interactions_table=function(significant_interactions,filename,
                                   csv_option='2'){
   if (csv_option=='2'){
-    write.csv2(significant_interactions,file = filename)
+    write.csv2(significant_interactions,file = filename,row.names = FALSE)
   }
   else{
-    write.csv(significant_interactions,file = filename)
+    write.csv(significant_interactions,file = filename,row.names = FALSE)
   }
 }
+#' @name summary.interaction_table
+#'
+#' @title Create summary of \code{interaction_table}
+#'
+#' @param table An interaction table returned from \link{create_interaction_table}
+#'
+#' @return A list with the following fields (the first three are taken directly from
+#' the \code{interaction.table}):
+#' \itemize{
+#' \item \code{measure_name}
+#' \item \code{signed}
+#' \item \code{measure_type}
+#' \item \code{number_significant}: The number of significant interactions
+#' \item \code{proportion_negative}: The proprotion of significant interactions which
+#' are negative
+#' }
+#'
+#'
+#' @export
+summary.interaction_table=function(table){
+  proportion_negative=sum(table$sim.score < 0)/nrow(table)
+  number_significant=nrow(table)
+  c(attributes(table)[c("measure_name","signed","measure_type")],
+    list(number_significant=number_significant,proportion_negative=proportion_negative))
+}
+
+#' @exportMethod
+as.edgelist.default = function(x){
+ UseMethod("as.edgelist")
+}
+
+#' @name as.edge_list.interaction_table
+#' @title as.edge_list.interaction_table
+#' @description Converts an interaction table to a two column character matrix
+#' where each row represent an edge between the OTUs
+#'
+#' @exportMethod
+as.edgelist.interaction_table = function(table){
+    as.matrix(table[,c('OTU_1','OTU_2')])
+}
+
+
 
 

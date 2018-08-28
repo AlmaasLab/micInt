@@ -11,7 +11,7 @@ similarity_measures(subset = NULL)
 By default, all similarity measures are returned}
 }
 \value{
-A list of the similarity measures with the function ifself (\code{FUN}), and its human reable name (\code{string})
+A list of the \link{sim.measure} objects defined by the function
 }
 \description{
 Similarity measures passed as functions to ccrepe and
