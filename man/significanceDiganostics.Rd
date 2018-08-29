@@ -4,8 +4,8 @@
 \alias{significanceDiganostics}
 \title{significanceDiganostics}
 \usage{
-significanceDiganostics(similarity_measures_significance, refined_table,
-  OTU_table, type = "q", score.name = "pearson")
+significanceDiganostics(similarity_measures_significance, OTU_table,
+  refined_table, metadataCols = NULL, type = "q")
 }
 \arguments{
 \item{similarity_measures_significance}{A list over interaction tables, see \link{output_ccrepe_data}.}

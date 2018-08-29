@@ -109,61 +109,114 @@ else{
 #' @param similarity_measures_significance A list over interaction tables, see \link{output_ccrepe_data}.
 #'
 #' @importFrom graphics par plot
-#' @export
-significanceDiganostics=function(similarity_measures_significance,refined_table,OTU_table,
-                                 type='q',score.name='pearson'){
-OTU_stat=OTU_stats(OTU_table)
+significanceDiganostics=function(similarity_measures_significance,OTU_table,refined_table,metadataCols = NULL,
+                                 type='q'){
+if(is.null(metadataCols)){
+metadataCols = which(unlist(lapply(OTU_table, FUN = function(x) !is.numeric(x)))
+)
+}
+OTU_stat=OTU_stats(OTU_table,metadataCols = metadataCols)
 # We want to plot the results, but want to exclude the ones being filtered
 # out because of low abundance
 OTU_stat=OTU_stat[OTU_stat$ID %in% names(refined_table),]
-numInteractions=lapply(similarity_measures_significance,
-                       function(x) countInteractions(OTU_stat$ID,x)
-                       )
 par(ask=TRUE)
 # Plotting number of significant interactions versus the relative abundaces of the
 # OTUs
-for(i in 1:length(numInteractions)){
-plot(OTU_stat$meanAbundance,numInteractions[[i]],xlab = 'Mean abundance',
-     ylab='Number of interactions',main=names(numInteractions)[i],
-     log='x')
-}
-for(i in 1:length(numInteractions)){
-  plot(OTU_stat$medianAbundance,numInteractions[[i]],xlab = 'Median abundance',
-       ylab='Number of interactions',main=names(numInteractions)[i],
-       log='x')
-}
-for(i in 1:length(numInteractions)){
-  plot(OTU_stat$maxAbundance,numInteractions[[i]],xlab = 'Max abundance',
-       ylab='Number of interactions',main=names(numInteractions)[i],
-       log='x')
+for(i in 1:length(similarity_measures_significance)){
+plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='mean',main=names(similarity_measures_significance)[i]
+     )
+  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='median',main=names(similarity_measures_significance)[i]
+  )
+  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='max',main=names(similarity_measures_significance)[i]
+  )
 }
 # Plotting the q-values/p-value of the significant interactions against the product
 # of the mean abundances of the interacting OTUs
-if(type=='q')
-{
-  description='q-value'
-  valueColumn='q.value'
-}
-else{
-  description='p-value'
-  valueColumn='p.value'
-}
-abundance_product=lapply(similarity_measures_significance,
-                         function(X) abundanceProduct(X,OTU_stat))
-  for(i in 1:length(numInteractions)){
+  for(i in 1:length(similarity_measures_significance)){
     if(length(similarity_measures_significance[[i]][[valueColumn]])==0){
       next
     }
-  plot(similarity_measures_significance[[i]][[valueColumn]],abundance_product[[i]],
-  main=names(numInteractions)[i],log='xy',xlab=description,ylab='Abundance product'
+  plot(similarity_measures_significance[[i]], OTU_stat,type='ab_prod',cutoff_type = type,
+  main=names(similarity_measures_significance)[i]
   )
 }
 }
 
+
+#' @title plot.interaction_table
+#'
+#' @param table An \code{interaction_table}
+#'
+#' @param OTU_stat OTU statistics obtained from the function \link{OTU_stas}
+#'
+#' @param type One of the following: \itemize{
+#' \item \code{'num_int'} Plots the number of interactions for each OTU against
+#' its abundance
+#' \item \code{'ab_prod'} Plots the product of the abundances of each significant pairs of
+#' OTUs against the q- or p-value of the interaction
+#' }
+#'
+#' @param cutoff_type
+#' One of the following:
+#' \itemize{
+#' \item \code{'q'} Plots according to the q-values
+#' \item \code{'p'} Plots according to the p-values
+#' }
+#' This parameter is ignored if \code{type='num_int'}
+#'
+#' @param abundance_type The type of abundance to use in the plots. One of \code{c('mean','median','max')}.
+#'
+#' @param ... Additional parameters to the \link{plot} function
+#'
+#' @description Makes a diagnostic plot of an \code{interaction_table}
+#'
+#' @export
+plot.interaction_table = function(table,OTU_stat,type = 'num_int',cutoff_type='q',
+                                  abundance_type ='mean',...){
+ plot_after = switch (abundance_type,
+   'mean' = OTU_stat$meanAbundance,
+   'max' = OTU_stat$maxAbundance,
+   'median' = OTU_stat$medianAbundance
+ )
+if(type == 'num_int'){
+num_int= countInteractions(OTU_stat$ID,table)
+xlab= switch (abundance_type,
+              'mean' = 'Mean abundance',
+              'max' = 'Max abundance',
+              'median' = 'Median abundance'
+)
+plot(x=plot_after,y=num_int,xlab = xlab, ylab='Number of interactions',log = 'x',... = ...)
+}
+else{
+  if(cutoff_type=='q')
+  {
+    description='q-value'
+    valueColumn='q.value'
+  }
+  else{
+    description='p-value'
+    valueColumn='p.value'
+  }
+abundance_product = abundanceProduct(table,OTU_stat,type=abundance_type)
+y = abundance_product
+x = table[[valueColumn]]
+plot(x,y,log='xy',xlab=description,ylab='Abundance product',... = ...)
+}
+}
+
+#' @title ratio_shared_interactions
+#'
+#' @description
 #' Finds the Jaccard index of number of shared interactions between the similarity measures
+#'
+#' @param similarity_measures_significance A list objects of the class \code{interaction_table}
+#'
+#' @return A matrix showing the Jaccard indecies of the number of significant interactions.
+#' Measures with no significant interactions are ignored.
 #'
 #' @export
 ratio_shared_interactions=function(similarity_measures_significance){
+  # Ignores tables with zero columns
   to_include=unlist(lapply(similarity_measures_significance,function(x) nrow(x)!= 0))
   OTU_pairs=lapply(similarity_measures_significance[to_include],extract_OTUs)
   n_sim_measures=length(OTU_pairs)
@@ -184,7 +237,7 @@ extract_OTUs=function(sim_result){
   OTUs_list=as.list(OTUs_orded)
   return(OTUs_list)
 }
-# Count the number identical (not necessarly contigious) rows
+# Count the number of identical (not necessarly contigious) rows
 count_matches=function(OTUs_1,OTUs_2){
  length(intersect(OTUs_1,OTUs_2))
 }

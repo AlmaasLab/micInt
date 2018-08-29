@@ -2,9 +2,16 @@
 % Please edit documentation in R/significance_pipeline.R
 \name{ratio_shared_interactions}
 \alias{ratio_shared_interactions}
-\title{Finds the Jaccard index of number of shared interactions between the similarity measures}
+\title{ratio_shared_interactions}
 \usage{
 ratio_shared_interactions(similarity_measures_significance)
+}
+\arguments{
+\item{similarity_measures_significance}{A list objects of the class \code{interaction_table}}
+}
+\value{
+A matrix showing the Jaccard indecies of the number of significant interactions.
+Measures with no significant interactions are ignored.
 }
 \description{
 Finds the Jaccard index of number of shared interactions between the similarity measures

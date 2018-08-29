@@ -1,17 +1,50 @@
+#' @title OTU statistics
+#'
+#' @description
+#' This function returns a summary of OTU statistics for the OTUs of
+#' an OTU table
+#'
+#' @param OTU_table The raw OTU table
+#' @param metadataCols See the corresponding description for \link{runAnalysis}
+#'
+#' @return
+#' A \code{data.frame} with one row for each OTU with the following
+#' elements:
+#'
+#' \itemize{
+#' \item \code{ID} The OTU name
+#' \item \code{meanAbundance}
+#' \item \code{medianAbundance}
+#' \item \code{maxAbundance}
+#' \item \code{numberNonZero} The number of samples where the OTU has a
+#' non-zero abundance
+#' \item \code{taxonomy}
+#' }
+#'
+#'
 #' @import matrixStats
-OTU_stats=function(OTU_table){
-ID=OTU_table$`OTU Id`
-refined_data=as.matrix(remove_metadata(OTU_table))
+#' @export
+OTU_stats=function(OTU_table, metadataCols= c('OTU Id','taxonomy')){
+ID=rownames(OTU_table)
+refined_data=as.matrix(remove_metadata(OTU_table,metadataCols= metadataCols))
 meanAbundance=colMeans(refined_data)
 medianAbundance=colMedians(refined_data)
 maxAbundance=colMaxs(refined_data)
 numberNonZero=colSums(refined_data != 0)
-propotionNonZero=colMeans(refined_data != 0)
+proportionNonZero=colMeans(refined_data != 0)
 taxonomy=OTU_table$taxonomy
 res=data.frame(ID,meanAbundance,medianAbundance,maxAbundance,
-           numberNonZero,propotionNonZero,taxonomy)
+           numberNonZero,proportionNonZero,taxonomy)
 }
-# Counts the number of interactions for each OTU
+
+#' @title countInteractions
+#'
+#' @description  Counts the number of interactions for each OTU
+#'
+#' @param IDs The name of each OTU
+#'
+#' @param interactions_table An \code{interaction_table}
+#'
 countInteractions=function(IDs,interactions_table){
   dataset_OTUs=c(interactions_table$`OTU_1`,interactions_table$`OTU_2`)
   counts=vapply(IDs,function(ID){
