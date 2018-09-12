@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_refinement.R
 \name{refine_data}
 \alias{refine_data}
-\title{refine_data}
+\title{Refine raw OTU table}
 \usage{
 refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
   renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
@@ -13,7 +13,31 @@ refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}
 }
+\value{
+A data frame with the metadata columns removed, and the OTUs
+below the cutoff are filtered away. Additionally, in the refined table
+the OTUs constitute the rows, while the rows are the samples (transposed
+compared to the original OTU table).
+}
 \description{
 Removes metadata from OTU table and cuts off the least abundant
 species, defined by the cutoff parameter
+}
+\details{
+In order for an OTU-table to be valid, the following criteria must hold:
+
+\itemize{
+\item
+The data points (sample) are in columns, the abundances for each
+OTU is in rows.
+\item
+The rows may only hold OTU abundances
+\item
+There may be as many metadata colums as preferable. However, the all
+need to be declared in the \code{metadataCols} argument and the column
+\code{taxonomy} has be there in order for the output file to contain the
+taxonomy.
+\item The row names of the table are the OTU names and the column names are the
+sample names
+}
 }

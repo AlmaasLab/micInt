@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_refinement.R
 \name{remove_metadata}
 \alias{remove_metadata}
-\title{remove_metadata}
+\title{Remove metadata from data set}
 \usage{
 remove_metadata(OTU_table, metadataCols = c("OTU Id", "taxonomy"))
 }
@@ -13,5 +13,5 @@ remove_metadata(OTU_table, metadataCols = c("OTU Id", "taxonomy"))
 metadata columns to remove from the table}
 }
 \description{
-Removes metadata columns from dataset
+Removes desired metadata columns from dataset
 }

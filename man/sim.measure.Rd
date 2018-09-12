@@ -4,7 +4,7 @@
 \name{sim.measure}
 \alias{sim.measure}
 \alias{sim.measure}
-\title{sim.measure}
+\title{Similarity measure}
 \usage{
 sim.measure(FUN, string, categorical = FALSE, mean_scaleable = FALSE,
   signed = FALSE, type = "parametric")

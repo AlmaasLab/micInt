@@ -1,5 +1,5 @@
 #' @name sim.measure
-#' @title sim.measure
+#' @title Similarity measure
 #' @description
 #' A similarity measure structure with the function ifself, and metadata fields
 #'
