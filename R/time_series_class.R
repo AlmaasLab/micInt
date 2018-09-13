@@ -22,7 +22,7 @@ return(res)
 
 setValidity("OTU_time_series",method = function(object){
   retval = NULL
-  if(nrow(x@table) != length(x@time_points)){
+  if(nrow(object@table) != length(object@time_points)){
     retval = c(retval,"Number of rows in table and number of time points differ")
   }
   if(is.null(retval))
