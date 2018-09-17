@@ -121,7 +121,8 @@ extract_log_integral_system = function(time_series){
 
 #' @title Stack equations from different time series
 #'
-#' @param equations A list of lists of equations, where the second list layer contains the
+#' @param equations A list of lists of equations (coefficient matrix
+#' \code{A} and right side \code{b}), where the second list layer contains the
 #' name of the respective OTUs
 #'
 #' @description For each OTU, all equations will be stacked together

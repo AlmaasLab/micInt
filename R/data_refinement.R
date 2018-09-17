@@ -278,9 +278,15 @@ as.edgelist = function(x, ...){
 }
 
 #' @name as.edge_list.interaction_table
-#' @title as.edge_list.interaction_table
+#' @title Create edge list from interaction table
+#'
+#' @param table An \code{interaction_table}
+#'
 #' @description Converts an interaction table to a two column character matrix
-#' where each row represent an edge between the OTUs
+#' where each row represent an edge between the OTUs. The entities in the each row are the name of the
+#' two interacting OTUs.
+#'
+#' @return The result of this function can be fed directly into \link{igraph} for making interacting network
 #'
 #' @export
 as.edgelist.interaction_table = function(table){

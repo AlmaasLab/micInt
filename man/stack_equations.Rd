@@ -7,7 +7,8 @@
 stack_equations(equations)
 }
 \arguments{
-\item{equations}{A list of lists of equations, where the second list layer contains the
+\item{equations}{A list of lists of equations (coefficient matrix
+\code{A} and right side \code{b}), where the second list layer contains the
 name of the respective OTUs}
 }
 \description{
