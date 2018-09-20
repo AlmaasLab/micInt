@@ -4,7 +4,7 @@
 \alias{cv.LV_fit}
 \title{Cross-validate fit for Lotka-Volterra coefficients}
 \usage{
-cv.LV_fit(equations, n_folds, weigths = expand.grid(self = 0.1 * 0:100,
+cv.LV_fit(equations, n_folds = 5, weights = expand.grid(self = 0.1 * 0:100,
   interaction = 0.1 * 0:100))
 }
 \arguments{

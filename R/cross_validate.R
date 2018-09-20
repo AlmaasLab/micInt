@@ -27,6 +27,10 @@
 #'
 
 test_LV_fit=function(test_equations,solution_matrix){
+# If the solution is not available, it makes no sense to calculate the statistics
+if(is.na(solution_matrix)){
+return(list(RMSE = NA_real_, MAE = NA_real_))
+}
 n_OTUs = length(test_equations)
 errors = lapply(1:n_OTUs, function(i){
 equation = test_equations[[i]]
@@ -63,6 +67,7 @@ MAE = mean(abs(cat_errors))
 #' }
 #' If missing, the cross validation is carried out over a quadratic grid from 0 to 10 in steps of 0.1
 #'
+#' @import magrittr
 #'
 #' @return
 #'
@@ -75,32 +80,37 @@ MAE = mean(abs(cat_errors))
 #'
 #'
 #' @export
-cv.LV_fit=function(equations,n_folds,weigths = expand.grid(self=0.1*0:100,interaction=0.1*0:100)){
+cv.LV_fit=function(equations,n_folds=5,weights = expand.grid(self=0.1*0:100,interaction=0.1*0:100)){
 # We first find the number of equation in each equation system
-n_equations = lapply(equations, function(x) nrow(x$A))
 # the total number of systems
 n_systems = length(equations)
 # and the number of parameter combinations to test
 n_combinations = nrow(weights)
-list_weights = lapply(1:n_combinations,function(i) weigths[i,])
+list_weights = lapply(1:n_combinations,function(i) weights[i,]%>% as.numeric)
 errors = lapply(list_weights,FUN = function(weights){
 # At this level, the weights are fixed and we assign the systems
 # into different folds
-names(weigths) = c('self','interaction')
+names(weights) = c('self','interaction')
 fold = sample(1:n_folds,size = n_systems,replace = TRUE)
 number_in_fold = sapply(1:n_folds, function(i) sum(fold==i))
-lapply(1:n_folds,function(i){
+fold_errors=lapply(1:n_folds,function(i){
 train = equations[fold != i]
 test = equations[fold == i]
-fit = ridge_fit(train,weigths)
+# We have to consider the cases where at least one of the systems are
+# singular
+fit = tryCatch(ridge_fit(train,weights),error = function(e) {
+  NA_real_
+  }
+)
 CV_res = as.data.frame(test_LV_fit(test_equations = test,solution_matrix = fit))
-})
-summary_statistics = do.call(rbind,errors)
+}
+)
+summary_statistics = do.call(rbind,fold_errors)
 RMSE = summary_statistics$RMSE^2*number_in_fold %>% mean %>% sqrt
 MAE = summary_statistics$MAE*number_in_fold %>% mean
 as.data.frame(list(RMSE=RMSE,MAE=MAE))
 }
 )
 results = do.call(rbind, errors)
-return(cbind(weigths,results))
+return(cbind(weights,results))
 }

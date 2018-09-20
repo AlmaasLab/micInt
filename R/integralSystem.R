@@ -127,7 +127,6 @@ extract_log_integral_system = function(time_series){
 #'
 #' @description For each OTU, all equations will be stacked together
 #'
-#' @importFrom magrittr %>%
 stack_equations = function(equations){
   # First, we find all available OTU names
   OTU_names = lapply(equations, names) %>% unlist %>% unique
