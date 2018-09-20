@@ -12,5 +12,6 @@ stack_equations(equations)
 name of the respective OTUs}
 }
 \description{
-For each OTU, all equations will be stacked together
+For each OTU, all equations will be stacked together into a single
+system
 }

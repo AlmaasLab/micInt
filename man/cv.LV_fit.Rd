@@ -4,13 +4,16 @@
 \alias{cv.LV_fit}
 \title{Cross-validate fit for Lotka-Volterra coefficients}
 \usage{
-cv.LV_fit(equations, n_folds = 5, weights = expand.grid(self = 0.1 * 0:100,
-  interaction = 0.1 * 0:100))
+cv.LV_fit(time_series, n_folds = length(time_series), kind = "integral",
+  weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100))
 }
 \arguments{
-\item{equations}{A list of equation systems returned from \code{\link{integralSystem}}}
+\item{time_series}{A list of \code{\link{OTU_time_series}} to be cross-validated}
 
-\item{n_folds}{The number of folds to apply}
+\item{n_folds}{The number of folds to apply. If missing, leave-one-out cross-validation is preformed.}
+
+\item{kind}{Charachter, one of \code{c('integral','log_integral')} Choose whether use the integral or log-integral approach
+described in the article cited.}
 
 \item{weights}{A n times 2 data.frame containing the weights to be tried out. The two colmns are: \itemize{
 \item \code{'self'} The regularization for the maximal growth rate
@@ -19,7 +22,7 @@ cv.LV_fit(equations, n_folds = 5, weights = expand.grid(self = 0.1 * 0:100,
 If missing, the cross validation is carried out over a quadratic grid from 0 to 10 in steps of 0.1}
 }
 \value{
-A data.frame containing the parameter values, and the two columns:
+A data.frame containing the parameter values, and the two columns of cross-validation error:
  \itemize{
 \item \code{'RMSE'} The root mean square error of the right sides
 \item \code{'MAE'} The mean absolute error of the right sides
@@ -27,4 +30,13 @@ A data.frame containing the parameter values, and the two columns:
 }
 \description{
 The function preforms k-fold cross-validation on a grid of regularization parameters
+}
+\details{
+In this setting, each time series is a ``data point'' in the cross-validation procedure, meaning that each
+fit is preformed on some of the time series and the other are used for validation.
+}
+\references{
+P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
+estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
+(Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \link{10.1016/j.amc.2013.08.093}
 }

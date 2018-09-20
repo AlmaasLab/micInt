@@ -125,7 +125,8 @@ extract_log_integral_system = function(time_series){
 #' \code{A} and right side \code{b}), where the second list layer contains the
 #' name of the respective OTUs
 #'
-#' @description For each OTU, all equations will be stacked together
+#' @description For each OTU, all equations will be stacked together into a single
+#' system
 #'
 stack_equations = function(equations){
   # First, we find all available OTU names
