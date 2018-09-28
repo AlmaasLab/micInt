@@ -4,7 +4,8 @@
 \alias{write.interactions_table}
 \title{write.interactions_table}
 \usage{
-write.interactions_table(significant_interactions, filename, csv_option = "2")
+write.interactions_table(significant_interactions, filename,
+  csv_option = "2")
 }
 \description{
 Takes an \code{interaction_table} and writes it to a file. For information about parameters,

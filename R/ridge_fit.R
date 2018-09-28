@@ -27,7 +27,8 @@
 #'
 #' An n_OTU times (n_OTU+1) numeric matrix where each row contains the coefficients determining
 #' the growth of the selected OTU. The first column contains the estimated growth rates, while the other
-#' rows contain the estimates for the interaction coefficients.
+#' rows contain the estimates for the interaction coefficients. This object has
+#' the S3 class attribute \code{LV_fit}.
 #'
 #' @references
 #'
@@ -56,5 +57,6 @@ solution %>% matrix(nrow =1)
 solution_matrix = do.call(rbind,solutions)
 rownames(solution_matrix) = names(solutions)
 colnames(solution_matrix) = c('self',names(solutions))
+class(solution_matrix) = c('LV_fit',class(solution_matrix))
 return(solution_matrix)
 }

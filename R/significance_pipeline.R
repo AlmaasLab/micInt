@@ -90,7 +90,7 @@ outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
-       function(x)(R.utils::doCall(.fcn=micInt::output_ccrepe_data,
+       function(x)(do.call(what=micInt::output_ccrepe_data,
                           args=x))
 )
 if(is.null(returnVariables)){

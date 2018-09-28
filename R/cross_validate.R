@@ -96,7 +96,7 @@ MAE = mean(abs(cat_errors))
 #'
 #'
 #' @export
-cv.LV_fit=function(time_series,n_folds=length(time_series),kind='integral',
+cv.LV=function(time_series,n_folds=length(time_series),kind='integral',
                    weights = expand.grid(self=0.1*0:100,interaction=0.1*0:100)){
 # We first find the number of time series
 # the total number of systems

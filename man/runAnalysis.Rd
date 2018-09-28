@@ -6,8 +6,9 @@
 \usage{
 runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
   parallel = TRUE, returnVariables = NULL, subset = NULL,
-  sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
-  metadataCols = c("OTU Id", "taxonomy"), postfix = "")
+  sim.scores = NULL, file = FALSE, magnitude_factor = 10,
+  prefix = NULL, metadataCols = c("OTU Id", "taxonomy"),
+  postfix = "")
 }
 \arguments{
 \item{OTU_table}{The raw OTU table to be treated}

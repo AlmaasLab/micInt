@@ -3,7 +3,6 @@
 \docType{class}
 \name{OTU_time_series}
 \alias{OTU_time_series}
-\alias{OTU_time_series}
 \title{Time series class for OTU tables}
 \usage{
 OTU_time_series(table, time_points)

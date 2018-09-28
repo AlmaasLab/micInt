@@ -17,7 +17,8 @@ by cross-validation}
 \value{
 An n_OTU times (n_OTU+1) numeric matrix where each row contains the coefficients determining
 the growth of the selected OTU. The first column contains the estimated growth rates, while the other
-rows contain the estimates for the interaction coefficients.
+rows contain the estimates for the interaction coefficients. This object has
+the S3 class attribute \code{LV_fit}.
 }
 \description{
 When determining the Lotka-Volterra coefficients of an OTU system, this function solves the linear
