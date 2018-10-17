@@ -4,7 +4,15 @@
 \alias{plot_trajectory}
 \title{Plot trajectory for time series}
 \usage{
-plot_trajectory()
+plot_trajectory(time_series_list, distance = "bray",
+  subset = names(time_series_list))
+}
+\arguments{
+\item{time_series_list}{A names list of \link{OTU_time_series} objects}
+
+\item{distance}{The name of any distance metric in \link{vegdist}}
+
+\item{subset}{Character, the subsets of time series to plot}
 }
 \value{
 A \link{ggplot} object showing the trajectory in the two first principal components
@@ -15,5 +23,6 @@ in time. This convenience functions does so by adding arrows between the samples
 chronological order in the PCA plot
 }
 \details{
-This function utilizes
+The function utilzes the entire table to make the principal components,
+even if some data points are excluded
 }
