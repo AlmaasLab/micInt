@@ -100,56 +100,6 @@ else{
   return(mget(returnVariables))
 }
 }
-#' @title significanceDiganostics
-#'
-#' @description
-#' Makes interaction density plots and abundance
-#' product plots for significant interations
-#'
-#' @param similarity_measures_significance A list over interaction tables, see \link{output_ccrepe_data}.
-#'
-#' @param refined_table The refined table returned from \link{}
-#'
-#' @inheritParams runAnalysis
-#'
-#' @inheritParams output_ccrepe_data
-#'
-#'
-#'
-#'
-#' @importFrom graphics par plot
-significanceDiganostics=function(similarity_measures_significance,OTU_table,refined_table,metadataCols = NULL,
-                                 threshold.type='q'){
-if(is.null(metadataCols)){
-metadataCols = which(unlist(lapply(OTU_table, FUN = function(x) !is.numeric(x)))
-)
-}
-OTU_stat=OTU_stats(OTU_table,metadataCols = metadataCols)
-# We want to plot the results, but want to exclude the ones being filtered
-# out because of low abundance
-OTU_stat=OTU_stat[OTU_stat$ID %in% names(refined_table),]
-par(ask=TRUE)
-# Plotting number of significant interactions versus the relative abundaces of the
-# OTUs
-for(i in 1:length(similarity_measures_significance)){
-plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='mean',main=names(similarity_measures_significance)[i]
-     )
-  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='median',main=names(similarity_measures_significance)[i]
-  )
-  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='max',main=names(similarity_measures_significance)[i]
-  )
-}
-# Plotting the q-values/p-value of the significant interactions against the product
-# of the mean abundances of the interacting OTUs
-  for(i in 1:length(similarity_measures_significance)){
-    if(length(similarity_measures_significance[[i]][[valueColumn]])==0){
-      next
-    }
-  plot(similarity_measures_significance[[i]], OTU_stat,type='ab_prod',cutoff_type = type,
-  main=names(similarity_measures_significance)[i]
-  )
-}
-}
 
 
 #' @title autoplot.interaction_table
