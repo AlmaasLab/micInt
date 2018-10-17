@@ -100,54 +100,13 @@ else{
   return(mget(returnVariables))
 }
 }
-#' @title significanceDiganostics
-#'
-#' @description
-#' Makes interaction density plots and abundance
-#' product plots for significant interations
-#'
-#' @param similarity_measures_significance A list over interaction tables, see \link{output_ccrepe_data}.
-#'
-#' @importFrom graphics par plot
-significanceDiganostics=function(similarity_measures_significance,OTU_table,refined_table,metadataCols = NULL,
-                                 type='q'){
-if(is.null(metadataCols)){
-metadataCols = which(unlist(lapply(OTU_table, FUN = function(x) !is.numeric(x)))
-)
-}
-OTU_stat=OTU_stats(OTU_table,metadataCols = metadataCols)
-# We want to plot the results, but want to exclude the ones being filtered
-# out because of low abundance
-OTU_stat=OTU_stat[OTU_stat$ID %in% names(refined_table),]
-par(ask=TRUE)
-# Plotting number of significant interactions versus the relative abundaces of the
-# OTUs
-for(i in 1:length(similarity_measures_significance)){
-plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='mean',main=names(similarity_measures_significance)[i]
-     )
-  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='median',main=names(similarity_measures_significance)[i]
-  )
-  plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_type ='max',main=names(similarity_measures_significance)[i]
-  )
-}
-# Plotting the q-values/p-value of the significant interactions against the product
-# of the mean abundances of the interacting OTUs
-  for(i in 1:length(similarity_measures_significance)){
-    if(length(similarity_measures_significance[[i]][[valueColumn]])==0){
-      next
-    }
-  plot(similarity_measures_significance[[i]], OTU_stat,type='ab_prod',cutoff_type = type,
-  main=names(similarity_measures_significance)[i]
-  )
-}
-}
 
 
-#' @title plot.interaction_table
+#' @title autoplot.interaction_table
 #'
 #' @param table An \code{interaction_table}
 #'
-#' @param OTU_stat OTU statistics obtained from the function \link{OTU_stas}
+#' @param OTU_stat OTU statistics obtained from the function \link{OTU_stats}
 #'
 #' @param type One of the following: \itemize{
 #' \item \code{'num_int'} Plots the number of interactions for each OTU against
@@ -166,13 +125,18 @@ plot(similarity_measures_significance[[i]],OTU_stat,type = 'num_int',abundance_t
 #'
 #' @param abundance_type The type of abundance to use in the plots. One of \code{c('mean','median','max')}.
 #'
-#' @param ... Additional parameters to the \link{plot} function
+#'
 #'
 #' @description Makes a diagnostic plot of an \code{interaction_table}
 #'
+#' @import ggplot2
+#'
+#' @return A \link{ggplot} object showing the desired diagnostic plot
+#'
+#'
 #' @export
-plot.interaction_table = function(table,OTU_stat,type = 'num_int',cutoff_type='q',
-                                  abundance_type ='mean',...){
+autoplot.interaction_table = function(table,OTU_stat,type = 'num_int',cutoff_type='q',
+                                  abundance_type ='mean'){
  plot_after = switch (abundance_type,
    'mean' = OTU_stat$meanAbundance,
    'max' = OTU_stat$maxAbundance,
@@ -185,7 +149,8 @@ xlab= switch (abundance_type,
               'max' = 'Max abundance',
               'median' = 'Median abundance'
 )
-plot(x=plot_after,y=num_int,xlab = xlab, ylab='Number of interactions',log = 'x',... = ...)
+return(ggplot()+geom_point(aes_string(x="plot_after",y="num_int"))+scale_x_continuous(name= xlab,trans = 'log10')+
+  scale_y_continuous(name='Number of interactions'))
 }
 else{
   if(cutoff_type=='q')
@@ -200,7 +165,8 @@ else{
 abundance_product = abundanceProduct(table,OTU_stat,type=abundance_type)
 y = abundance_product
 x = table[[valueColumn]]
-plot(x,y,log='xy',xlab=description,ylab='Abundance product',... = ...)
+return(ggplot()+geom_point(aes_string(x="x",y="y"))+xlab(description)+ylab('Abundance product')+
+  scale_x_continuous(trans='log10')+scale_y_continuous(trans='log10'))
 }
 }
 
