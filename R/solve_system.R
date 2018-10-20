@@ -16,9 +16,8 @@
 #' @param times The time points to include in the simulation
 #'
 #' @return Matrix of class \code{deSolve}. For more information, see the description in \link{ode}.
-#'
-#'
 #' @seealso \link{ridge_fit}, \link{deSolve-package}
+#' @importFrom deSolve ode
 #'
 #'
 #'
@@ -29,12 +28,13 @@ ode(y=start,func=system_equation,parms = fit,times = times)
 }
 
 #' @title The ODE function for the Lotka-Volterra system
-system_equation=function(t,y,params){
-self_growth_rate=param[,1]
-interaction_matrix = params[,-1]
+system_equation=function(t,y,parms){
+self_growth_rate=parms[,1]
+interaction_matrix = parms[,-1]
 # The right hand side as it would be if devided by the concentration of
 # each OTU beforehand
 right_side =self_growth_rate+rowSums(interaction_matrix%*%y)
 # Finally, multiply with the concentraions
 dxdt=y*right_side
+list(dxdt)
 }

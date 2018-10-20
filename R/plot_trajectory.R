@@ -44,4 +44,3 @@ res=ggplot(data=fort_table)+geom_path(aes_string(x="PC1",
   ylab(sprintf("PC2 (%.2f%%)",PC2_proportion*100))+guides(color=guide_legend('Time series'))
 return(res)
 }
-

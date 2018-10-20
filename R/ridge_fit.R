@@ -57,6 +57,6 @@ solution %>% matrix(nrow =1)
 solution_matrix = do.call(rbind,solutions)
 rownames(solution_matrix) = names(solutions)
 colnames(solution_matrix) = c('self',names(solutions))
-class(solution_matrix) = c('LV_fit',class(solution_matrix))
+class(solution_matrix) = c('LV',class(solution_matrix))
 return(solution_matrix)
 }

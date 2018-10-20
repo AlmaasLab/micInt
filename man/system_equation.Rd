@@ -4,7 +4,7 @@
 \alias{system_equation}
 \title{The ODE function for the Lotka-Volterra system}
 \usage{
-system_equation(t, y, params)
+system_equation(t, y, parms)
 }
 \description{
 The ODE function for the Lotka-Volterra system
