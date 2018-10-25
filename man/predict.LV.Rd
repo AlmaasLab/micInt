@@ -5,7 +5,7 @@
 \title{Predict trajectory of a Lotka-Volterra system from estimated
 coefficients}
 \usage{
-\method{predict}{LV}(fit, start, times)
+\method{predict}{LV}(fit, start, times, diagnostics = TRUE, ...)
 }
 \arguments{
 \item{fit}{An object of class \code{LV_fit} returned from a suitable
@@ -16,14 +16,20 @@ of the simulation. The OTUs must be in the same order as in the
 \code{fit} argument.}
 
 \item{times}{The time points to include in the simulation}
+
+\item{...}{Additional parameters to the function \code{\link{ode}} used to solve the system}
 }
 \value{
-Matrix of class \code{deSolve}. For more information, see the description in \link{ode}.
+An object of type \code{\link{OTU_time_series}}, where the
+table is a matrix of type \code{\link{deSolve}}
 }
 \description{
 This function utilizes the \code{\link{deSolve}} package in order to
 simulate a Lotka-Volterra system with fitted coefficients. Hence, it can be used
 for predictions.
+}
+\details{
+By default, the \code{lsoda} is the method used
 }
 \seealso{
 \link{ridge_fit}, \link{deSolve-package}
