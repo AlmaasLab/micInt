@@ -8,11 +8,12 @@ plot_trajectory(time_series_list, distance = "bray",
   subset = names(time_series_list))
 }
 \arguments{
-\item{time_series_list}{A names list of \link{OTU_time_series} objects}
+\item{time_series_list}{A list of \link{OTU_time_series} objects}
 
 \item{distance}{The name of any distance metric in \link{vegdist}}
 
-\item{subset}{Character, the subsets of time series to plot}
+\item{subset}{Character, the subsets of time series to plot, based on the
+names of the list.}
 }
 \value{
 A \link{ggplot} object showing the trajectory in the two first principal components
@@ -24,5 +25,6 @@ chronological order in the PCA plot
 }
 \details{
 The function utilzes the entire table to make the principal components,
-even if some data points are excluded
+even if some data points are excluded. Note the columns \code{'time_series'} and \code{'time_points'}
+which are available in the object being returned.
 }
