@@ -16,7 +16,7 @@ to OTU tables, useful for time series analysis
 \describe{
 \item{\code{table}}{The refined OTU table returned from \link{refine_data}}
 
-\item{\code{time_points}}{Numeric, the time (measured in secounds) from the start of the
-experiment or any other arbitrary time reference (preferingly the epoch)}
+\item{\code{time_points}}{Numeric, the time from the start of the
+experiment or any other arbitrary time reference}
 }}
 

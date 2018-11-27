@@ -7,8 +7,8 @@
 #'
 #' @slot table The refined OTU table returned from \link{refine_data}
 #'
-#' @slot time_points Numeric, the time (measured in secounds) from the start of the
-#' experiment or any other arbitrary time reference (preferingly the epoch)
+#' @slot time_points Numeric, the time from the start of the
+#' experiment or any other arbitrary time reference
 #' @export
 setClass(Class = "OTU_time_series",slots =c(table='data.frame',time_points="numeric"))
 
