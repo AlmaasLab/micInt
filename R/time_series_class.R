@@ -15,7 +15,9 @@ setClass(Class = "OTU_time_series",slots =c(table='data.frame',time_points="nume
 #' @rdname OTU_time_series
 #' @export
 OTU_time_series = function(table, time_points){
-res = new("OTU_time_series",table=table, time_points=time_points)
+# Ensures the observations come in the correct order
+sorted_table=table[order(time_points),]
+res = new("OTU_time_series",table=sorted_table, time_points=sort(time_points))
 stopifnot(validObject(res))
 return(res)
 }
