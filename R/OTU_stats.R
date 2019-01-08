@@ -4,8 +4,8 @@
 #' This function returns a summary of OTU statistics for the OTUs of
 #' an OTU table
 #'
-#' @param OTU_table The raw OTU table
-#' @param metadataCols See the corresponding description for \link{runAnalysis}
+#' @param refined_table The refined OTU table returned from \link{refine_data}
+#' @inheritParams  output_ccrepe_data
 #'
 #' @return
 #' A \code{data.frame} with one row for each OTU with the following
@@ -18,21 +18,22 @@
 #' \item \code{maxAbundance}
 #' \item \code{numberNonZero} The number of samples where the OTU has a
 #' non-zero abundance
-#' \item \code{taxonomy}
+#' \item \code{taxonomy} collapsed into a single string
 #' }
 #'
 #'
 #' @import matrixStats
 #' @export
-OTU_stats=function(OTU_table, metadataCols= c('OTU Id','taxonomy')){
-ID=rownames(OTU_table)
-refined_data=as.matrix(remove_metadata(OTU_table,metadataCols= metadataCols))
+OTU_stats=function(refined_table,taxonomy=NULL){
+refined_data=refined_table %>% as.matrix
+ID=colnames(refined_data)
+# Sometimes, we may risk that the taxonomy table is not the correct order
+taxonomy=taxonomy[ID]
 meanAbundance=colMeans(refined_data)
 medianAbundance=colMedians(refined_data)
 maxAbundance=colMaxs(refined_data)
 numberNonZero=colSums(refined_data != 0)
 proportionNonZero=colMeans(refined_data != 0)
-taxonomy=OTU_table$taxonomy
 res=data.frame(ID,meanAbundance,medianAbundance,maxAbundance,
            numberNonZero,proportionNonZero,taxonomy)
 }

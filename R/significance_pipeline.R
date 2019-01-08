@@ -84,7 +84,7 @@ if(inheirits(OTU_table,'phyloseq')){
     # Makes a contatented string of the taxonomies of each OTU
     apply(taxonomy,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
   }
-  OTU_table=phyloseq::otu_table(OTU_table) %>% as.matrix
+  OTU_table=phyloseq::otu_table(OTU_table) %>% data.frame
   if(!phyloseq::taxa_are_rows(OTU_table)){
     OTU_table = t(otu_table)
   }

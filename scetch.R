@@ -16,3 +16,7 @@ do.call(paste,list('a','b','c',sep='_'))
 paste(x=c('a','b','c'),sep='_',collapse = NULL)
 temp=c(a=1,b=2,c=3)
 temp['d']
+library(magrittr)
+filtered=temp[c('a','d','b')] %>% na.omit
+class(filtered)
+filtered

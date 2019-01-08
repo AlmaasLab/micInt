@@ -4,12 +4,13 @@
 \alias{OTU_stats}
 \title{OTU statistics}
 \usage{
-OTU_stats(OTU_table, metadataCols = c("OTU Id", "taxonomy"))
+OTU_stats(refined_data, taxonomy = NULL)
 }
 \arguments{
-\item{OTU_table}{The raw OTU table}
+\item{refined_data}{The refined OTU table returned from \link{refine_data}}
 
-\item{metadataCols}{See the corresponding description for \link{runAnalysis}}
+\item{taxonomy}{Named character, with the names being those of the OTUs and the values
+their taxonomy collapased into a single string (for each OTU)}
 }
 \value{
 A \code{data.frame} with one row for each OTU with the following
@@ -22,7 +23,7 @@ elements:
 \item \code{maxAbundance}
 \item \code{numberNonZero} The number of samples where the OTU has a
 non-zero abundance
-\item \code{taxonomy}
+\item \code{taxonomy} collapsed into a single string
 }
 }
 \description{
