@@ -11,7 +11,8 @@ runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
   postfix = "")
 }
 \arguments{
-\item{OTU_table}{The raw OTU table to be treated}
+\item{OTU_table}{The raw OTU table (if a \code{data.frame} is supplied) to be treated
+\emph{or} a \code{phyloseq} object containing the data (the latter is recommended)}
 
 \item{abundance_cutoff}{The mean abundance cutoff for the OTUs}
 
@@ -23,6 +24,7 @@ Available options are: \itemize{
 The \code{interactions_table} of significant interactions
 \item \code{refined_table}: The processed  OTU table
 \item \code{min_dataset}: The smallest non-zero entity in the refined table
+\item \code{taxonomy}: A named numberic containing the taxonomy of each OTU (collapsed into a single string)
 }
 In addition, all paramerters for this function are available
 If \code{NULL}, all variables in the function will be returned}
@@ -44,10 +46,10 @@ will be this number multiplied with \code{min_dataset}}
 \item{prefix}{The prefix of the file names being written. Ignored if \code{file=FALSE}.}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
-metadata columns to remove from the table before analyzing it}
+metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied}
 }
 \description{
-Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results
+Runs an automized processing of the OTU table or phyloseq object, passes the jobs to \code{ccrepe} and saves the results
 }
 \details{
 If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
@@ -56,7 +58,8 @@ where all numbers are in scientific notation. Then the sim.score name follows, t
 extention.
 The postfix is by default empty.
 
-In order for an OTU-table to be valid, the following criteria must hold:
+In order for an OTU-table to be valid when the argument \code{OTU_table} is a \code{data.frame},
+the following criteria must hold:
 
 \itemize{
 \item
@@ -72,4 +75,5 @@ taxonomy.
 \item The row names of the table are the OTU names and the column names are the
 sample names
 }
+For \code{phyloseq} object, you do not need to care about this, it is automatically handeled
 }

@@ -7,7 +7,8 @@
 ccrepe_analysis(ccrepe_job, parallel = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}}
+\item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments
+being passed to \link{\code{ccrepe}}}
 
 \item{parallel}{Should the jobs be run in parallel?}
 

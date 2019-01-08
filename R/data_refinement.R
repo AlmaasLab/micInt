@@ -13,8 +13,11 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
   else{
     metadata = metadataCols
   }
-  # Removes the metadata for the data set
-  refined_table=as.data.frame(t(OTU_table[,-metadata]))
+  # Removes the metadata for the data set if there is any
+  if(length(metadata)!=0){
+    OTU_table=OTU_table[,-metadata]
+  }
+  refined_table=as.data.frame(t(OTU_table))
   colnames(refined_table)=row.names(OTU_table)
   return(refined_table)
 }
@@ -58,7 +61,7 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
 #'
-#' @param OTU_table The raw OTU table
+#' @param OTU_table The raw OTU table, either as a \code{data.frame} or a \code{matrix}
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 #'
@@ -106,7 +109,8 @@ renormalize=function(table)
 #'
 #' @param data The results from ccrepe
 #'
-#' @param OTU_table The original OTU table
+#' @param taxonomy Named character, with the names being those of the OTUs and the values
+#' their taxonomy collapased into a single string (for each OTU)
 #'
 #' @param threshold.type The type of threshold to be used \code{'q'} denotes q-value,
 #'  while \code{'p'} denotes p-value
@@ -134,9 +138,9 @@ renormalize=function(table)
 #' @importFrom utils modifyList write.csv write.csv2
 #'
 #' @export
-output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,output.file=FALSE,filename=NULL,
+output_ccrepe_data=function(data,taxonomy=NULL,threshold.type='q',threshold.value=0.05,output.file=FALSE,filename=NULL,
                    return.value=TRUE,csv_option='2',removeDuplicates=TRUE,sim.measure.attributes=NULL){
-                    significant_interactions=create_interaction_table(data=data,OTU_table = OTU_table,threshold.type = threshold.type,
+                    significant_interactions=create_interaction_table(data=data,taxonomy=taxonomy,threshold.type = threshold.type,
                                                                       threshold.value = threshold.value,
                                                                       removeDuplicates = removeDuplicates,score_attributes=sim.measure.attributes)
                     if(output.file){
@@ -160,7 +164,7 @@ output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.val
 #' @return An \code{interactions_table}
 #'
 #' @export
-create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',threshold.value=0.05,removeDuplicates=TRUE,score_attributes=NULL){
+create_interaction_table=function(data,taxonomy=NULL,threshold.type='q',threshold.value=0.05,removeDuplicates=TRUE,score_attributes=NULL){
   options(stringsAsFactors = FALSE)
   p.values=as.data.frame(data$p.values)
   z.stat=as.data.frame(data$z.stat)
@@ -184,7 +188,7 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
     significant_interactions$p.value=numeric()
     significant_interactions$q.value=numeric()
     significant_interactions$z.stat=numeric()
-    if (!is.null(OTU_table)){
+    if (!is.null(taxonomy)){
       # Add taxonomy if available
       significant_interactions$taxonomy_1=character()
       significant_interactions$taxonomy_2=character()
@@ -206,10 +210,10 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
     if(!is.null(z.stat)&& nrow(z.stat)!=0){
       significant_interactions$z.stat=apply(significant_interactions,1,function(x){z.stat[x[1],x[2]]})
     }
-    if (!is.null(OTU_table)){
+    if (!is.null(taxonomy)){
       # Add taxonomy if available
-      significant_interactions$taxonomy_1=OTU_table[match(significant_interactions$OTU_1,as.character(row.names(OTU_table))),]$taxonomy
-      significant_interactions$taxonomy_2=OTU_table[match(significant_interactions$OTU_2,as.character(row.names(OTU_table))),]$taxonomy
+      significant_interactions$taxonomy_1=taxonomy[significant_interactions$OTU_1]
+      significant_interactions$taxonomy_2=taxonomy[significant_interactions$OTU_2]
     }
     # Sorts by dersired significance column
     if (threshold.type=='q')
@@ -238,7 +242,7 @@ create_interaction_table=function(data,OTU_table=NULL,threshold.type='q',thresho
 #'
 #' @export
 write.interactions_table=function(significant_interactions,filename,
-                                  csv_option='2'){
+                                  csv_option='1'){
   if (csv_option=='2'){
     write.csv2(significant_interactions,file = filename,row.names = FALSE)
   }

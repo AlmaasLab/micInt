@@ -37,13 +37,21 @@ if(!is.null(magfac)){
 return(prefix)
 }
 
-
-
-add_outputargs=function(ccrepe_res,OTU_table=NULL,file=TRUE,return.value=FALSE,
+#' @title
+#' Add outputargs
+#'
+#' @description
+#' Add  output arguments being used by \code{\link{output_ccrepe_data}} in addition to
+#' the ones returned from \code{\link{ccrepe_analysis}}.
+#'
+#' @inheritParams output_ccrepe_data
+#'
+add_outputargs=function(ccrepe_res,taxonomy=NULL,output.file=TRUE,return.value=FALSE,
                         threshold.type='q',threshold.value=0.05,
-                        csv_option='2',removeDuplicates=TRUE){
+                        csv_option='1',removeDuplicates=TRUE){
 ccrepe_res=lapply(ccrepe_res,function(i){
   n=names(i)
+  # Renames the list elements such that entity name "res" becomes "data"
   if ('res' %in% n){
   names(n)=n
   n['res']='data'
@@ -52,10 +60,9 @@ ccrepe_res=lapply(ccrepe_res,function(i){
   }
 }
 )
-output_defaultargs=list(OTU_table = OTU_table,output.file = file,
+output_defaultargs=list(taxonomy = taxonomy,output.file = output.file,
                         return.value = return.value,threshold.value=threshold.value,
                         threshold.type=threshold.type,
-                        csv_option='2',removeDuplicates=removeDuplicates)
+                        csv_option=csv_option,removeDuplicates=removeDuplicates)
 outputargs = lapply(ccrepe_res,function(x) modifyList(x,output_defaultargs))
 }
-

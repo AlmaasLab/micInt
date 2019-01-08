@@ -4,7 +4,7 @@
 \alias{create_interaction_table}
 \title{Create table of significant interactions}
 \usage{
-create_interaction_table(data, OTU_table = NULL, threshold.type = "q",
+create_interaction_table(data, taxonomy = NULL, threshold.type = "q",
   threshold.value = 0.05, removeDuplicates = TRUE,
   score_attributes = NULL)
 }

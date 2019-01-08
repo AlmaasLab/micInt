@@ -8,7 +8,7 @@ refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
   renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
 }
 \arguments{
-\item{OTU_table}{The raw OTU table}
+\item{OTU_table}{The raw OTU table, either as a \code{data.frame} or a \code{matrix}}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}

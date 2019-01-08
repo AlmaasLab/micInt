@@ -1,9 +1,10 @@
 #' @title runAnalysis
 #'
 #' @description
-#' Runs an automized processing of the OTU table, passes the jobs to \code{ccrepe} and saves the results
+#' Runs an automized processing of the OTU table or phyloseq object, passes the jobs to \code{ccrepe} and saves the results
 #'
-#' @param OTU_table The raw OTU table to be treated
+#' @param OTU_table The raw OTU table (if a \code{data.frame} is supplied) to be treated
+#' \emph{or} a \code{phyloseq} object containing the data (the latter is recommended)
 #'
 #' @param abundance_cutoff The mean abundance cutoff for the OTUs
 #'
@@ -25,6 +26,7 @@
 #' The \code{interactions_table} of significant interactions
 #' \item \code{refined_table}: The processed  OTU table
 #' \item \code{min_dataset}: The smallest non-zero entity in the refined table
+#' \item \code{taxonomy}: A named numberic containing the taxonomy of each OTU (collapsed into a single string)
 #' }
 #' In addition, all paramerters for this function are available
 #' If \code{NULL}, all variables in the function will be returned
@@ -35,7 +37,7 @@
 #' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
 #'
 #' @param metadataCols The names (character vector) or position (integer) of the
-#' metadata columns to remove from the table before analyzing it
+#' metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied
 #'
 #' @details
 #' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
@@ -44,7 +46,8 @@
 #' extention.
 #' The postfix is by default empty.
 #'
-#' In order for an OTU-table to be valid, the following criteria must hold:
+#' In order for an OTU-table to be valid when the argument \code{OTU_table} is a \code{data.frame},
+#' the following criteria must hold:
 #'
 #' \itemize{
 #' \item
@@ -60,10 +63,11 @@
 #' \item The row names of the table are the OTU names and the column names are the
 #' sample names
 #' }
-#'
+#' For \code{phyloseq} object, you do not need to care about this, it is automatically handeled
 #'
 #'
 #' @import stringr
+#' @import phyloseq
 #' @export
 runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10,prefix=NULL,
@@ -71,6 +75,32 @@ runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     postfix=""){
 if(is.null(prefix))
 prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
+if(inheirits(OTU_table,'phyloseq')){
+  if (OTU_table@tax_table %>%  is.null){
+    taxonomy = NULL
+  }
+  else{
+    taxonomy=tax_table(OTU_table) %>% data.frame
+    # Makes a contatented string of the taxonomies of each OTU
+    apply(taxonomy,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
+  }
+  OTU_table=phyloseq::otu_table(OTU_table) %>% as.matrix
+  if(!phyloseq::taxa_are_rows(OTU_table)){
+    OTU_table = t(otu_table)
+  }
+  metadataCols=NULL
+}
+# In case we are provided with a data frame instead
+else{
+  # If we are provided a data frame, we must see if the taxonomy column exists
+  if('taxonomy' %in% colnames(OTU_table)){
+  taxonomy=OTU_table$taxonomy
+  names(taxonomy) = rownames(OTU_table)
+  }
+  else{
+    taxonomy=NULL
+  }
+}
 refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff,metadataCols = metadataCols)
 # The smallest value in the data set
 min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
@@ -86,7 +116,7 @@ if(!is.null(subset))
 }
 stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
 ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
-outputargs=add_outputargs(ccrepe_res,OTU_table=OTU_table,file=file,
+outputargs=add_outputargs(ccrepe_res,taxonomy=taxonomy,output.file=file,
                           threshold.value=q_crit,
                           return.value =TRUE)
 similarity_measures_significance=lapply(outputargs,
