@@ -21,3 +21,6 @@ the \code{interaction.table}):
 are negative
 }
 }
+\description{
+Create summary of \code{interaction_table}
+}

@@ -1,6 +1,6 @@
-#' @title remove_metadata
+#' @title Remove metadata from data set
 #' @description
-#' Removes metadata columns from dataset
+#' Removes desired metadata columns from dataset
 #' @param OTU_table The raw OTU table
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
@@ -53,7 +53,7 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
   }
   return(refined_table)
 }
-#' @title refine_data
+#' @title Refine raw OTU table
 #' @description
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
@@ -61,6 +61,29 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' @param OTU_table The raw OTU table
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
+#'
+#' @return A data frame with the metadata columns removed, and the OTUs
+#' below the cutoff are filtered away. Additionally, in the refined table
+#'the OTUs constitute the rows, while the rows are the samples (transposed
+#'compared to the original OTU table).
+#'
+#' @details
+#' In order for an OTU-table to be valid, the following criteria must hold:
+#'
+#' \itemize{
+#' \item
+#' The data points (sample) are in columns, the abundances for each
+#' OTU is in rows.
+#' \item
+#' The rows may only hold OTU abundances
+#' \item
+#' There may be as many metadata colums as preferable. However, the all
+#' need to be declared in the \code{metadataCols} argument and the column
+#' \code{taxonomy} has be there in order for the output file to contain the
+#' taxonomy.
+#' \item The row names of the table are the OTU names and the column names are the
+#' sample names
+#' }
 #'
 #' @export
 refine_data=function(OTU_table,abundance_cutoff=0,cutoff_type='mean',renormalize=TRUE,metadataCols=c('OTU Id','taxonomy'))
@@ -76,6 +99,7 @@ renormalize=function(table)
   table[,]=res
   return(table)
 }
+
 #' @title output_ccrepe_data
 #' @description
 #' Takes input from ccrepe and transforms it into a convenient table
@@ -125,8 +149,10 @@ output_ccrepe_data=function(data,OTU_table=NULL,threshold.type='q',threshold.val
                     else{
                       return(NULL)
                     }
+
+
 }
-#'@title create_interaction_table
+#'@title Create table of significant interactions
 #'
 #' @description Performs the actual process of making the table.
 #' For documentation of parameters, see \link{output_ccrepe_data}
@@ -252,15 +278,18 @@ as.edgelist = function(x, ...){
 }
 
 #' @name as.edge_list.interaction_table
-#' @title as.edge_list.interaction_table
+#' @title Create edge list from interaction table
+#'
+#' @param table An \code{interaction_table}
+#'
 #' @description Converts an interaction table to a two column character matrix
-#' where each row represent an edge between the OTUs
+#' where each row represent an edge between the OTUs. The entities in the each row are the name of the
+#' two interacting OTUs.
+#'
+#' @return The result of this function can be fed directly into \link{igraph} for making interacting network
 #'
 #' @export
 as.edgelist.interaction_table = function(table){
     as.matrix(table[,c('OTU_1','OTU_2')])
 }
-
-
-
 

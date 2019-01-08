@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_refinement.R
 \name{create_interaction_table}
 \alias{create_interaction_table}
-\title{create_interaction_table}
+\title{Create table of significant interactions}
 \usage{
 create_interaction_table(data, OTU_table = NULL, threshold.type = "q",
   threshold.value = 0.05, removeDuplicates = TRUE,
