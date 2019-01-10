@@ -8,7 +8,7 @@ cut_abundances(refined_table, abundance_cutoff = 0, type = "mean",
   renormalize = TRUE)
 }
 \arguments{
-\item{abundance_cutoff}{Numeric, the threshold cutoff value}
+\item{abundance_cutoff}{Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.}
 
 \item{type}{The type of measure to base the cutoff on. Can be any
 of \code{'mean'}, \code{median}, \code{max} which cuts away

@@ -14,7 +14,7 @@ runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
 \item{OTU_table}{The raw OTU table (if a \code{data.frame} is supplied) to be treated
 \emph{or} a \code{phyloseq} object containing the data (the latter is recommended)}
 
-\item{abundance_cutoff}{The mean abundance cutoff for the OTUs}
+\item{abundance_cutoff}{The mean abundance cutoff for the OTUs. If it is \code{NULL}, the there will be not filtering.}
 
 \item{parallel}{Should the analysis be run in parallel?}
 
@@ -26,8 +26,10 @@ The \code{interactions_table} of significant interactions
 \item \code{min_dataset}: The smallest non-zero entity in the refined table
 \item \code{taxonomy}: A named numberic containing the taxonomy of each OTU (collapsed into a single string)
 }
-In addition, all paramerters for this function are available
-If \code{NULL}, all variables in the function will be returned}
+In addition, all paramerters for this function are available.
+If \code{NULL}, all variables in the function will be returned.
+Note: If \code{OTU_table} is a \code{phyloseq} object, the returned variables is a data frame corresponding to the
+\code{phyloseq} object. This is due to the fact that it is intervally converted into a data frame.}
 
 \item{subset}{Character, the subset of similarity measures to use, denoted by
 the its name in the list (not necessarly its string) returned from \link{similarity_measures} or similarity
@@ -47,6 +49,9 @@ will be this number multiplied with \code{min_dataset}}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied}
+}
+\value{
+A list of the variables requested from the parameter \code{returnVariables}.
 }
 \description{
 Runs an automized processing of the OTU table or phyloseq object, passes the jobs to \code{ccrepe} and saves the results

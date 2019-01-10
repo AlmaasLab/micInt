@@ -8,7 +8,11 @@ refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
   renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
 }
 \arguments{
-\item{OTU_table}{The raw OTU table, either as a \code{data.frame} or a \code{matrix}}
+\item{OTU_table}{The raw OTU table, either as a \code{data.frame} or a \code{matrix} (not phyloseq)}
+
+\item{abundance_cutoff}{Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.}
+
+\item{renormalize}{Logical, should the abundances be renormalized after the procedyre?}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}

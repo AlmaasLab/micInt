@@ -28,7 +28,7 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
 #' Removes metadata columns from dataset
 #'
 #' @param abundance_cutoff
-#' Numeric, the threshold cutoff value
+#' Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
 #'
 #' @param type
 #' The type of measure to base the cutoff on. Can be any
@@ -41,6 +41,10 @@ remove_metadata=function(OTU_table,metadataCols=c('OTU Id','taxonomy')){
 #'
 #' @import matrixStats
 cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize=TRUE){
+  if(is.null(abundance_cutoff)){
+    # If we do not set an abundance cutoff, we skip the process entierly
+    return(refined_table)
+  }
   m_refined_table=as.matrix(refined_table)
   abundances=switch(type,
          mean=colMeans(refined_table),
@@ -61,7 +65,8 @@ cut_abundances=function(refined_table,abundance_cutoff=0,type='mean',renormalize
 #' Removes metadata from OTU table and cuts off the least abundant
 #' species, defined by the cutoff parameter
 #'
-#' @param OTU_table The raw OTU table, either as a \code{data.frame} or a \code{matrix}
+#' @param OTU_table The raw OTU table, either as a \code{data.frame} or a \code{matrix} (not phyloseq)
+#' @inheritParams cut_abundances
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 #'

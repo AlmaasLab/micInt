@@ -4,10 +4,10 @@
 \alias{OTU_stats}
 \title{OTU statistics}
 \usage{
-OTU_stats(refined_data, taxonomy = NULL)
+OTU_stats(refined_table, taxonomy = NULL)
 }
 \arguments{
-\item{refined_data}{The refined OTU table returned from \link{refine_data}}
+\item{refined_table}{The refined OTU table returned from \link{refine_data}}
 
 \item{taxonomy}{Named character, with the names being those of the OTUs and the values
 their taxonomy collapased into a single string (for each OTU)}

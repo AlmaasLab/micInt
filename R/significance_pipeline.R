@@ -6,7 +6,7 @@
 #' @param OTU_table The raw OTU table (if a \code{data.frame} is supplied) to be treated
 #' \emph{or} a \code{phyloseq} object containing the data (the latter is recommended)
 #'
-#' @param abundance_cutoff The mean abundance cutoff for the OTUs
+#' @param abundance_cutoff The mean abundance cutoff for the OTUs. If it is \code{NULL}, the there will be not filtering.
 #'
 #' @param parallel Should the analysis be run in parallel?
 #'
@@ -28,8 +28,10 @@
 #' \item \code{min_dataset}: The smallest non-zero entity in the refined table
 #' \item \code{taxonomy}: A named numberic containing the taxonomy of each OTU (collapsed into a single string)
 #' }
-#' In addition, all paramerters for this function are available
-#' If \code{NULL}, all variables in the function will be returned
+#' In addition, all paramerters for this function are available.
+#' If \code{NULL}, all variables in the function will be returned.
+#' Note: If \code{OTU_table} is a \code{phyloseq} object, the returned variables is a data frame corresponding to the
+#' \code{phyloseq} object. This is due to the fact that it is intervally converted into a data frame.
 #'
 #' @param magnitude_factor When making noisified functions, the magnitude of the noise
 #' will be this number multiplied with \code{min_dataset}
@@ -38,6 +40,8 @@
 #'
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied
+#'
+#' @return A list of the variables requested from the parameter \code{returnVariables}.
 #'
 #' @details
 #' If the function is told to output a file and no prefix is given, the csv-files will all share a common prefix of the form:
