@@ -7,7 +7,7 @@
 OTU_stats(refined_table, taxonomy = NULL)
 }
 \arguments{
-\item{refined_table}{The refined OTU table returned from \link{refine_data}}
+\item{refined_table}{The refined OTU table returned from \link{refine_data} or a \code{phyloseq} object.}
 
 \item{taxonomy}{Named character, with the names being those of the OTUs and the values
 their taxonomy collapased into a single string (for each OTU)}
@@ -23,7 +23,7 @@ elements:
 \item \code{maxAbundance}
 \item \code{numberNonZero} The number of samples where the OTU has a
 non-zero abundance
-\item \code{taxonomy} collapsed into a single string
+\item \code{taxonomy} collapsed into a single string, may be missing
 }
 }
 \description{

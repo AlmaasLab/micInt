@@ -4,7 +4,7 @@
 #' This function returns a summary of OTU statistics for the OTUs of
 #' an OTU table
 #'
-#' @param refined_table The refined OTU table returned from \link{refine_data}
+#' @param refined_table The refined OTU table returned from \link{refine_data} or a \code{phyloseq} object.
 #' @inheritParams  output_ccrepe_data
 #'
 #' @return
@@ -18,24 +18,36 @@
 #' \item \code{maxAbundance}
 #' \item \code{numberNonZero} The number of samples where the OTU has a
 #' non-zero abundance
-#' \item \code{taxonomy} collapsed into a single string
+#' \item \code{taxonomy} collapsed into a single string, may be missing
 #' }
 #'
 #'
 #' @import matrixStats
 #' @export
 OTU_stats=function(refined_table,taxonomy=NULL){
-refined_data=refined_table %>% as.matrix
-ID=colnames(refined_data)
-# Sometimes, we may risk that the taxonomy table is not the correct order
-taxonomy=taxonomy[ID]
-meanAbundance=colMeans(refined_data)
-medianAbundance=colMedians(refined_data)
-maxAbundance=colMaxs(refined_data)
-numberNonZero=colSums(refined_data != 0)
-proportionNonZero=colMeans(refined_data != 0)
-res=data.frame(ID,meanAbundance,medianAbundance,maxAbundance,
-           numberNonZero,proportionNonZero,taxonomy)
+  if(inherits(refined_table,'phyloseq')){
+    refined_data=refined_table %>%  phyloseq::otu_table %>% as.matrix
+    if(phyloseq::taxa_are_rows(refined_table)){
+      refined_data = t(refined_data)
+    }
+  }
+  else{
+    refined_data=refined_table %>% as.matrix
+  }
+  ID=colnames(refined_data)
+  meanAbundance=colMeans(refined_data)
+  medianAbundance=colMedians(refined_data)
+  maxAbundance=colMaxs(refined_data)
+  numberNonZero=colSums(refined_data != 0)
+  proportionNonZero=colMeans(refined_data != 0)
+  res=data.frame(ID,meanAbundance,medianAbundance,maxAbundance,
+                 numberNonZero,proportionNonZero)
+  if(!is.null(taxonomy)){
+    # Sometimes, we may risk that the taxonomy table is not the correct order
+    taxonomy=taxonomy[ID]
+    res$taxonomy=taxonomy
+  }
+  return(res)
 }
 
 #' @title countInteractions
@@ -56,15 +68,15 @@ countInteractions=function(IDs,interactions_table){
 }
 # Computes the abunance product for at set of interactions
 abundanceProduct=function(interactions_table,OTU_stat,type='mean'){
-abundances=switch(type,
-  'mean' = OTU_stat$meanAbundance,
-  'median'= OTU_stat$medianAbundance,
-  'max'= OTU_stat$maxAbundance
-)
-names(abundances)=OTU_stat$ID
-abundance_1=abundances[interactions_table$OTU_1]
-abundance_2=abundances[interactions_table$OTU_2]
-abundance_1*abundance_2
+  abundances=switch(type,
+                    'mean' = OTU_stat$meanAbundance,
+                    'median'= OTU_stat$medianAbundance,
+                    'max'= OTU_stat$maxAbundance
+  )
+  names(abundances)=OTU_stat$ID
+  abundance_1=abundances[interactions_table$OTU_1]
+  abundance_2=abundances[interactions_table$OTU_2]
+  abundance_1*abundance_2
 }
 
 #' @title overall_stats
@@ -80,6 +92,6 @@ abundance_1*abundance_2
 #'
 #' }
 overall_stats=function(similarity_measures_significance){
-overall=data.frame()
+  overall=data.frame()
 
 }

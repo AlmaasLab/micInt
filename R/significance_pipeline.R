@@ -79,7 +79,7 @@ runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
                     postfix=""){
 if(is.null(prefix))
 prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
-if(inheirits(OTU_table,'phyloseq')){
+if(inherits(OTU_table,'phyloseq')){
   if (OTU_table@tax_table %>%  is.null){
     taxonomy = NULL
   }
