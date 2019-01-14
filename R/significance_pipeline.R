@@ -80,6 +80,7 @@ runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
 if(is.null(prefix))
 prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
 if(inherits(OTU_table,'phyloseq')){
+  phyloseq_object=OTU_table
   if (OTU_table@tax_table %>%  is.null){
     taxonomy = NULL
   }
@@ -89,8 +90,8 @@ if(inherits(OTU_table,'phyloseq')){
     apply(taxonomy,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
   }
   OTU_table=phyloseq::otu_table(OTU_table) %>% data.frame
-  if(!phyloseq::taxa_are_rows(OTU_table)){
-    OTU_table = t(otu_table)
+  if(!phyloseq::taxa_are_rows(phyloseq_object)){
+    OTU_table = t(OTU_table) %>% data.frame
   }
   metadataCols=NULL
 }
