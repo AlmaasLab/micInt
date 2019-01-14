@@ -20,3 +20,6 @@ library(magrittr)
 filtered=temp[c('a','d','b')] %>% na.omit
 class(filtered)
 filtered
+ds=data.frame(a=c('a','b'),b=c('c','d'))
+rownames(ds)=c('Rad 1','Rad 2')
+apply(ds,MARGIN=1,FUN=paste,collapse=' ')

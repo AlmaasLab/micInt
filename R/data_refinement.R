@@ -185,7 +185,7 @@ create_interaction_table=function(data,taxonomy=NULL,threshold.type='q',threshol
     stop("no valid theshold method given, must be 'p' (local p-value)
          or 'q' (familywise false discovery rate)")
   }
-  significant_pairs=which(threshold_matrix<threshold.value,arr.ind = TRUE)
+  significant_pairs=which(threshold_matrix < threshold.value,arr.ind = TRUE)
   significant_interactions = as.data.frame(matrix(colnames(threshold_matrix)[significant_pairs],ncol=2))
   colnames(significant_interactions)=c('OTU_1','OTU_2')
   if(nrow(significant_interactions)==0){

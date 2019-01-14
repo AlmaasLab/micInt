@@ -85,9 +85,10 @@ if(inherits(OTU_table,'phyloseq')){
     taxonomy = NULL
   }
   else{
-    taxonomy=tax_table(OTU_table) %>% data.frame
+    taxonomy_frame=tax_table(OTU_table) %>% data.frame
     # Makes a contatented string of the taxonomies of each OTU
-    apply(taxonomy,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
+    taxonomy=apply(taxonomy_frame,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
+    names(taxonomy) = rownames(taxonomy_frame)
   }
   OTU_table=phyloseq::otu_table(OTU_table) %>% data.frame
   if(!phyloseq::taxa_are_rows(phyloseq_object)){
