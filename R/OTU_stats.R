@@ -26,9 +26,12 @@
 #' @export
 OTU_stats=function(refined_table,taxonomy=NULL){
   if(inherits(refined_table,'phyloseq')){
-    refined_data=refined_table %>%  phyloseq::otu_table %>% as.matrix
+    refined_data=refined_table %>%  phyloseq::otu_table() %>% as.matrix
     if(phyloseq::taxa_are_rows(refined_table)){
       refined_data = t(refined_data)
+    }
+    if(is.null(taxonomy)){
+      taxonomy=collapse_taxonomy(refined_table)
     }
   }
   else{

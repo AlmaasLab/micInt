@@ -302,3 +302,24 @@ as.edgelist.interaction_table = function(table){
     as.matrix(table[,c('OTU_1','OTU_2')])
 }
 
+#' @title Collapse taxonomy into single strings
+#'
+#' @description Given a phyloseq object with a taxonomy table, this function extracts the taxonomy of each OTU and
+#' collapse the result into a single string
+#'
+#' @param phyloseq A \code{\link{phyloseq}} object containing the \code{tax_table} slot. If this slot does not exist,
+#' the function will return \code{NULL}.
+#'
+#' @value A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
+
+collapse_taxonomy <- function(phyloseq) {
+  taxonomy_table=tax_table(phyloseq,errorIfNULL = FALSE)
+  if(is.null(taxonomy_table)){
+    return(taxonomy_table)
+  }
+  taxonomy_frame=data.frame(taxonomy_table)
+  # Makes a contatented string of the taxonomies of each OTU
+  taxonomy=apply(taxonomy_frame,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
+  names(taxonomy) = rownames(taxonomy_frame)
+  return(taxonomy)
+}

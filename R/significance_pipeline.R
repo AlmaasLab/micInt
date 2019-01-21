@@ -81,15 +81,7 @@ if(is.null(prefix))
 prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
 if(inherits(OTU_table,'phyloseq')){
   phyloseq_object=OTU_table
-  if (OTU_table@tax_table %>%  is.null){
-    taxonomy = NULL
-  }
-  else{
-    taxonomy_frame=tax_table(OTU_table) %>% data.frame
-    # Makes a contatented string of the taxonomies of each OTU
-    taxonomy=apply(taxonomy_frame,MARGIN = 1,FUN = function(x) paste(x,collapse = ','))
-    names(taxonomy) = rownames(taxonomy_frame)
-  }
+  taxonomy= collapse_taxonomy(phyloseq_object)
   OTU_table=phyloseq::otu_table(OTU_table) %>% data.frame
   if(!phyloseq::taxa_are_rows(phyloseq_object)){
     OTU_table = t(OTU_table) %>% data.frame
