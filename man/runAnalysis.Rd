@@ -8,7 +8,7 @@ runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
   parallel = TRUE, returnVariables = NULL, subset = NULL,
   sim.scores = NULL, file = FALSE, magnitude_factor = 10,
   prefix = NULL, metadataCols = c("OTU Id", "taxonomy"),
-  postfix = "")
+  postfix = "", renormalize = TRUE)
 }
 \arguments{
 \item{OTU_table}{The raw OTU table (if a \code{data.frame} is supplied) to be treated
@@ -40,7 +40,7 @@ If \code{NULL}, all available measures will be used}
 to use. If it is \code{NULL}, all measures available in the package
 will be used (recommanded for most purposes).}
 
-\item{file}{Should the tables of significant interactions be printed to a file?}
+\item{file}{Should the tables of significant interactions be printed to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure}
 
 \item{magnitude_factor}{When making noisified functions, the magnitude of the noise
 will be this number multiplied with \code{min_dataset}}
@@ -49,6 +49,9 @@ will be this number multiplied with \code{min_dataset}}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied}
+
+\item{renormalize}{Should the data be renormalized during filtering process and permutation?
+Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.}
 }
 \value{
 A list of the variables requested from the parameter \code{returnVariables}.

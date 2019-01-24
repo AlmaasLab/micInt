@@ -4,9 +4,9 @@
 \alias{add_outputargs}
 \title{Add outputargs}
 \usage{
-add_outputargs(ccrepe_res, taxonomy = NULL, output.file = TRUE,
-  return.value = FALSE, threshold.type = "q", threshold.value = 0.05,
-  csv_option = "1", removeDuplicates = TRUE)
+add_outputargs(ccrepe_res, taxonomy = NULL, output.file = NULL,
+  return.value = NULL, threshold.type = NULL, threshold.value = NULL,
+  csv_option = NULL, removeDuplicates = NULL)
 }
 \arguments{
 \item{taxonomy}{Named character, with the names being those of the OTUs and the values

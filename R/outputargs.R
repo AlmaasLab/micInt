@@ -46,9 +46,9 @@ create_prefix <- function(q_crit = NULL, p_crit = NULL, cutoff = NULL, magfac = 
 #'
 #' @inheritParams output_ccrepe_data
 #'
-add_outputargs <- function(ccrepe_res, taxonomy = NULL, output.file = TRUE, return.value = FALSE,
-                           threshold.type = "q", threshold.value = 0.05,
-                           csv_option = "1", removeDuplicates = TRUE) {
+add_outputargs <- function(ccrepe_res, taxonomy = NULL, output.file = NULL, return.value = NULL,
+                           threshold.type = NULL, threshold.value = NULL,
+                           csv_option = NULL, removeDuplicates =  NULL) {
   ccrepe_res <- lapply(ccrepe_res, function(i) {
     n <- names(i)
     # Renames the list elements such that entity name "res" becomes "data"

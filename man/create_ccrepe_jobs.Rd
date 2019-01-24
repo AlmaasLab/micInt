@@ -4,9 +4,8 @@
 \alias{create_ccrepe_jobs}
 \title{create_ccrepe_jobs}
 \usage{
-create_ccrepe_jobs(data = NULL, sim.scores = similarity_measures(),
-  ccrepe_defaultargs = NULL, prefix = "significant_interactions",
-  postfix = ".csv")
+create_ccrepe_jobs(sim.scores = similarity_measures(),
+  prefix = "significant_interactions", postfix = ".csv")
 }
 \description{
 Creates ccrepe jobs out of sim.score functions

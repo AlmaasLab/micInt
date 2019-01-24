@@ -10,6 +10,9 @@ collapse_taxonomy(phyloseq)
 \item{phyloseq}{A \code{\link{phyloseq}} object containing the \code{tax_table} slot. If this slot does not exist,
 the function will return \code{NULL}.}
 }
+\value{
+A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
+}
 \description{
 Given a phyloseq object with a taxonomy table, this function extracts the taxonomy of each OTU and
 collapse the result into a single string

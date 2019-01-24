@@ -2,13 +2,16 @@
 % Please edit documentation in R/ccrepe_analysis.R
 \name{ccrepe_analysis}
 \alias{ccrepe_analysis}
-\title{ccrepe_analysis}
+\title{Conduct ccrepe analysis}
 \usage{
-ccrepe_analysis(ccrepe_job, parallel = TRUE, verbose = TRUE)
+ccrepe_analysis(ccrepe_job, commonargs, parallel = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments
-being passed to \link{\code{ccrepe}}}
+being passed to \code{\link{ccrepe}}}
+
+\item{commonargs}{\code{ccrepe} arguments common for all jobs}
 
 \item{parallel}{Should the jobs be run in parallel?}
 

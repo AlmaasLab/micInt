@@ -4,13 +4,15 @@
 # OTU correlations, their correlations, p-value, q-value and taxonomy.
 #****************************************************************************
 #' @title
-#' ccrepe_analysis
+#'Conduct ccrepe analysis
 #'
 #' @description
 #' A wrapper around the \code{ccrepe} function, provides parallel analysis
 #'
 #' @param ccrepe_job A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments
-#' being passed to \link{\code{ccrepe}}
+#' being passed to \code{\link{ccrepe}}
+#'
+#' @param commonargs \code{ccrepe} arguments common for all jobs
 #'
 #' @param parallel Should the jobs be run in parallel?
 #'
@@ -27,7 +29,7 @@
 #' @import parallel
 #' @importFrom utils modifyList
 #' @export
-ccrepe_analysis <- function(ccrepe_job,
+ccrepe_analysis <- function(ccrepe_job,commonargs,
                             parallel = TRUE, verbose = TRUE) {
   if (parallel) {
     n_cores <- detectCores()
@@ -48,7 +50,7 @@ ccrepe_analysis <- function(ccrepe_job,
       tryCatch(
         parLapply(
           cl = cluster, X = ccrepe_job,
-          fun = function(x) list(res = do.call(ccrepe, x$ccrepe_args))
+          fun = function(x) list(res = do.call(ccrepe, c(x$ccrepe_args,commonargs)))
         ),
         finally = {
           # Makes sure the cluster shuts down even though an error has occured
@@ -61,7 +63,7 @@ ccrepe_analysis <- function(ccrepe_job,
       X = ccrepe_job,
       FUN = function(x) {
         print(x$string)
-        list(res = do.call(ccrepe, x$ccrepe_args))
+        list(res = do.call(ccrepe, c(x$ccrepe_args,commonargs)))
       }
     )
   }

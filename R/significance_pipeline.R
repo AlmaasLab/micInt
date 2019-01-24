@@ -19,7 +19,7 @@
 #' measure modiftying function such as \link{noisify}
 #' If \code{NULL}, all available measures will be used
 #'
-#' @param file Should the tables of significant interactions be printed to a file?
+#' @param file Should the tables of significant interactions be printed to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure
 #' @param returnVariables Which variables should the function return (character vector)?
 #' Available options are: \itemize{
 #' \item \code{similarity_measures_significance}:
@@ -40,6 +40,9 @@
 #'
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied
+#'
+#' @param renormalize Should the data be renormalized during filtering process and permutation?
+#' Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.
 #'
 #' @return A list of the variables requested from the parameter \code{returnVariables}.
 #'
@@ -76,7 +79,7 @@
 runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = TRUE,
                         returnVariables = NULL, subset = NULL, sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
                         metadataCols = c("OTU Id", "taxonomy"),
-                        postfix = "") {
+                        postfix = "", renormalize=TRUE) {
   if (is.null(prefix)) {
     prefix <- create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
   }
@@ -100,32 +103,30 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
       taxonomy <- NULL
     }
   }
-  refined_table <- refine_data(OTU_table, abundance_cutoff = abundance_cutoff, metadataCols = metadataCols)
-  # The smallest value in the data set
+  refined_table <- refine_data(OTU_table, abundance_cutoff = abundance_cutoff, metadataCols = metadataCols,renormalize=renormalize)
+  # The smallest non-zero value in the data set
   min_dataset <- min(apply(refined_table, MARGIN = 2, function(x) min(x[x > 0])))
   magnitude <- magnitude_factor * min_dataset
   if (is.null(sim.scores)) {
     sim.scores <- noisify(magnitude = magnitude)
-    ccrepe_job <- create_ccrepe_jobs(
-      data = refined_table, sim.scores = sim.scores,
+    ccrepe_job <- create_ccrepe_jobs(sim.scores = sim.scores,
       prefix = prefix, postfix = paste0(postfix, ".csv")
     )
   }
+  ccrepe_commonargs <- list(x = refined_table, min.subj = 10, verbose = TRUE,renormalize=renormalize)
   if (!is.null(subset)) {
     ccrepe_job <- ccrepe_job[subset]
   }
   stringlist <- lapply(ccrepe_job, function(x) list(string = x$string))
-  ccrepe_res <- ccrepe_analysis(ccrepe_job, parallel = parallel)
-  outputargs <- add_outputargs(ccrepe_res,
-    taxonomy = taxonomy, output.file = file,
-    threshold.value = q_crit,
-    return.value = TRUE
-  )
+  ccrepe_res <- ccrepe_analysis(ccrepe_job=ccrepe_job,commonargs=ccrepe_commonargs, parallel = parallel)
+  outputargs <- add_outputargs(ccrepe_res)
+  common_outputargs=list(threshold.value=q_crit,return.value=TRUE,taxonomy=taxonomy,output.file=file,
+                         threshold.type='q',removeDuplicates = TRUE,csv_option='1')
   similarity_measures_significance <- lapply(
     outputargs,
     function(x) (do.call(
         what = micInt::output_ccrepe_data,
-        args = x
+        args = c(x,common_outputargs)
       ))
   )
   if (is.null(returnVariables)) {

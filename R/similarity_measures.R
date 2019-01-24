@@ -164,15 +164,10 @@ similarity_measures <- function(subset = NULL) {
 
 #' @title create_ccrepe_jobs
 #' @description  Creates ccrepe jobs out of sim.score functions
-create_ccrepe_jobs <- function(data = NULL, sim.scores = similarity_measures(), ccrepe_defaultargs = NULL, prefix =
+create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
                                  "significant_interactions", postfix = ".csv") {
-  # Note: At least one of data and ccrepe_defaultargs must be different
-  # from NULL
-  if (is.null(ccrepe_defaultargs)) {
-    ccrepe_defaultargs <- list(x = data, min.subj = 10, verbose = TRUE)
-  }
   jobs <- lapply(sim.scores, function(sim.score) list(
-      ccrepe_args = c(ccrepe_defaultargs,
+      ccrepe_args =list(
         sim.score = sim.score@FUN
       ),
       output_args = list(

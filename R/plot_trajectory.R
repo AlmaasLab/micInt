@@ -44,8 +44,7 @@ plot_trajectory <- function(time_series_list, distance = "bray", subset = names(
   names(frames) <- names(time_series_list)
   # Combines the different frames in order to make a PCA ordination
   all_frames <- do.call(rbind, frames)
-  dist_matrix <- vegdist(all_frames[, colnames(all_frames) %in% c("time_series", "time_points") %>% `!`()] %>% as.matrix()
-    , ,
+  dist_matrix <- vegdist(all_frames[, colnames(all_frames) %in% c("time_series", "time_points") %>% `!`()] %>% as.matrix(),
     method = distance, diag = TRUE, upper = TRUE
   )
   PCA_all <- prcomp(dist_matrix)

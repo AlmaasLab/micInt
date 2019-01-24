@@ -321,7 +321,7 @@ as.edgelist.interaction_table <- function(table) {
 #' @param phyloseq A \code{\link{phyloseq}} object containing the \code{tax_table} slot. If this slot does not exist,
 #' the function will return \code{NULL}.
 #'
-#' @value A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
+#' @return A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
 
 collapse_taxonomy <- function(phyloseq) {
   taxonomy_table <- tax_table(phyloseq, errorIfNULL = FALSE)
