@@ -41,22 +41,21 @@
 #' @seealso \code{\link{integralSystem}}
 #'
 #' @export
-ridge_fit = function(equations, weights){
-n_coefficients = ncol(equations[[1]]$A)
-# Ridge regularization matrix
-ridge_matrix = c(weights['self'],rep(weights['interaction'],n_coefficients-1)) %>% diag
-solutions=lapply(equations, function(equation)
-{
-solution = tryCatch(solve(t(equation$A)%*% equation$A+ridge_matrix,t(equation$A)%*% equation$b),
-                    error = function(e) {
-                      stop("Equation system singular")
-                    }
-)
-solution %>% matrix(nrow =1)
-})
-solution_matrix = do.call(rbind,solutions)
-rownames(solution_matrix) = names(solutions)
-colnames(solution_matrix) = c('self',names(solutions))
-class(solution_matrix) = c('LV',class(solution_matrix))
-return(solution_matrix)
+ridge_fit <- function(equations, weights) {
+  n_coefficients <- ncol(equations[[1]]$A)
+  # Ridge regularization matrix
+  ridge_matrix <- c(weights["self"], rep(weights["interaction"], n_coefficients - 1)) %>% diag()
+  solutions <- lapply(equations, function(equation) {
+    solution <- tryCatch(solve(t(equation$A) %*% equation$A + ridge_matrix, t(equation$A) %*% equation$b),
+      error = function(e) {
+        stop("Equation system singular")
+      }
+    )
+    solution %>% matrix(nrow = 1)
+  })
+  solution_matrix <- do.call(rbind, solutions)
+  rownames(solution_matrix) <- names(solutions)
+  colnames(solution_matrix) <- c("self", names(solutions))
+  class(solution_matrix) <- c("LV", class(solution_matrix))
+  return(solution_matrix)
 }

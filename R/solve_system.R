@@ -25,19 +25,19 @@
 #'
 #'
 #' @export
-predict.LV=function(fit,start,times,diagnostics= TRUE,...){
-sol=ode(y=start,func=system_equation,parms = fit,times = times)
-OTU_time_series(table=sol[,-1]%>% as.data.frame,time_points = sol[,1])
+predict.LV <- function(fit, start, times, diagnostics = TRUE, ...) {
+  sol <- ode(y = start, func = system_equation, parms = fit, times = times)
+  OTU_time_series(table = sol[, -1] %>% as.data.frame(), time_points = sol[, 1])
 }
 
 #' @title The ODE function for the Lotka-Volterra system
-system_equation=function(t,y,parms){
-self_growth_rate=parms[,1]
-interaction_matrix = parms[,-1]
-# The right hand side as it would be if devided by the concentration of
-# each OTU beforehand
-right_side =self_growth_rate+rowSums(interaction_matrix%*%y)
-# Finally, multiply with the concentraions
-dxdt=y*right_side
-list(dxdt)
+system_equation <- function(t, y, parms) {
+  self_growth_rate <- parms[, 1]
+  interaction_matrix <- parms[, -1]
+  # The right hand side as it would be if devided by the concentration of
+  # each OTU beforehand
+  right_side <- self_growth_rate + rowSums(interaction_matrix %*% y)
+  # Finally, multiply with the concentraions
+  dxdt <- y * right_side
+  list(dxdt)
 }

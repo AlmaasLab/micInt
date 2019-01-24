@@ -30,7 +30,7 @@
 #'
 #'
 #' Faust K and Raes J. CoNet app: inference of biological association networks using Cytoscape \emph{F1000Research 2016}, 5:1519
-#'(doi: \url{10.12688/f1000research.9050.2})
+#' (doi: \url{10.12688/f1000research.9050.2})
 #'
 #' Karoline Faust et al. Microbial Co-occurrence Relationships in the Human Microbiome".
 #' In: \emph{PLoS Comput. Biol.} 8.7 (July 2012). issn: 1553-734X. doi: \url{10.1371/journal.pcbi.
@@ -42,7 +42,7 @@
 #' 2013)}. issn: 1553-7358. doi: \url{10.1371/journal.pcbi.1003388}.
 #'
 #' P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
-#'estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
+#' estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
 #' (Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \link{10.1016/j.amc.2013.08.093}
 #'
 #' @seealso

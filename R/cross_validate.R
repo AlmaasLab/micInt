@@ -26,22 +26,21 @@
 #'
 #'
 
-test_LV_fit=function(test_equations,solution_matrix){
-# If the solution is not available, it makes no sense to calculate the statistics
-if(is.na(solution_matrix)){
-return(list(RMSE = NA_real_, MAE = NA_real_))
-}
-n_OTUs = length(test_equations)
-errors = lapply(1:n_OTUs, function(i){
-equation = test_equations[[i]]
-equation$A%*%solution_matrix[i,]-equation$b
-}
-)
-cat_errors = do.call(c,errors)
-list(
-  RMSE = sqrt(mean(cat_errors^2)),
-MAE = mean(abs(cat_errors))
-)
+test_LV_fit <- function(test_equations, solution_matrix) {
+  # If the solution is not available, it makes no sense to calculate the statistics
+  if (is.na(solution_matrix)) {
+    return(list(RMSE = NA_real_, MAE = NA_real_))
+  }
+  n_OTUs <- length(test_equations)
+  errors <- lapply(1:n_OTUs, function(i) {
+    equation <- test_equations[[i]]
+    equation$A %*% solution_matrix[i, ] - equation$b
+  })
+  cat_errors <- do.call(c, errors)
+  list(
+    RMSE = sqrt(mean(cat_errors^2)),
+    MAE = mean(abs(cat_errors))
+  )
 }
 
 
@@ -96,43 +95,40 @@ MAE = mean(abs(cat_errors))
 #'
 #'
 #' @export
-cv.LV=function(time_series,n_folds=length(time_series),kind='integral',
-                   weights = expand.grid(self=0.1*0:100,interaction=0.1*0:100)){
-# We first find the number of time series
-# the total number of systems
-n_time_series = length(time_series)
-# and the number of parameter combinations to test
-n_combinations = nrow(weights)
-list_weights = lapply(1:n_combinations,function(i) weights[i,]%>% as.numeric)
-# We cache the systems in order to avoid re-calculating them
-systems= lapply(time_series,function(x) integralSystem(x,kind=kind))
-errors = lapply(list_weights,FUN = function(weights){
-# At this level, the weights are fixed and we assign the time series
-# into different folds
-names(weights) = c('self','interaction')
-fold = sample(rep(1:n_folds,length.out=n_time_series))
-number_in_fold = sapply(1:n_folds, function(i) sum(fold==i))
-fold_errors=lapply(1:n_folds,function(i){
-train_equations = systems[fold != i] %>% stack_equations
-test_equations = systems[fold == i] %>% stack_equations
-# We have to consider the cases where at least one of the systems are
-# singular
-fit = tryCatch(ridge_fit(train_equations,weights),error = function(e) {
-  NA_real_
-  }
-)
-CV_res = as.data.frame(test_LV_fit(test_equations = test_equations,solution_matrix = fit))
-}
-)
-summary_statistics = do.call(rbind,fold_errors)
-# Note the parentesis the next two lines. Without them, the expression
-# is not evaluated correctly as the multiplicator operator
-# has lower precedence than the piping operator
-RMSE = (summary_statistics$RMSE^2*number_in_fold) %>% mean %>% sqrt
-MAE = (summary_statistics$MAE*number_in_fold) %>% mean
-as.data.frame(list(RMSE=RMSE,MAE=MAE))
-}
-)
-results = do.call(rbind, errors)
-return(cbind(weights,results))
+cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
+                  weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100)) {
+  # We first find the number of time series
+  # the total number of systems
+  n_time_series <- length(time_series)
+  # and the number of parameter combinations to test
+  n_combinations <- nrow(weights)
+  list_weights <- lapply(1:n_combinations, function(i) weights[i, ] %>% as.numeric())
+  # We cache the systems in order to avoid re-calculating them
+  systems <- lapply(time_series, function(x) integralSystem(x, kind = kind))
+  errors <- lapply(list_weights, FUN = function(weights) {
+    # At this level, the weights are fixed and we assign the time series
+    # into different folds
+    names(weights) <- c("self", "interaction")
+    fold <- sample(rep(1:n_folds, length.out = n_time_series))
+    number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
+    fold_errors <- lapply(1:n_folds, function(i) {
+      train_equations <- systems[fold != i] %>% stack_equations()
+      test_equations <- systems[fold == i] %>% stack_equations()
+      # We have to consider the cases where at least one of the systems are
+      # singular
+      fit <- tryCatch(ridge_fit(train_equations, weights), error = function(e) {
+        NA_real_
+      })
+      CV_res <- as.data.frame(test_LV_fit(test_equations = test_equations, solution_matrix = fit))
+    })
+    summary_statistics <- do.call(rbind, fold_errors)
+    # Note the parentesis the next two lines. Without them, the expression
+    # is not evaluated correctly as the multiplicator operator
+    # has lower precedence than the piping operator
+    RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
+    MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
+    as.data.frame(list(RMSE = RMSE, MAE = MAE))
+  })
+  results <- do.call(rbind, errors)
+  return(cbind(weights, results))
 }

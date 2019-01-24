@@ -17,7 +17,7 @@
 #' @param subset Character, the subset of similarity measures to use, denoted by
 #' the its name in the list (not necessarly its string) returned from \link{similarity_measures} or similarity
 #' measure modiftying function such as \link{noisify}
-#'If \code{NULL}, all available measures will be used
+#' If \code{NULL}, all available measures will be used
 #'
 #' @param file Should the tables of significant interactions be printed to a file?
 #' @param returnVariables Which variables should the function return (character vector)?
@@ -73,60 +73,67 @@
 #' @import stringr
 #' @import phyloseq
 #' @export
-runAnalysis=function(OTU_table,abundance_cutoff=1e-04,q_crit=0.05,parallel=TRUE,
-                    returnVariables=NULL,subset=NULL,sim.scores=NULL,file=FALSE,magnitude_factor=10,prefix=NULL,
-                    metadataCols=c('OTU Id','taxonomy'),
-                    postfix=""){
-if(is.null(prefix))
-prefix = create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
-if(inherits(OTU_table,'phyloseq')){
-  phyloseq_object=OTU_table
-  taxonomy= collapse_taxonomy(phyloseq_object)
-  OTU_table=phyloseq::otu_table(OTU_table) %>% data.frame
-  if(!phyloseq::taxa_are_rows(phyloseq_object)){
-    OTU_table = t(OTU_table) %>% data.frame
+runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = TRUE,
+                        returnVariables = NULL, subset = NULL, sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
+                        metadataCols = c("OTU Id", "taxonomy"),
+                        postfix = "") {
+  if (is.null(prefix)) {
+    prefix <- create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
   }
-  metadataCols=NULL
-}
-# In case we are provided with a data frame instead
-else{
-  # If we are provided a data frame, we must see if the taxonomy column exists
-  if('taxonomy' %in% colnames(OTU_table)){
-  taxonomy=OTU_table$taxonomy
-  names(taxonomy) = rownames(OTU_table)
+  if (inherits(OTU_table, "phyloseq")) {
+    phyloseq_object <- OTU_table
+    taxonomy <- collapse_taxonomy(phyloseq_object)
+    OTU_table <- phyloseq::otu_table(OTU_table) %>% data.frame()
+    if (!phyloseq::taxa_are_rows(phyloseq_object)) {
+      OTU_table <- t(OTU_table) %>% data.frame()
+    }
+    metadataCols <- NULL
   }
-  else{
-    taxonomy=NULL
+  # In case we are provided with a data frame instead
+  else {
+    # If we are provided a data frame, we must see if the taxonomy column exists
+    if ("taxonomy" %in% colnames(OTU_table)) {
+      taxonomy <- OTU_table$taxonomy
+      names(taxonomy) <- rownames(OTU_table)
+    }
+    else {
+      taxonomy <- NULL
+    }
   }
-}
-refined_table=refine_data(OTU_table,abundance_cutoff=abundance_cutoff,metadataCols = metadataCols)
-# The smallest value in the data set
-min_dataset=min(apply(refined_table,MARGIN = 2,function(x) min(x[x>0])))
-magnitude=magnitude_factor*min_dataset
-if(is.null(sim.scores)){
-  sim.scores =noisify(magnitude = magnitude)
-  ccrepe_job=create_ccrepe_jobs(data=refined_table,sim.scores = sim.scores,
-                                prefix=prefix,postfix=paste0(postfix,".csv"))
-}
-if(!is.null(subset))
-{
-  ccrepe_job=ccrepe_job[subset]
-}
-stringlist=lapply(ccrepe_job, function(x) list(string=x$string))
-ccrepe_res=ccrepe_analysis(ccrepe_job,parallel = parallel)
-outputargs=add_outputargs(ccrepe_res,taxonomy=taxonomy,output.file=file,
-                          threshold.value=q_crit,
-                          return.value =TRUE)
-similarity_measures_significance=lapply(outputargs,
-       function(x)(do.call(what=micInt::output_ccrepe_data,
-                          args=x))
-)
-if(is.null(returnVariables)){
-  return(mget(ls()))
-}
-else{
-  return(mget(returnVariables))
-}
+  refined_table <- refine_data(OTU_table, abundance_cutoff = abundance_cutoff, metadataCols = metadataCols)
+  # The smallest value in the data set
+  min_dataset <- min(apply(refined_table, MARGIN = 2, function(x) min(x[x > 0])))
+  magnitude <- magnitude_factor * min_dataset
+  if (is.null(sim.scores)) {
+    sim.scores <- noisify(magnitude = magnitude)
+    ccrepe_job <- create_ccrepe_jobs(
+      data = refined_table, sim.scores = sim.scores,
+      prefix = prefix, postfix = paste0(postfix, ".csv")
+    )
+  }
+  if (!is.null(subset)) {
+    ccrepe_job <- ccrepe_job[subset]
+  }
+  stringlist <- lapply(ccrepe_job, function(x) list(string = x$string))
+  ccrepe_res <- ccrepe_analysis(ccrepe_job, parallel = parallel)
+  outputargs <- add_outputargs(ccrepe_res,
+    taxonomy = taxonomy, output.file = file,
+    threshold.value = q_crit,
+    return.value = TRUE
+  )
+  similarity_measures_significance <- lapply(
+    outputargs,
+    function(x) (do.call(
+        what = micInt::output_ccrepe_data,
+        args = x
+      ))
+  )
+  if (is.null(returnVariables)) {
+    return(mget(ls()))
+  }
+  else {
+    return(mget(returnVariables))
+  }
 }
 
 
@@ -163,39 +170,38 @@ else{
 #'
 #'
 #' @export
-autoplot.interaction_table = function(table,OTU_stat,type = 'num_int',cutoff_type='q',
-                                  abundance_type ='mean'){
- plot_after = switch (abundance_type,
-   'mean' = OTU_stat$meanAbundance,
-   'max' = OTU_stat$maxAbundance,
-   'median' = OTU_stat$medianAbundance
- )
-if(type == 'num_int'){
-num_int= countInteractions(OTU_stat$ID,table)
-xlab= switch (abundance_type,
-              'mean' = 'Mean abundance',
-              'max' = 'Max abundance',
-              'median' = 'Median abundance'
-)
-return(ggplot()+geom_point(aes_string(x="plot_after",y="num_int"))+scale_x_continuous(name= xlab,trans = 'log10')+
-  scale_y_continuous(name='Number of interactions'))
-}
-else{
-  if(cutoff_type=='q')
-  {
-    description='q-value'
-    valueColumn='q.value'
+autoplot.interaction_table <- function(table, OTU_stat, type = "num_int", cutoff_type = "q",
+                                       abundance_type = "mean") {
+  plot_after <- switch(abundance_type,
+    "mean" = OTU_stat$meanAbundance,
+    "max" = OTU_stat$maxAbundance,
+    "median" = OTU_stat$medianAbundance
+  )
+  if (type == "num_int") {
+    num_int <- countInteractions(OTU_stat$ID, table)
+    xlab <- switch(abundance_type,
+      "mean" = "Mean abundance",
+      "max" = "Max abundance",
+      "median" = "Median abundance"
+    )
+    return(ggplot() + geom_point(aes_string(x = "plot_after", y = "num_int")) + scale_x_continuous(name = xlab, trans = "log10") +
+      scale_y_continuous(name = "Number of interactions"))
   }
-  else{
-    description='p-value'
-    valueColumn='p.value'
+  else {
+    if (cutoff_type == "q") {
+      description <- "q-value"
+      valueColumn <- "q.value"
+    }
+    else {
+      description <- "p-value"
+      valueColumn <- "p.value"
+    }
+    abundance_product <- abundanceProduct(table, OTU_stat, type = abundance_type)
+    y <- abundance_product
+    x <- table[[valueColumn]]
+    return(ggplot() + geom_point(aes_string(x = "x", y = "y")) + xlab(description) + ylab("Abundance product") +
+      scale_x_continuous(trans = "log10") + scale_y_continuous(trans = "log10"))
   }
-abundance_product = abundanceProduct(table,OTU_stat,type=abundance_type)
-y = abundance_product
-x = table[[valueColumn]]
-return(ggplot()+geom_point(aes_string(x="x",y="y"))+xlab(description)+ylab('Abundance product')+
-  scale_x_continuous(trans='log10')+scale_y_continuous(trans='log10'))
-}
 }
 
 #' @title ratio_shared_interactions
@@ -209,30 +215,29 @@ return(ggplot()+geom_point(aes_string(x="x",y="y"))+xlab(description)+ylab('Abun
 #' Measures with no significant interactions are ignored.
 #'
 #' @export
-ratio_shared_interactions=function(similarity_measures_significance){
+ratio_shared_interactions <- function(similarity_measures_significance) {
   # Ignores tables with zero columns
-  to_include=unlist(lapply(similarity_measures_significance,function(x) nrow(x)!= 0))
-  OTU_pairs=lapply(similarity_measures_significance[to_include],extract_OTUs)
-  n_sim_measures=length(OTU_pairs)
-  res=matrix(data=NA, nrow=n_sim_measures,ncol=n_sim_measures)
-  dimnames(res)=list(names(OTU_pairs),names(OTU_pairs))
-  for (i in 1:(n_sim_measures-1)){
-    for (j in (i+1):n_sim_measures){
-      res[i,j]=count_matches(OTU_pairs[[i]],OTU_pairs[[j]])/min(length(OTU_pairs[[i]]),length(OTU_pairs[[j]]))
-      res[j,i]=res[i,j]
+  to_include <- unlist(lapply(similarity_measures_significance, function(x) nrow(x) != 0))
+  OTU_pairs <- lapply(similarity_measures_significance[to_include], extract_OTUs)
+  n_sim_measures <- length(OTU_pairs)
+  res <- matrix(data = NA, nrow = n_sim_measures, ncol = n_sim_measures)
+  dimnames(res) <- list(names(OTU_pairs), names(OTU_pairs))
+  for (i in 1:(n_sim_measures - 1)) {
+    for (j in (i + 1):n_sim_measures) {
+      res[i, j] <- count_matches(OTU_pairs[[i]], OTU_pairs[[j]]) / min(length(OTU_pairs[[i]]), length(OTU_pairs[[j]]))
+      res[j, i] <- res[i, j]
     }
   }
   return(res)
 }
 # Ensures that each pair of OTUs are ordered by the lowest index first
-extract_OTUs=function(sim_result){
-  OTUs=sim_result[c('OTU_1','OTU_2')]
-  OTUs_orded=as.data.frame(apply(OTUs,1,function(x) c(min(x),max(x))))
-  OTUs_list=as.list(OTUs_orded)
+extract_OTUs <- function(sim_result) {
+  OTUs <- sim_result[c("OTU_1", "OTU_2")]
+  OTUs_orded <- as.data.frame(apply(OTUs, 1, function(x) c(min(x), max(x))))
+  OTUs_list <- as.list(OTUs_orded)
   return(OTUs_list)
 }
 # Count the number of identical (not necessarly contigious) rows
-count_matches=function(OTUs_1,OTUs_2){
- length(intersect(OTUs_1,OTUs_2))
+count_matches <- function(OTUs_1, OTUs_2) {
+  length(intersect(OTUs_1, OTUs_2))
 }
-

@@ -40,15 +40,19 @@
 #' @seealso noisify
 #'
 #' @export
-setClass(Class="sim.measure",slots=c(FUN="function",string="character",
-                                     categorical="logical",mean_scaleable="logical",signed="logical",type=
-                                       "character"))
+setClass(Class = "sim.measure", slots = c(
+  FUN = "function", string = "character",
+  categorical = "logical", mean_scaleable = "logical", signed = "logical", type =
+    "character"
+))
 
 #' @name sim.measure
-#'@rdname sim.measure
-sim.measure=function(FUN,string,categorical=FALSE,mean_scaleable=FALSE,signed=FALSE,type="parametric"){
-  new("sim.measure",FUN=FUN,string=string,categorical=categorical,
-      mean_scaleable=mean_scaleable,signed=signed,type=type)
+#' @rdname sim.measure
+sim.measure <- function(FUN, string, categorical = FALSE, mean_scaleable = FALSE, signed = FALSE, type = "parametric") {
+  new("sim.measure",
+    FUN = FUN, string = string, categorical = categorical,
+    mean_scaleable = mean_scaleable, signed = signed, type = type
+  )
 }
 #' @name sim.measure.attributes
 #' @title sim.measure.attributes
@@ -59,22 +63,22 @@ sim.measure=function(FUN,string,categorical=FALSE,mean_scaleable=FALSE,signed=FA
 #' in \link{sim.measure})
 #' @slot signed Logical, does this similarity measure return signed results?
 #' @export
-setClass(Class="sim.measure.attributes",slots = c(string="character",type_measure="character",signed="logical"))
+setClass(Class = "sim.measure.attributes", slots = c(string = "character", type_measure = "character", signed = "logical"))
 
-setGeneric("sim.measure.attributes",def=function(x,...) standardGeneric("sim.measure.attributes")
-)
+setGeneric("sim.measure.attributes", def = function(x, ...) standardGeneric("sim.measure.attributes"))
 
 #' @rdname sim.measure.attributes
 #' @export
-setMethod("sim.measure.attributes","sim.measure",
-          definition = function(x){
-            new("sim.measure.attributes",string=x@string,type_measure=x@type,signed=x@signed)
-          }
+setMethod("sim.measure.attributes", "sim.measure",
+  definition = function(x) {
+    new("sim.measure.attributes", string = x@string, type_measure = x@type, signed = x@signed)
+  }
 )
 #' @rdname sim.measure.attributes
 #' @export
-setMethod("sim.measure.attributes","character",
-          function(x,type_measure,signed){
-            new("sim.measure.attributes",string=x,type_measure=type_measure,signed=signed)
-          }
+setMethod(
+  "sim.measure.attributes", "character",
+  function(x, type_measure, signed) {
+    new("sim.measure.attributes", string = x, type_measure = type_measure, signed = signed)
+  }
 )
