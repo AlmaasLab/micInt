@@ -5,7 +5,6 @@
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 remove_metadata <- function(OTU_table, metadataCols = c("OTU Id", "taxonomy")) {
-  options(stringsAsFactors = FALSE)
   if (is.character(metadataCols)) {
     metadata <- which(colnames(OTU_table) %in% metadataCols)
   }
@@ -163,13 +162,26 @@ output_ccrepe_data <- function(data, taxonomy = NULL, threshold.type = "q", thre
 #' @title Create table of significant interactions
 #'
 #' @description Performs the actual process of making the table.
-#' For documentation of parameters, see \link{output_ccrepe_data}
+#' @return An \code{interaction_table}, being a \code{data.frame} with the following columns
+#' (given that they are available in the input):
+#' \itemize{
+#' \item \code{OTU_1}, \code{OTU_2} The IDs of the two interacting OTUs
+#' \item \code{z.stat} The \eqn{z}{z}-value of the interaction
+#' \item \code{p.value} The p-value of the interaction (based only on the interaction itself)
+#' \item \code{q.value} The q-value of the interaction (corrected for multiple testing)
+#' \item \code{taxonomy_1}, \code{taxonomy_2} The taxonomy of the two interacting OTUs, collapsed into a single string.
+#' }
+#' In addition, the information from the given similarity scores are also provided
 #'
-#' @return An \code{interactions_table}
+#' @seealso \link{collapse_taxonomy} \link{sim.measure.attributes}
+#'
+#'
 #'
 #' @export
-create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q", threshold.value = 0.05, removeDuplicates = TRUE, score_attributes = NULL) {
-  options(stringsAsFactors = FALSE)
+#'
+#' @inheritParams output_ccrepe_data
+create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q", threshold.value = 0.05,
+                                     removeDuplicates = TRUE, score_attributes = NULL) {
   p.values <- as.data.frame(data$p.values)
   z.stat <- as.data.frame(data$z.stat)
   sim.score <- as.data.frame(data$sim.score)
@@ -238,7 +250,7 @@ create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q"
   class(significant_interactions) <- c("interaction_table", class(significant_interactions))
   if (is.null(score_attributes)) {
     attr(significant_interactions, "measure_name") <- NA
-    attr(significant_interactions, "signed") <- ifelse(!all(significant_interactions$sim.score >= 0), TRUE, NA)
+    attr(significant_interactions, "signed") <- NA
     attr(significant_interactions, "measure_type") <- NA
   }
   else {
@@ -248,6 +260,7 @@ create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q"
   }
   return(significant_interactions)
 }
+
 #'
 #' @title write.interactions_table
 #'
@@ -284,7 +297,8 @@ write.interactions_table <- function(significant_interactions, filename,
 #'
 #' @export
 summary.interaction_table <- function(table) {
-  proportion_negative <- sum(table$sim.score < 0) / nrow(table)
+  proportion_negative <- ifelse(attr(table,'signed'),
+                                sum(table$sim.score < 0) / nrow(table), NA)
   number_significant <- nrow(table)
   c(
     attributes(table)[c("measure_name", "signed", "measure_type")],
@@ -297,8 +311,8 @@ as.edgelist <- function(x, ...) {
   UseMethod("as.edgelist")
 }
 
-#' @name as.edge_list.interaction_table
-#' @title Create edge list from interaction table
+#' @name as.edgelist.interaction_table
+#' @title Create edge list from \code{interaction_table}
 #'
 #' @param table An \code{interaction_table}
 #'
@@ -306,7 +320,8 @@ as.edgelist <- function(x, ...) {
 #' where each row represent an edge between the OTUs. The entities in the each row are the name of the
 #' two interacting OTUs.
 #'
-#' @return The result of this function can be fed directly into \link{igraph} for making interacting network
+#' @return The result of this function can be fed directly into \link[igraph]{graph_from_edgelist}
+#' for making interacting network
 #'
 #' @export
 as.edgelist.interaction_table <- function(table) {

@@ -23,13 +23,20 @@
 #' @param returnVariables Which variables should the function return (character vector)?
 #' Available options are: \itemize{
 #' \item \code{similarity_measures_significance}:
-#' The \code{interactions_table} of significant interactions
+#' The \code{interaction_table} of significant interactions
 #' \item \code{refined_table}: The processed  OTU table
 #' \item \code{min_dataset}: The smallest non-zero entity in the refined table
 #' \item \code{taxonomy}: A named numberic containing the taxonomy of each OTU (collapsed into a single string)
+#' \item \code{outputargs}: A list (with a element for each similarity measure) comtaining the arguments to be passed
+#' to \link{output_ccrepe_data} for each similarity measure
+#' \item \code{common_outputargs}: Like \code{outputargs}, but these arguments stay the same for all similarity
+#' measure in order to avoid duplicates.
 #' }
-#' In addition, all paramerters for this function are available.
-#' If \code{NULL}, all variables in the function will be returned.
+#'
+#' In addition, all paramerters for this function are available. Other internal variables
+#' found upon inspection of the source code may also be returned,
+#' but they are for advanced users only.
+#' If \code{NULL}, the listed parameters in this section in addtion to an echo of the parameters are retuned.
 #' Note: If \code{OTU_table} is a \code{phyloseq} object, the returned variables is a data frame corresponding to the
 #' \code{phyloseq} object. This is due to the fact that it is intervally converted into a data frame.
 #'
@@ -63,17 +70,18 @@
 #' \item
 #' The rows may only hold OTU abundances
 #' \item
-#' There may be as many metadata colums as preferable. However, the all
+#' There may be as many metadata colums as you like. However, they all
 #' need to be declared in the \code{metadataCols} argument and the column
 #' \code{taxonomy} has be there in order for the output file to contain the
 #' taxonomy.
 #' \item The row names of the table are the OTU names and the column names are the
 #' sample names
 #' }
-#' For \code{phyloseq} object, you do not need to care about this, it is automatically handeled
+#' For \code{phyloseq} objects, you do not need to care about this, it is automatically handeled
+#'
+#' @seealso \link{output_ccrepe_data}
 #'
 #'
-#' @import stringr
 #' @import phyloseq
 #' @export
 runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = TRUE,
@@ -130,13 +138,15 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
       ))
   )
   if (is.null(returnVariables)) {
-    return(mget(ls()))
+    parameters <- formalArgs('runAnalysis')
+    API_variables <- c('similarity_measures_significance','outputargs','common_outputargs',
+                       'refined_table','min_dataset','taxonomy')
+    mget(c(parameters,API_variables)) %>% return()
   }
   else {
     return(mget(returnVariables))
   }
 }
-
 
 #' @title autoplot.interaction_table
 #'

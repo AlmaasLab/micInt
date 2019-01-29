@@ -8,10 +8,38 @@ create_interaction_table(data, taxonomy = NULL, threshold.type = "q",
   threshold.value = 0.05, removeDuplicates = TRUE,
   score_attributes = NULL)
 }
+\arguments{
+\item{data}{The results from ccrepe}
+
+\item{taxonomy}{Named character, with the names being those of the OTUs and the values
+their taxonomy collapased into a single string (for each OTU)}
+
+\item{threshold.type}{The type of threshold to be used \code{'q'} denotes q-value,
+while \code{'p'} denotes p-value}
+
+\item{threshold.value}{The critical significance value for including an interaction}
+
+\item{removeDuplicates}{If \code{TRUE}, the function ensures that no OTU pair is listed twice in the results.
+Else, two interacting OTUs may show up twice in reverse order
+(a pair where OTU A is listed as \code{OTU_1} and OTU B is listed was \code{OTU_2} and vice versa for the other pair)}
+
+\item{score_attributes}{An object of class \link{sim.measure.attributes} belonging to the similarity measure being used}
+}
 \value{
-An \code{interactions_table}
+An \code{interaction_table}, being a \code{data.frame} with the following columns
+(given that they are available in the input):
+\itemize{
+\item \code{OTU_1}, \code{OTU_2} The IDs of the two interacting OTUs
+\item \code{z.stat} The \eqn{z}{z}-value of the interaction
+\item \code{p.value} The p-value of the interaction (based only on the interaction itself)
+\item \code{q.value} The q-value of the interaction (corrected for multiple testing)
+\item \code{taxonomy_1}, \code{taxonomy_2} The taxonomy of the two interacting OTUs, collapsed into a single string.
+}
+In addition, the information from the given similarity scores are also provided
 }
 \description{
 Performs the actual process of making the table.
-For documentation of parameters, see \link{output_ccrepe_data}
+}
+\seealso{
+\link{collapse_taxonomy} \link{sim.measure.attributes}
 }
