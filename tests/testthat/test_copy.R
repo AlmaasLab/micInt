@@ -15,6 +15,7 @@ testdata<-matrix(c(0.29787234, 0.2978723, 0.2553191, 0.1489362,
 dimnames(testdata) <-  list(
   c("Subject.1", "Subject.2","Subject.3","Subject.4","Subject.5","Subject.6","Subject.7","Subject.8","Subject.9","Subject.10"),
   c("bug.1", "bug.2", "bug.3","bug.4")) # column names
-expect_error(runAnalysis(t(testdata)),regexp = NA)
+expect_error(runAnalysis(t(testdata),parallel = FALSE,subset = c('pearson','spearman')),
+             regexp = NA)
 }
 )

@@ -3,18 +3,35 @@
 \docType{class}
 \name{OTU_time_series}
 \alias{OTU_time_series}
+\alias{OTU_time_series,data.frame,numeric-method}
+\alias{OTU_time_series,phyloseq,numeric-method}
+\alias{OTU_time_series,phyloseq,character-method}
 \title{Time series class for OTU tables}
 \usage{
-OTU_time_series(table, time_points)
+\S4method{OTU_time_series}{data.frame,numeric}(table, time_points)
+
+\S4method{OTU_time_series}{phyloseq,numeric}(table, time_points)
+
+\S4method{OTU_time_series}{phyloseq,character}(table, time_points)
+}
+\arguments{
+\item{table}{A refined table returned form \code{\link{refine_data}} or a \code{phyloseq} object}
+
+\item{time_points}{A numeric vector of the start point. If a \code{phyloseq} object is provided, it can be a
+character vector of length one, specifying which column in the sample data to use for the time points.}
 }
 \description{
 This class provides a way to integrate measurements of time
 to OTU tables, useful for time series analysis
 }
+\details{
+If you provide a \code{phyloseq} object, you might want to split it into groups before
+using the constructor function.
+}
 \section{Slots}{
 
 \describe{
-\item{\code{table}}{The refined OTU table returned from \link{refine_data}}
+\item{\code{table}}{The refined OTU table representing the community}
 
 \item{\code{time_points}}{Numeric, the time from the start of the
 experiment or any other arbitrary time reference}

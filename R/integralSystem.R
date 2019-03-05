@@ -3,10 +3,7 @@
 #' and the linear equation system for its coefficients, as described in cited article.
 #'
 #' @param time_series An \code{OTU_time_series} or a list of them
-#' If a list is passed, the number of OTUs must be the same and in the same order
-#' The order of the rows in the table must correpsond to the order of the measurements.
-#'
-#' @param time_points
+#' If a list is passed, the OTUs must be the same and in the same order in each of the sub-objects.
 #'
 #' @param kind Charachter, one of \code{c('integral','log_integral')} Choose whether use the integral or log-integral approach
 #' described in the article cited.
@@ -30,7 +27,7 @@
 #'
 #' @export
 integralSystem <- function(time_series, kind = "integral", removeZeros = TRUE) {
-  if ("OTU_time_series" %in% class(time_series)) {
+  if (inherits(time_series,'OTU_time_series')) {
     time_series <- list(time_series)
   }
   if (kind == "integral") {

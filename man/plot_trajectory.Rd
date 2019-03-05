@@ -16,13 +16,13 @@ plot_trajectory(time_series_list, distance = "bray",
 \item{subset}{Character, the subsets of time series to plot, based on the
 names of the list.}
 
+\item{label}{Logical, should each point be labelled with the time point?}
+
 \item{label_size}{Positive numeric, the font size of the label. Ignored if \code{text=FALSE}.}
 
 \item{color}{Character, the color mapping to use in the plot. Defaults to the time series}
 
 \item{linetype}{Character, the linetype mapping to be used. Defaults to solid}
-
-\item{text}{Logical, should each point be labelled with the time point?}
 }
 \value{
 A \link{ggplot} object showing the trajectory in the two first principal components

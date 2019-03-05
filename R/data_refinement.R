@@ -147,7 +147,7 @@ output_ccrepe_data <- function(data, taxonomy = NULL, threshold.type = "q", thre
     removeDuplicates = removeDuplicates, score_attributes = sim.measure.attributes
   )
   if (output.file) {
-    write.interactions_table(significant_interactions,
+    write.interaction_table(significant_interactions,
       filename = filename,
       csv_option = csv_option
     )
@@ -262,13 +262,13 @@ create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q"
 }
 
 #'
-#' @title write.interactions_table
+#' @title write.interaction_table
 #'
 #' @description Takes an \code{interaction_table} and writes it to a file. For information about parameters,
 #' see \link{output_ccrepe_data}
 #'
 #' @export
-write.interactions_table <- function(significant_interactions, filename,
+write.interaction_table <- function(significant_interactions, filename,
                                      csv_option = "1") {
   if (csv_option == "2") {
     write.csv2(significant_interactions, file = filename, row.names = FALSE)

@@ -19,7 +19,7 @@
 #' measure modiftying function such as \link{noisify}
 #' If \code{NULL}, all available measures will be used
 #'
-#' @param file Should the tables of significant interactions be printed to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure
+#' @param file Should the tables of significant interactions be written to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure
 #' @param returnVariables Which variables should the function return (character vector)?
 #' Available options are: \itemize{
 #' \item \code{similarity_measures_significance}:
@@ -42,6 +42,8 @@
 #'
 #' @param magnitude_factor When making noisified functions, the magnitude of the noise
 #' will be this number multiplied with \code{min_dataset}
+#'
+#' @param q_crit Numeric, the q-value cutoff when construction interaction tables
 #'
 #' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
 #'

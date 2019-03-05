@@ -16,6 +16,8 @@ runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
 
 \item{abundance_cutoff}{The mean abundance cutoff for the OTUs. If it is \code{NULL}, the there will be not filtering.}
 
+\item{q_crit}{Numeric, the q-value cutoff when construction interaction tables}
+
 \item{parallel}{Should the analysis be run in parallel?}
 
 \item{returnVariables}{Which variables should the function return (character vector)?
@@ -47,7 +49,7 @@ If \code{NULL}, all available measures will be used}
 to use. If it is \code{NULL}, all measures available in the package
 will be used (recommanded for most purposes).}
 
-\item{file}{Should the tables of significant interactions be printed to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure}
+\item{file}{Should the tables of significant interactions be written to a file? If so, they are printed to \code{csv}-files containing the name of the similarity measure}
 
 \item{magnitude_factor}{When making noisified functions, the magnitude of the noise
 will be this number multiplied with \code{min_dataset}}

@@ -1,6 +1,0 @@
-exportPattern("^[[:alpha:]]+")
-import(ccrepe)
-import(vegan)
-import(tictoc)
-import(methods)
-

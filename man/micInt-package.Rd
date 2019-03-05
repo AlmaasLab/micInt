@@ -24,8 +24,8 @@ can be useful in user-written code as well.
 For the CoNet approach, the major function is \code{\link{runAnalysis}} which provides a more or less
 complete pipeline. This is a wrapper around the package \code{\link{ccrepe}}. For more advanced users, the lower level
 API using \code{\link{ccrepe_analysis}} might be preferable. In addition, there are many auxillary functions
-such as generating interaction tables (\code{\link{create.interations_table}}), writing them to file (\code{\link{write.interations_table}})
-and making diagnostic plots of the tables (\code{\link{plot.intertions_table}}).
+such as generating interaction tables (\code{\link{create.interation_table}}), writing them to file (\code{\link{write.interation_table}})
+and making diagnostic plots of the tables (\code{\link{autoplot.intertion_table}}).
 }
 
 \subsection{Lotka-Volterra}{

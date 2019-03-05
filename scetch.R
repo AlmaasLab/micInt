@@ -23,3 +23,5 @@ filtered
 ds=data.frame(a=c('a','b'),b=c('c','d'))
 rownames(ds)=c('Rad 1','Rad 2')
 apply(ds,MARGIN=1,FUN=paste,collapse=' ')
+time = OTU_time_series(phyloseq_object,time_points = phyloseq_object@sam_data$Week)
+time_2 = OTU_time_series(phyloseq_object,time_points = 'Week')

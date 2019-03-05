@@ -8,8 +8,7 @@ integralSystem(time_series, kind = "integral", removeZeros = TRUE)
 }
 \arguments{
 \item{time_series}{An \code{OTU_time_series} or a list of them
-If a list is passed, the number of OTUs must be the same and in the same order
-The order of the rows in the table must correpsond to the order of the measurements.}
+If a list is passed, the OTUs must be the same and in the same order in each of the sub-objects.}
 
 \item{kind}{Charachter, one of \code{c('integral','log_integral')} Choose whether use the integral or log-integral approach
 described in the article cited.}
@@ -18,8 +17,6 @@ described in the article cited.}
 produce zero rows. This is ignored for the \code{'log_integral'} because in that
 case, all two consecutive measurements which contains a zero for the OTU in question,
 must be discared anyway.}
-
-\item{time_points}{}
 }
 \value{
 A list of lists (one for each OTU) with two elements:

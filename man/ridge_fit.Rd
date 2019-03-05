@@ -28,7 +28,7 @@ equations using ridge regularization (l^2).
 The equations are fitted individually, this is: For each OTU, all coefficients determining it abundance
 is fitted independently from the other coeffcients. The entity
 
-\deqn{\|A\beta-b\|^2+\lambda_{\text{self}}\beta_{\text{self}}^2+
+\deqn{\| A\beta-b \|^2+\lambda_{\text{self}}\beta_{\text{self}}^2+
 \lambda_{\text{interaction}}\|\beta_{\text{interaction}}\|^2}
 will be minimized where \eqn{\beta} is the estimated solution, \eqn{\beta_{\text{self}}} is the estimated
 maximal growth rate of the OTU and \eqn{\beta_{\text{inteaction}}} are the estimated effect of the interactions

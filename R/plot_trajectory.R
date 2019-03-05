@@ -1,3 +1,5 @@
+#' @importFrom stats prcomp
+#'
 #' @title
 #' Plot trajectory for time series
 #'
@@ -10,7 +12,7 @@
 #' @param distance The name of any distance metric in \link{vegdist}
 #' @param subset Character, the subsets of time series to plot, based on the
 #' names of the list.
-#' @param text Logical, should each point be labelled with the time point?
+#' @param label Logical, should each point be labelled with the time point?
 #' @param label_size Positive numeric, the font size of the label. Ignored if \code{text=FALSE}.
 #' @param color Character, the color mapping to use in the plot. Defaults to the time series
 #' @param linetype Character, the linetype mapping to be used. Defaults to solid

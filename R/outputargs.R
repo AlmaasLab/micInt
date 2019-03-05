@@ -44,6 +44,8 @@ create_prefix <- function(q_crit = NULL, p_crit = NULL, cutoff = NULL, magfac = 
 #' Add  output arguments being used by \code{\link{output_ccrepe_data}} in addition to
 #' the ones returned from \code{\link{ccrepe_analysis}}.
 #'
+#' @param ccrepe_res A list of results from \code{\link{ccrepe}}}
+#'
 #' @inheritParams output_ccrepe_data
 #'
 add_outputargs <- function(ccrepe_res, taxonomy = NULL, output.file = NULL, return.value = NULL,

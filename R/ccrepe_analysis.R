@@ -62,15 +62,15 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
     ccrepe_res <- lapply(
       X = ccrepe_job,
       FUN = function(x) {
-        print(x$string)
+        message(x$string)
         list(res = do.call(ccrepe, c(x$ccrepe_args,commonargs)))
       }
     )
   }
   stop <- Sys.time()
   if (verbose) {
-    print("Time to execute the ccrepe analysis")
-    print(stop - start)
+    message("Time to execute the ccrepe analysis")
+    message(stop - start)
   }
   for (i in 1:length(ccrepe_job)) {
     ccrepe_res[[i]] <- modifyList(ccrepe_res[[i]], ccrepe_job[[i]]$output_args)
