@@ -5,7 +5,7 @@
 \title{Predict trajectory of a Lotka-Volterra system from estimated
 coefficients}
 \usage{
-\method{predict}{LV}(fit, start, times, diagnostics = TRUE, ...)
+\method{predict}{LV}(fit, start, times, ...)
 }
 \arguments{
 \item{fit}{An object of class \code{LV_fit} returned from a suitable
@@ -29,7 +29,7 @@ simulate a Lotka-Volterra system with fitted coefficients. Hence, it can be used
 for predictions.
 }
 \details{
-By default, the \code{lsoda} is the method used
+By default, the \code{lsoda} is the method used, but this can be changed by passing an \code{method} argument
 }
 \seealso{
 \link{ridge_fit}, \link{deSolve-package}

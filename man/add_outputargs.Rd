@@ -9,6 +9,8 @@ add_outputargs(ccrepe_res, taxonomy = NULL, output.file = NULL,
   csv_option = NULL, removeDuplicates = NULL)
 }
 \arguments{
+\item{ccrepe_res}{A list of results from \code{\link{ccrepe}}}
+
 \item{taxonomy}{Named character, with the names being those of the OTUs and the values
 their taxonomy collapased into a single string (for each OTU)}
 

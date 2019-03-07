@@ -15,7 +15,7 @@
 #'
 #' @param times The time points to include in the simulation
 #' @param ... Additional parameters to the function \code{\link{ode}} used to solve the system
-#' @details By default, the \code{lsoda} is the method used
+#' @details By default, the \code{lsoda} is the method used, but this can be changed by passing an \code{method} argument
 #' @return An object of type \code{\link{OTU_time_series}}, where the
 #' table is a matrix of type \code{\link{deSolve}}
 #' @seealso \link{ridge_fit}, \link{deSolve-package}
@@ -25,8 +25,8 @@
 #'
 #'
 #' @export
-predict.LV <- function(fit, start, times, diagnostics = TRUE, ...) {
-  sol <- ode(y = start, func = system_equation, parms = fit, times = times)
+predict.LV <- function(fit, start, times, ...) {
+  sol <- ode(y = start, func = system_equation, parms = fit, times = times, ...)
   OTU_time_series(table = sol[, -1] %>% as.data.frame(), time_points = sol[, 1])
 }
 

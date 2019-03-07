@@ -123,7 +123,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
       prefix = prefix, postfix = paste0(postfix, ".csv")
     )
   }
-  ccrepe_commonargs <- list(x = refined_table, min.subj = 10, verbose = TRUE,renormalize=renormalize)
+  ccrepe_commonargs <- list(x = refined_table, min.subj = 10, verbose = FALSE, renormalize=renormalize)
   if (!is.null(subset)) {
     ccrepe_job <- ccrepe_job[subset]
   }

@@ -25,3 +25,24 @@ rownames(ds)=c('Rad 1','Rad 2')
 apply(ds,MARGIN=1,FUN=paste,collapse=' ')
 time = OTU_time_series(phyloseq_object,time_points = phyloseq_object@sam_data$Week)
 time_2 = OTU_time_series(phyloseq_object,time_points = 'Week')
+comp_phyloseq = phyloseq_object %>% microbiome::transform(transform = 'compositional')
+new_phyloseq_object <- phyloseq::prune_taxa(taxa = comp_phyloseq %>%
+                                              phyloseq::taxa_sums(.)/phyloseq::nsamples(comp_phyloseq) >
+                                              10^{-3},comp_phyloseq) %>%  phyloseq::subset_samples(Source=='Water')
+
+reactors = phyloseq::sample_data(new_phyloseq_object)[['Reactor']] %>% unique
+
+time_series = lapply(reactors , function(reactor){
+                    subsetted_phyloseq = phyloseq::prune_samples(x=new_phyloseq_object,
+                                                                 samples=phyloseq::sample_data(new_phyloseq_object)[['Reactor']]==reactor)
+                     OTU_time_series(subsetted_phyloseq, 'Week')
+  }
+
+                     )
+names(time_series) = reactors
+time_series
+systems = micInt::integralSystem(time_series = time_series)
+sol = micInt::ridge_fit(systems,weights = c(self=0.1,interaction=0.01))
+start = time_series[[1]]@table[1,,drop=TRUE] %>% unlist()
+pred <- predict(sol,start = start,times = c(time_series[[1]]@time_points))
+micInt::plot_trajectory(time_series_list = list(predicted=pred, reference=time_series[[1]]),label = TRUE)

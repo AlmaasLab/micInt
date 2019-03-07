@@ -18,7 +18,7 @@ by cross-validation}
 An n_OTU times (n_OTU+1) numeric matrix where each row contains the coefficients determining
 the growth of the selected OTU. The first column contains the estimated growth rates, while the other
 rows contain the estimates for the interaction coefficients. This object has
-the S3 class attribute \code{LV_fit}.
+the S3 class attribute \code{LV}.
 }
 \description{
 When determining the Lotka-Volterra coefficients of an OTU system, this function solves the linear
@@ -28,10 +28,10 @@ equations using ridge regularization (l^2).
 The equations are fitted individually, this is: For each OTU, all coefficients determining it abundance
 is fitted independently from the other coeffcients. The entity
 
-\deqn{\| A\beta-b \|^2+\lambda_{\text{self}}\beta_{\text{self}}^2+
-\lambda_{\text{interaction}}\|\beta_{\text{interaction}}\|^2}
-will be minimized where \eqn{\beta} is the estimated solution, \eqn{\beta_{\text{self}}} is the estimated
-maximal growth rate of the OTU and \eqn{\beta_{\text{inteaction}}} are the estimated effect of the interactions
+\deqn{\| A\beta-b \|^2+\lambda_{\mathrm{self}}\beta_{\mathrm{self}}^2+
+\lambda_{\mathrm{interaction}}\|\beta_{\mathrm{interaction}}\|^2}
+will be minimized where \eqn{\beta} is the estimated solution, \eqn{\beta_{\mathrm{self}}} is the estimated
+maximal growth rate of the OTU and \eqn{\beta_{\mathrm{inteaction}}} are the estimated effect of the interactions
 with the other OTUs (and itself).
 }
 \references{
