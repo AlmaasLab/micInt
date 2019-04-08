@@ -1,9 +1,9 @@
 Package: micInt
 Type: Package
 Title: Find microbial interactions
-Version: 0.0.39
+Version: 0.1.0
 Depends: R (>= 3.3.0), ggplot2, ggfortify
-Imports: ccrepe,infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
+Imports: methods, ccrepe,infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph
 Suggests: readxl, ggrepel, ggdendro, kableExtra, cluster,
     testthat

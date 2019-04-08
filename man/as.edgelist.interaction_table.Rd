@@ -4,10 +4,12 @@
 \alias{as.edgelist.interaction_table}
 \title{Create edge list from \code{interaction_table}}
 \usage{
-\method{as.edgelist}{interaction_table}(table)
+\method{as.edgelist}{interaction_table}(x, ...)
 }
 \arguments{
-\item{table}{An \code{interaction_table}}
+\item{x}{An \code{interaction_table}}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 The result of this function can be fed directly into \link[igraph]{graph_from_edgelist}

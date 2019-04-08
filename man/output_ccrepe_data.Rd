@@ -7,7 +7,7 @@
 output_ccrepe_data(data, taxonomy = NULL, threshold.type = "q",
   threshold.value = 0.05, output.file = FALSE, filename = NULL,
   return.value = TRUE, csv_option = "2", removeDuplicates = TRUE,
-  sim.measure.attributes = NULL)
+  score_attributes = NULL)
 }
 \arguments{
 \item{data}{The results from ccrepe}
@@ -34,7 +34,7 @@ Else, the decimal delimer is point and comma the delimer between numbers.}
 Else, two interacting OTUs may show up twice in reverse order
 (a pair where OTU A is listed as \code{OTU_1} and OTU B is listed was \code{OTU_2} and vice versa for the other pair)}
 
-\item{score_attributes}{An object of class \link{sim.measure.attributes} belonging to the similarity measure being used}
+\item{score_attributes}{An object of class \linkS4class{sim.measure.attributes} belonging to the similarity measure being used}
 }
 \description{
 Takes input from ccrepe and transforms it into a convenient table

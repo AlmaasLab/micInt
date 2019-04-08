@@ -47,6 +47,8 @@
 #'
 #' @param prefix The prefix of the file names being written. Ignored if \code{file=FALSE}.
 #'
+#' @param postfix The postfix of the file names being written. Ignored if \code{file=FALSE}.
+#'
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied
 #'
@@ -150,9 +152,11 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
   }
 }
 
+
+# Diagnostic plots --------------------------------------------------------
 #' @title autoplot.interaction_table
 #'
-#' @param table An \code{interaction_table}
+#' @param object An \code{interaction_table}
 #'
 #' @param OTU_stat OTU statistics obtained from the function \link{OTU_stats}
 #'
@@ -173,6 +177,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #'
 #' @param abundance_type The type of abundance to use in the plots. One of \code{c('mean','median','max')}.
 #'
+#' @param ... Further arguments to be passed from or to other methods.
 #'
 #'
 #' @description Makes a diagnostic plot of an \code{interaction_table}
@@ -183,15 +188,15 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #'
 #'
 #' @export
-autoplot.interaction_table <- function(table, OTU_stat, type = "num_int", cutoff_type = "q",
-                                       abundance_type = "mean") {
+autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutoff_type = "q",
+                                       abundance_type = "mean", ...) {
   plot_after <- switch(abundance_type,
     "mean" = OTU_stat$meanAbundance,
     "max" = OTU_stat$maxAbundance,
     "median" = OTU_stat$medianAbundance
   )
   if (type == "num_int") {
-    num_int <- countInteractions(OTU_stat$ID, table)
+    num_int <- countInteractions(OTU_stat$ID, object)
     xlab <- switch(abundance_type,
       "mean" = "Mean abundance",
       "max" = "Max abundance",
@@ -209,9 +214,9 @@ autoplot.interaction_table <- function(table, OTU_stat, type = "num_int", cutoff
       description <- "p-value"
       valueColumn <- "p.value"
     }
-    abundance_product <- abundanceProduct(table, OTU_stat, type = abundance_type)
+    abundance_product <- abundanceProduct(object, OTU_stat, type = abundance_type)
     y <- abundance_product
-    x <- table[[valueColumn]]
+    x <- object[[valueColumn]]
     return(ggplot() + geom_point(aes_string(x = "x", y = "y")) + xlab(description) + ylab("Abundance product") +
       scale_x_continuous(trans = "log10") + scale_y_continuous(trans = "log10"))
   }

@@ -23,7 +23,7 @@ while \code{'p'} denotes p-value}
 Else, two interacting OTUs may show up twice in reverse order
 (a pair where OTU A is listed as \code{OTU_1} and OTU B is listed was \code{OTU_2} and vice versa for the other pair)}
 
-\item{score_attributes}{An object of class \link{sim.measure.attributes} belonging to the similarity measure being used}
+\item{score_attributes}{An object of class \linkS4class{sim.measure.attributes} belonging to the similarity measure being used}
 }
 \value{
 An \code{interaction_table}, being a \code{data.frame} with the following columns
@@ -41,5 +41,5 @@ In addition, the information from the given similarity scores are also provided
 Performs the actual process of making the table.
 }
 \seealso{
-\link{collapse_taxonomy} \link{sim.measure.attributes}
+\link{collapse_taxonomy} \linkS4class{sim.measure.attributes}
 }

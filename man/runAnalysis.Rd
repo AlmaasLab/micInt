@@ -59,6 +59,8 @@ will be this number multiplied with \code{min_dataset}}
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table before analyzing it. Ignored if a \code{phyloseq} object is supplied}
 
+\item{postfix}{The postfix of the file names being written. Ignored if \code{file=FALSE}.}
+
 \item{renormalize}{Should the data be renormalized during filtering process and permutation?
 Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.}
 }

@@ -24,8 +24,8 @@ can be useful in user-written code as well.
 For the CoNet approach, the major function is \code{\link{runAnalysis}} which provides a more or less
 complete pipeline. This is a wrapper around the package \code{\link{ccrepe}}. For more advanced users, the lower level
 API using \code{\link{ccrepe_analysis}} might be preferable. In addition, there are many auxillary functions
-such as generating interaction tables (\code{\link{create.interation_table}}), writing them to file (\code{\link{write.interation_table}})
-and making diagnostic plots of the tables (\code{\link{autoplot.intertion_table}}).
+such as generating interaction tables (\code{\link{create_interaction_table}}), writing them to file (\code{\link{write.interaction_table}})
+and making diagnostic plots of the tables (\code{\link{autoplot.interaction_table}}).
 }
 
 \subsection{Lotka-Volterra}{
@@ -41,31 +41,31 @@ to predict future dynamics of a microbial community using \code{\link{predict.LV
 }
 \references{
 Faust K and Raes J. CoNet app: inference of biological association networks using Cytoscape \emph{F1000Research 2016}, 5:1519
-(doi: \url{10.12688/f1000research.9050.2})
+(doi: \url{https://doi.org/10.12688/f1000research.9050.2})
 
 Karoline Faust et al. Microbial Co-occurrence Relationships in the Human Microbiome".
-In: \emph{PLoS Comput. Biol.} 8.7 (July 2012). issn: 1553-734X. doi: \url{10.1371/journal.pcbi.
+In: \emph{PLoS Comput. Biol.} 8.7 (July 2012). issn: 1553-734X. doi: \url{https://doi.org/10.1371/journal.pcbi.
 1002606}.
 
 
 Richard R. Stein et al. ``Ecological Modeling from Time-Series Inference: Insight into Dy-
 namics and Stability of Intestinal Microbiota.'' In: \emph{PLoS Comput. Biol. 9.12 (desember
-2013)}. issn: 1553-7358. doi: \url{10.1371/journal.pcbi.1003388}.
+2013)}. issn: 1553-7358. doi: \url{https://doi.org/10.1371/journal.pcbi.1003388}.
 
 P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
-(Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \link{10.1016/j.amc.2013.08.093}
+(Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \url{https://doi.org/10.1016/j.amc.2013.08.093}
 }
 \seealso{
 \code{\link{refine_data}} Convert an OTU table into a refined table (required for some functions in the package)
 
 \code{\link{OTU_stats}} Get statistics on OTUs
 
-\code{\link{runAnalyis}} High level CoNet wrapper
+\code{\link{runAnalysis}} High level CoNet wrapper
 
 \code{\link{ccrepe_analysis}} Low level CoNet wrapper
 
-\code{\link{create.interactions_table}} Make CoNet interaction table
+\code{\link{create_interaction_table}} Make CoNet interaction table
 
 \code{\link{integralSystem}} Make equations for estimating the Lotka-Volterra coeffcients
 

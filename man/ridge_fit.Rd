@@ -37,7 +37,7 @@ with the other OTUs (and itself).
 \references{
 Richard R. Stein et al. ``Ecological Modeling from Time-Series Inference: Insight into Dy-
 namics and Stability of Intestinal Microbiota.'' In: \emph{PLoS Comput. Biol. 9.12 (desember
-2013)}. issn: 1553-7358. doi: \url{10.1371/journal.pcbi.1003388}.
+2013)}. issn: 1553-7358. DOI: \url{https://doi.org/10.1371/journal.pcbi.1003388}.
 }
 \seealso{
 \code{\link{integralSystem}}

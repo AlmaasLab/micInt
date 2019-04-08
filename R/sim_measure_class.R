@@ -1,4 +1,4 @@
-#' @name sim.measure
+#' @name sim.measure-class
 #' @title Similarity measure
 #' @description
 #' A similarity measure structure with the function ifself, and metadata fields
@@ -35,6 +35,8 @@
 #' \item \code{"parameteric"} The actual values of the abundances matter in the calulations
 #' }
 #'
+
+#'
 #'
 #' @seealso noisify
 #'
@@ -45,16 +47,49 @@ setClass(Class = "sim.measure", slots = c(
     "character"
 ))
 
-#' @name sim.measure
-#' @rdname sim.measure
+#' @rdname sim.measure-class
+#' @param FUN The similarity measure function to use, of the form \code{f(x,y)}.
+#' The function must satisfy the following: \itemize{
+#' \item If \code{x} and \code{y} are both given, they are treated as vectors and the
+#' similarity score between them is returned
+#' \item If only \code{x} is given, it is treated as a matrix (or data frame) where the
+#' features are in columns and sample in the rows. The function must then return
+#' the matrix of pairwise similarities
+#' \item The function must return a similarity score in the interval [0,1], where 1 is
+#' perfect similarity and 0 is perfect dissimilarity. Alternativly, signed similarity scores
+#' in the interval [-1,1] can also be used.
+#' }
+#' @param string The similarity score's human readable name.
+#'
+#' @param categorical Logical value indicating whether the function only
+#' considers presence-absence of an OTU. If \code{TRUE}, the function will not be
+#' noisified as there is no point in adding noise to the data.
+#'
+#'
+#' @param mean_scaleable Logical value telling whether it makes sense to scale the input by its
+#' mean before applying this function
+#'
+#' @param signed If \code{TRUE}, the similarity measures gives signed results in the interval [-1,1],
+#' else they are in the interval [0,1].
+#'
+#' @param type Character; the way the similarity measure processes the information. On of: \itemize{
+#' \item \code{"presence-absence"} Measures the similarity of OTUs solely by their presence-absence
+#' pattern
+#' #' \item \code{"non-parametric"} Measures the similarity based on the rank pattern, but besides this,
+#' no other information on the abudandances are used
+#' \item \code{"parameteric"} The actual values of the abundances matter in the calulations
+#' }
+#'
+#' @export
 sim.measure <- function(FUN, string, categorical = FALSE, mean_scaleable = FALSE, signed = FALSE, type = "parametric") {
   new("sim.measure",
     FUN = FUN, string = string, categorical = categorical,
     mean_scaleable = mean_scaleable, signed = signed, type = type
   )
 }
-#' @name sim.measure.attributes
-#' @title sim.measure.attributes
+
+#' @rdname sim.measure.attributes-class
+#' @title Attributes of similarity measures
 #' @description
 #' The useful metadata fields for a \code{sim.measure}
 #' @slot string Character, the similarity score's human readable name
@@ -64,16 +99,22 @@ sim.measure <- function(FUN, string, categorical = FALSE, mean_scaleable = FALSE
 #' @export
 setClass(Class = "sim.measure.attributes", slots = c(string = "character", type_measure = "character", signed = "logical"))
 
+#' @rdname sim.measure.attributes-class
 setGeneric("sim.measure.attributes", def = function(x, ...) standardGeneric("sim.measure.attributes"))
 
-#' @rdname sim.measure.attributes
+#' @rdname sim.measure.attributes-class
+#' @param x An \link{sim.measure} contaning the information to be displayed or a character string contaning the same of
+#' the similarity measure
 #' @export
 setMethod("sim.measure.attributes", "sim.measure",
   definition = function(x) {
     new("sim.measure.attributes", string = x@string, type_measure = x@type, signed = x@signed)
   }
 )
-#' @rdname sim.measure.attributes
+#' @rdname sim.measure.attributes-class
+#' @param type_measure Character, the type of similarity measure which should be repesented
+#' @param signed Logical, is the similarity measure signed?
+#' @param ... further arguments passed to or from other methods.
 #' @export
 setMethod(
   "sim.measure.attributes", "character",

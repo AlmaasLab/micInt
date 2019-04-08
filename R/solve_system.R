@@ -5,7 +5,7 @@
 #' simulate a Lotka-Volterra system with fitted coefficients. Hence, it can be used
 #' for predictions.
 #'
-#' @param fit An object of class \code{LV_fit} returned from a suitable
+#' @param object An object of class \code{LV_fit} returned from a suitable
 #' fitting function such as \code{\link{ridge_fit}}, containing the Lotka-Volterra coefficients
 #'
 #'
@@ -25,12 +25,17 @@
 #'
 #'
 #' @export
-predict.LV <- function(fit, start, times, ...) {
-  sol <- ode(y = start, func = system_equation, parms = fit, times = times, ...)
+predict.LV <- function(object, start, times, ...) {
+  sol <- ode(y = start, func = system_equation, parms = object, times = times, ...)
   OTU_time_series(table = sol[, -1] %>% as.data.frame(), time_points = sol[, 1])
 }
 
 #' @title The ODE function for the Lotka-Volterra system
+#' @param t Numeric, the time point a which the function is evaluated, ignored as the equation is
+#' autonomous
+#' @param y Numeric, the current state of the system
+#' @param parms Matrix, the Lotka-Volterra parameters. The maximum growth rate is in the first column,
+#' while the interaction-based parameters consitute the rest of the matrix.
 system_equation <- function(t, y, parms) {
   self_growth_rate <- parms[, 1]
   interaction_matrix <- parms[, -1]

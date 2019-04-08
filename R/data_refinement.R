@@ -25,10 +25,12 @@ remove_metadata <- function(OTU_table, metadataCols = c("OTU Id", "taxonomy")) {
 #' @description
 #' Removes metadata columns from dataset
 #'
+#' @param refined_table A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed
+#'
 #' @param abundance_cutoff
 #' Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
 #'
-#' @param type
+#' @param cutoff_type
 #' The type of measure to base the cutoff on. Can be any
 #' of \code{'mean'}, \code{median}, \code{max} which cuts away
 #' OTUs based on mean, median and maximum abundance, repectivly
@@ -38,13 +40,13 @@ remove_metadata <- function(OTU_table, metadataCols = c("OTU Id", "taxonomy")) {
 #'
 #'
 #' @import matrixStats
-cut_abundances <- function(refined_table, abundance_cutoff = 0, type = "mean", renormalize = TRUE) {
+cut_abundances <- function(refined_table, abundance_cutoff = 0, cutoff_type = "mean", renormalize = TRUE) {
   if (is.null(abundance_cutoff)) {
     # If we do not set an abundance cutoff, we skip the process entierly
     return(refined_table)
   }
   m_refined_table <- as.matrix(refined_table)
-  abundances <- switch(type,
+  abundances <- switch(cutoff_type,
     mean = colMeans(refined_table),
     median = colMedians(m_refined_table),
     max = colMaxs(m_refined_table),
@@ -95,7 +97,7 @@ cut_abundances <- function(refined_table, abundance_cutoff = 0, type = "mean", r
 refine_data <- function(OTU_table, abundance_cutoff = 0, cutoff_type = "mean", renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy")) {
   refined_table <- remove_metadata(OTU_table, metadataCols = metadataCols)
   # Cuts away the least abundant species
-  cut_abundances(refined_table, abundance_cutoff, type = cutoff_type, renormalize = renormalize)
+  cut_abundances(refined_table, abundance_cutoff, cutoff_type = cutoff_type, renormalize = renormalize)
 }
 renormalize <- function(table) {
   matrix <- as.matrix(table)
@@ -132,7 +134,7 @@ renormalize <- function(table) {
 #' the numbers if comma as decimal delimer and semicolon as the delimer between numbers.
 #' Else, the decimal delimer is point and comma the delimer between numbers.
 #'
-#' @param score_attributes An object of class \link{sim.measure.attributes} belonging to the similarity measure being used
+#' @param score_attributes An object of class \linkS4class{sim.measure.attributes} belonging to the similarity measure being used
 #'
 #'
 #'
@@ -140,11 +142,11 @@ renormalize <- function(table) {
 #'
 #' @export
 output_ccrepe_data <- function(data, taxonomy = NULL, threshold.type = "q", threshold.value = 0.05, output.file = FALSE, filename = NULL,
-                               return.value = TRUE, csv_option = "2", removeDuplicates = TRUE, sim.measure.attributes = NULL) {
+                               return.value = TRUE, csv_option = "2", removeDuplicates = TRUE, score_attributes = NULL) {
   significant_interactions <- create_interaction_table(
     data = data, taxonomy = taxonomy, threshold.type = threshold.type,
     threshold.value = threshold.value,
-    removeDuplicates = removeDuplicates, score_attributes = sim.measure.attributes
+    removeDuplicates = removeDuplicates, score_attributes = score_attributes
   )
   if (output.file) {
     write.interaction_table(significant_interactions,
@@ -173,7 +175,7 @@ output_ccrepe_data <- function(data, taxonomy = NULL, threshold.type = "q", thre
 #' }
 #' In addition, the information from the given similarity scores are also provided
 #'
-#' @seealso \link{collapse_taxonomy} \link{sim.measure.attributes}
+#' @seealso \link{collapse_taxonomy} \linkS4class{sim.measure.attributes}
 #'
 #'
 #'
@@ -267,9 +269,13 @@ create_interaction_table <- function(data, taxonomy = NULL, threshold.type = "q"
 #' @description Takes an \code{interaction_table} and writes it to a file. For information about parameters,
 #' see \link{output_ccrepe_data}
 #'
+#' @param significant_interactions An \code{interaction_table} returned from \code{\link{create_interaction_table}}
+#'
+#' @inheritParams output_ccrepe_data
+#'
 #' @export
 write.interaction_table <- function(significant_interactions, filename,
-                                     csv_option = "1") {
+                                     csv_option = "2") {
   if (csv_option == "2") {
     write.csv2(significant_interactions, file = filename, row.names = FALSE)
   }
@@ -281,7 +287,9 @@ write.interaction_table <- function(significant_interactions, filename,
 #'
 #' @title Create summary of \code{interaction_table}
 #'
-#' @param table An interaction table returned from \link{create_interaction_table}
+#' @param object An interaction table returned from \link{create_interaction_table}
+#'
+#' @param ... further arguments passed to or from other methods
 #'
 #' @return A list with the following fields (the first three are taken directly from
 #' the \code{interaction.table}):
@@ -296,16 +304,26 @@ write.interaction_table <- function(significant_interactions, filename,
 #'
 #'
 #' @export
-summary.interaction_table <- function(table) {
-  proportion_negative <- ifelse(attr(table,'signed'),
-                                sum(table$sim.score < 0) / nrow(table), NA)
-  number_significant <- nrow(table)
+summary.interaction_table <- function(object, ...) {
+  proportion_negative <- ifelse(attr(object,'signed'),
+                                sum(object$sim.score < 0) / nrow(object), NA)
+  number_significant <- nrow(object)
   c(
-    attributes(table)[c("measure_name", "signed", "measure_type")],
+    attributes(object)[c("measure_name", "signed", "measure_type")],
     list(number_significant = number_significant, proportion_negative = proportion_negative)
   )
 }
 
+#'
+#' @title Convert an object to a list of edges
+#'
+#' @description This is a S3 generic to convert a suitable object represetning (on some way) a graph to an
+#' egelist which can be inported to \code{igraph} by the function \link{graph_from_edgelist}.
+#'
+#' @param x The R object to convert to an edgelist
+#'
+#' @param ... further arguments passed to or from other methods.
+#'
 #' @export
 as.edgelist <- function(x, ...) {
   UseMethod("as.edgelist")
@@ -314,7 +332,9 @@ as.edgelist <- function(x, ...) {
 #' @name as.edgelist.interaction_table
 #' @title Create edge list from \code{interaction_table}
 #'
-#' @param table An \code{interaction_table}
+#' @param x An \code{interaction_table}
+#'
+#' @param ... further arguments passed to or from other methods.
 #'
 #' @description Converts an interaction table to a two column character matrix
 #' where each row represent an edge between the OTUs. The entities in the each row are the name of the
@@ -324,8 +344,8 @@ as.edgelist <- function(x, ...) {
 #' for making interacting network
 #'
 #' @export
-as.edgelist.interaction_table <- function(table) {
-  as.matrix(table[, c("OTU_1", "OTU_2")])
+as.edgelist.interaction_table <- function(x, ...) {
+  as.matrix(x[, c("OTU_1", "OTU_2")])
 }
 
 #' @title Collapse taxonomy into single strings

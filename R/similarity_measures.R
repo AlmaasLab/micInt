@@ -164,6 +164,7 @@ similarity_measures <- function(subset = NULL) {
 
 #' @title create_ccrepe_jobs
 #' @description  Creates ccrepe jobs out of sim.score functions
+#' @inheritParams runAnalysis
 create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
                                  "significant_interactions", postfix = ".csv") {
   jobs <- lapply(sim.scores, function(sim.score) list(
@@ -172,7 +173,7 @@ create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
       ),
       output_args = list(
         filename = paste0(prefix, "_", sim.score@string, postfix),
-        sim.measure.attributes = sim.measure.attributes(sim.score)
+        score_attributes = sim.measure.attributes(sim.score)
       )
     ))
 }

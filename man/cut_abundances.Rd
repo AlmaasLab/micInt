@@ -4,13 +4,15 @@
 \alias{cut_abundances}
 \title{cut_abundances}
 \usage{
-cut_abundances(refined_table, abundance_cutoff = 0, type = "mean",
-  renormalize = TRUE)
+cut_abundances(refined_table, abundance_cutoff = 0,
+  cutoff_type = "mean", renormalize = TRUE)
 }
 \arguments{
+\item{refined_table}{A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed}
+
 \item{abundance_cutoff}{Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.}
 
-\item{type}{The type of measure to base the cutoff on. Can be any
+\item{cutoff_type}{The type of measure to base the cutoff on. Can be any
 of \code{'mean'}, \code{median}, \code{max} which cuts away
 OTUs based on mean, median and maximum abundance, repectivly}
 

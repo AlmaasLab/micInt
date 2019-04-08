@@ -60,7 +60,7 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' @references
 #' P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 #' estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
-#' (Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \link{10.1016/j.amc.2013.08.093}
+#' (Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \url{https://doi.org/10.1016/j.amc.2013.08.093}
 #'
 #' @param n_folds
 #'

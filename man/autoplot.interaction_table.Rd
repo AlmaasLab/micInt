@@ -4,11 +4,11 @@
 \alias{autoplot.interaction_table}
 \title{autoplot.interaction_table}
 \usage{
-\method{autoplot}{interaction_table}(table, OTU_stat, type = "num_int",
-  cutoff_type = "q", abundance_type = "mean")
+\method{autoplot}{interaction_table}(object, OTU_stat, type = "num_int",
+  cutoff_type = "q", abundance_type = "mean", ...)
 }
 \arguments{
-\item{table}{An \code{interaction_table}}
+\item{object}{An \code{interaction_table}}
 
 \item{OTU_stat}{OTU statistics obtained from the function \link{OTU_stats}}
 
@@ -27,6 +27,8 @@ OTUs against the q- or p-value of the interaction
 This parameter is ignored if \code{type='num_int'}}
 
 \item{abundance_type}{The type of abundance to use in the plots. One of \code{c('mean','median','max')}.}
+
+\item{...}{Further arguments to be passed from or to other methods.}
 }
 \value{
 A \link{ggplot} object showing the desired diagnostic plot

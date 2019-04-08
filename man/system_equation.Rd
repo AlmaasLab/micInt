@@ -6,6 +6,15 @@
 \usage{
 system_equation(t, y, parms)
 }
+\arguments{
+\item{t}{Numeric, the time point a which the function is evaluated, ignored as the equation is
+autonomous}
+
+\item{y}{Numeric, the current state of the system}
+
+\item{parms}{Matrix, the Lotka-Volterra parameters. The maximum growth rate is in the first column,
+while the interaction-based parameters consitute the rest of the matrix.}
+}
 \description{
 The ODE function for the Lotka-Volterra system
 }

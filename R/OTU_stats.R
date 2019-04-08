@@ -84,18 +84,17 @@ abundanceProduct <- function(interactions_table, OTU_stat, type = "mean") {
   abundance_1 * abundance_2
 }
 
-#' @title overall_stats
-#' @description Compiles a summary of significant interactions for the given similarity measures
-#' @param similarity_measures_significance List of \code{interaction_table} objects returned from
-#' \link{create_interaction_table}
-#' @param outputargs The corresponding outputargs list sendt to \link{create_interaction_table}
-#' @param A \code{data.frame} consisting of the following fields: \itemize{
-#' \item \code{name} The name of the similarity measure
-#' \item \code{type} The type of similarity measure, equal to the one in the \code{type}
-#' slot in it \code{sim.measure} object
-#' \item \code{num_significant} The number of significant interaction
-#'
-#' }
-overall_stats <- function(similarity_measures_significance) {
-  overall <- data.frame()
-}
+# @title overall_stats
+# @description Compiles a summary of significant interactions for the given similarity measures
+# @param similarity_measures_significance List of \code{interaction_table} objects returned from
+# \link{create_interaction_table}
+# @param outputargs The corresponding outputargs list sendt to \link{create_interaction_table}
+# @param A \code{data.frame} consisting of the following fields: \itemize{
+# \item \code{name} The name of the similarity measure
+#
+# \item \code{type} The type of similarity measure, equal to the one in the \code{type}
+# slot in it \code{sim.measure} object
+# \item \code{num_significant} The number of significant interaction
+#
+# }
+# #overall_stats <- function(similarity_measures_significance) {#  overall <- data.frame()#}

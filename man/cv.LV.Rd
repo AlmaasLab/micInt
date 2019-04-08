@@ -38,5 +38,5 @@ fit is preformed on some of the time series and the other are used for validatio
 \references{
 P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
-(Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \link{10.1016/j.amc.2013.08.093}
+(Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \url{https://doi.org/10.1016/j.amc.2013.08.093}
 }

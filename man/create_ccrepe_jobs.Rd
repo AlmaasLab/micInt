@@ -7,6 +7,15 @@
 create_ccrepe_jobs(sim.scores = similarity_measures(),
   prefix = "significant_interactions", postfix = ".csv")
 }
+\arguments{
+\item{sim.scores}{The similarity measures of class \link{sim.measure}
+to use. If it is \code{NULL}, all measures available in the package
+will be used (recommanded for most purposes).}
+
+\item{prefix}{The prefix of the file names being written. Ignored if \code{file=FALSE}.}
+
+\item{postfix}{The postfix of the file names being written. Ignored if \code{file=FALSE}.}
+}
 \description{
 Creates ccrepe jobs out of sim.score functions
 }

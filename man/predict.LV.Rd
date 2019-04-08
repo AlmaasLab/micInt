@@ -5,10 +5,10 @@
 \title{Predict trajectory of a Lotka-Volterra system from estimated
 coefficients}
 \usage{
-\method{predict}{LV}(fit, start, times, ...)
+\method{predict}{LV}(object, start, times, ...)
 }
 \arguments{
-\item{fit}{An object of class \code{LV_fit} returned from a suitable
+\item{object}{An object of class \code{LV_fit} returned from a suitable
 fitting function such as \code{\link{ridge_fit}}, containing the Lotka-Volterra coefficients}
 
 \item{start}{The vector of the microbial community at the start

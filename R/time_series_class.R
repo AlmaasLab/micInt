@@ -1,4 +1,4 @@
-#' @name OTU_time_series
+#' @name OTU_time_series-class
 #'
 #' @title Time series class for OTU tables
 #'
@@ -22,13 +22,13 @@
 #' @export
 setClass(Class = "OTU_time_series", slots = c(table = "data.frame", time_points = "numeric"))
 
-
+#' @rdname OTU_time_series-class
 setGeneric('OTU_time_series',def = function(table,time_points){
   standardGeneric('OTU_time_series')
 }
 )
 
-#' @rdname OTU_time_series
+#' @rdname OTU_time_series-class
 #' @export
 setMethod('OTU_time_series',signature = c(table='data.frame','numeric'),definition = function(table, time_points){
   # Ensures the observations come in the correct order
@@ -38,7 +38,7 @@ setMethod('OTU_time_series',signature = c(table='data.frame','numeric'),definiti
   return(res)
 })
 
-#' @rdname OTU_time_series
+#' @rdname OTU_time_series-class
 #' @export
 setMethod('OTU_time_series',signature = c(table='phyloseq','numeric'),
           definition = function(table, time_points){
@@ -51,7 +51,7 @@ setMethod('OTU_time_series',signature = c(table='phyloseq','numeric'),
   OTU_time_series(table_refined,time_points = time_points)
 })
 
-#' @rdname OTU_time_series
+#' @rdname OTU_time_series-class
 #' @export
 setMethod('OTU_time_series',signature = c(table='phyloseq','character'), definition = function(table,time_points){
 if(length(time_points) != 1){

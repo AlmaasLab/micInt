@@ -79,7 +79,7 @@ plot_trajectory <- function(time_series_list, distance = "bray", subset = names(
     )) + geom_point(size = 0)
   }
   if (label) {
-    res <- res + geom_text(aes(label = time_points), size = label_size, color = "black")
+    res <- res + geom_text(aes_string(label = "time_points"), size = label_size, color = "black")
   }
   if (is.null(color)) {
     res <- res + guides(color = guide_legend("Time series"))

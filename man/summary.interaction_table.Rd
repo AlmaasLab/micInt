@@ -4,10 +4,12 @@
 \alias{summary.interaction_table}
 \title{Create summary of \code{interaction_table}}
 \usage{
-\method{summary}{interaction_table}(table)
+\method{summary}{interaction_table}(object, ...)
 }
 \arguments{
-\item{table}{An interaction table returned from \link{create_interaction_table}}
+\item{object}{An interaction table returned from \link{create_interaction_table}}
+
+\item{...}{further arguments passed to or from other methods}
 }
 \value{
 A list with the following fields (the first three are taken directly from

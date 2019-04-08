@@ -5,7 +5,16 @@
 \title{write.interaction_table}
 \usage{
 write.interaction_table(significant_interactions, filename,
-  csv_option = "1")
+  csv_option = "2")
+}
+\arguments{
+\item{significant_interactions}{An \code{interaction_table} returned from \code{\link{create_interaction_table}}}
+
+\item{filename}{What is the name of the output file (including path). Ignored if \code{output.file} is \code{TRUE}}
+
+\item{csv_option}{If assigned the value \code{'2'}, the function will use the \code{write.csv2} function which print
+the numbers if comma as decimal delimer and semicolon as the delimer between numbers.
+Else, the decimal delimer is point and comma the delimer between numbers.}
 }
 \description{
 Takes an \code{interaction_table} and writes it to a file. For information about parameters,
