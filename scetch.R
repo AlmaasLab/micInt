@@ -52,3 +52,29 @@ label <- rep('Hallo!',100)
 frame <- data.frame(x,y,label)
 library(ggplot2)
 ggplot(frame)+aes_string(x="x",y="y")+geom_text(aes_string(label="label"),cex=1)
+soilrep
+sample_data(soilrep)
+table <- list(a=c(1,4),b=c(2,5),c=c(3,7)) %>% as_tibble()
+table
+liste_2 <- list(a=c(1,4),b=c(4,1),c=c(3,7)) %>% as_tibble()
+pmap(liste,sum)
+pmap_int(names(liste_2))
+debug_pipe()
+library(pipecleaner)
+debug_pipeline(subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped')))
+b <- subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped'),keep_variables = FALSE,keep_empty = FALSE)
+table %>% rowwise() %>% mutate(d=lapply(list(.data), FUN=function(variable){
+variable + 1
+}) %>% median()
+)
+table %>% rowwise() %>% do({lapply(.data, FUN=function(variable){
+  variable + 1
+}) %>% unlist() %>% median() %>% tibble
+  })
+d = numeric(nrow(liste))
+for(i in 1:nrow(liste)){
+row <- liste[i,]
+d[i]=lapply(row,FUN=function(variable){
+  variable + 1
+}) %>% unlist() %>% median()
+}

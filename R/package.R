@@ -72,3 +72,5 @@
 #'
 #' @keywords internal
 "_PACKAGE"
+# Ensures that R CMD check does not complain about magrittr piping dots
+globalVariables(".")
