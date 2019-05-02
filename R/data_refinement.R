@@ -369,3 +369,50 @@ collapse_taxonomy <- function(phyloseq) {
   names(taxonomy) <- rownames(taxonomy_frame)
   return(taxonomy)
 }
+
+
+#' @title Scale a phyloseq object
+#'
+#' @description This function scales the abundances in each sample by a constant, making it suitable to transform from
+#' relative data to absolute data.
+#'
+#' @param object A \code{phyloseq} object, where the abundances in its OTU table are to be scaled
+#' @param column Either a character vector of length 1 with the name of the column in the sample data to scale by or a
+#' numeric vector which length is equal to the number of samples.
+#'
+#' @return A \code{phyloseq} object where the abundances in the OTU table are scaled
+#' @export
+#'
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("soilrep")
+#' s <- 1:nsamples(soilrep)
+#' scale_by_column(soilrep, s)
+scale_by_column <- function(object, column){
+  if(is.character(column)){
+    if(length(column) != 1){
+      stop("The input must be a character vector of length 1")
+    }
+    if(column %in% phyloseq::sample_variables(object) %>% magrittr::not()){
+      stop("The selected column does not exist in the sample data")
+    }
+    scale_vector <- sample_data(object)[[column]]
+  }
+  else{
+    if(length(column) != nsamples(object)){
+      stop("The length of the input must equal the number of samples")
+    }
+    scale_vector <- column
+  }
+  if(phyloseq::taxa_are_rows(object)){
+    OTU_table <- scale(phyloseq::otu_table(object),center = FALSE, scale = 1/scale_vector) %>%
+      phyloseq::otu_table(taxa_are_rows = TRUE)
+  }
+  else{
+    OTU_table <- t(scale(t(phyloseq::otu_table(object)),center = FALSE, scale = 1/scale_vector)) %>%
+      phyloseq::otu_table(taxa_are_rows = FALSE)
+  }
+ otu_table(object) <- OTU_table
+ return(object)
+}

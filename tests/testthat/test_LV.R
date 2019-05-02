@@ -1,7 +1,6 @@
 context('Lotka-Volterra')
 library(micInt)
 library(magrittr)
-library(phyloseq)
 new_phyloseq_object <- readRDS('toy_phyloseq.rds')
 reactors = phyloseq::sample_data(new_phyloseq_object)[['Reactor']] %>% unique
 test_that('Construction of OTU time series from phyloseq objects works',
@@ -25,4 +24,3 @@ expect_s3_class(micInt::plot_trajectory(time_series_list = list(predicted=pred, 
                 'gg')
 }
 )
-

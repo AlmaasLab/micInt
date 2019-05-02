@@ -78,3 +78,8 @@ d[i]=lapply(row,FUN=function(variable){
   variable + 1
 }) %>% unlist() %>% median()
 }
+s <- c(rep(0,50),rep(100,6))
+scaled_sample <- micInt::scale_by_column(soilrep,s)
+new <- scale(otu_table(soilrep),center = FALSE,scale = s)
+otu_table(scaled_sample)
+test_phyloseq = phyloseq()
