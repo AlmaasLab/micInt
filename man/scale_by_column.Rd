@@ -19,3 +19,10 @@ A \code{phyloseq} object where the abundances in the OTU table are scaled
 This function scales the abundances in each sample by a constant, making it suitable to transform from
 relative data to absolute data.
 }
+\examples{
+library(micInt)
+library(phyloseq)
+data("soilrep")
+s <- 1:nsamples(soilrep)
+scale_by_column(soilrep, s)
+}

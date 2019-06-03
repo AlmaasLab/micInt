@@ -8,7 +8,7 @@ refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
   renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
 }
 \arguments{
-\item{OTU_table}{The raw OTU table, either as a \code{data.frame} or a \code{matrix} (not phyloseq)}
+\item{OTU_table}{The raw OTU table, either as a \code{data.frame}, a \code{matrix} or a \code{phyloseq} object}
 
 \item{abundance_cutoff}{Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.}
 
@@ -48,4 +48,6 @@ taxonomy.
 \item The row names of the table are the OTU names and the column names are the
 sample names
 }
+Of course, this does not apply to the case when a \code{phyloseq} object is provided as everything
+ will be handled automatically
 }
