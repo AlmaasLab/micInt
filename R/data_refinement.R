@@ -111,7 +111,7 @@ refine_data <-
            metadataCols = c("OTU Id", "taxonomy")) {
     if (inherits(OTU_table, 'phyloseq')) {
       refined_table <- phyloseq::otu_table(OTU_table) %>% data.frame()
-      if (!phyloseq::taxa_are_rows(OTU_table)) {
+      if (phyloseq::taxa_are_rows(OTU_table)) {
         refined_table %<>% t()
       }
     }
@@ -245,7 +245,8 @@ create_interaction_table <-
     significant_pairs <-
       which(threshold_matrix < threshold.value, arr.ind = TRUE)
     significant_interactions <-
-      as.data.frame(matrix(colnames(threshold_matrix)[significant_pairs], ncol = 2))
+      as.data.frame(matrix(colnames(threshold_matrix)[significant_pairs],
+                           ncol = 2), stringsAsFactors=FALSE)
     colnames(significant_interactions) <- c("OTU_1", "OTU_2")
     if (nrow(significant_interactions) == 0) {
       significant_interactions$sim.score <- numeric()
