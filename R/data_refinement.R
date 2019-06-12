@@ -41,7 +41,6 @@ remove_metadata <-
 #' Logical, should the abundances be renormalized after the procedyre?
 #'
 #'
-#' @import matrixStats
 cut_abundances <-
   function(refined_table,
            abundance_cutoff = 0,
@@ -54,11 +53,11 @@ cut_abundances <-
     m_refined_table <- as.matrix(refined_table)
     abundances <- switch(
       cutoff_type,
-      mean = colMeans(refined_table),
-      median = colMedians(m_refined_table),
-      max = colMaxs(m_refined_table),
-      numberNonZero = colSums(m_refined_table != 0),
-      proprotionNonZero = colMeans(m_refined_table != 0)
+      mean = base::colMeans(refined_table),
+      median = matrixStats::colMedians(m_refined_table),
+      max = matrixStats::colMaxs(m_refined_table),
+      numberNonZero = base::colSums(m_refined_table != 0),
+      proprotionNonZero = base::colMeans(m_refined_table != 0)
     )
     refined_table <- refined_table[, abundances > abundance_cutoff]
     if (renormalize) {
@@ -77,12 +76,14 @@ cut_abundances <-
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 #'
-#' @return A data frame with the metadata columns removed, and the OTUs
+#' @return A data frame (always a base data frame even though a tibble is supplied)
+#' with the metadata columns removed, and the OTUs
 #' below the cutoff are filtered away. Additionally, in the refined table
 #' the OTUs constitute the rows, while the rows are the samples (transposed
 #' compared to the original OTU table).
 #'
 #' @details
+#' \subsection{Critera for OTU tables}{
 #' In order for an OTU-table to be valid, the following criteria must hold:
 #'
 #' \itemize{
@@ -101,6 +102,20 @@ cut_abundances <-
 #' }
 #' Of course, this does not apply to the case when a \code{phyloseq} object is provided as everything
 #'  will be handled automatically
+#' }
+#' \subsection{Tibbles}{
+#' Tibbles are troublesome in this context as the do not support rownames. In order to obtain the OTU IDs, the function
+#' looks through the following in order and proceed with the next until successfull:
+#' \enumerate{
+#' \item If the original OTU table has rownames, they are used as the OTU IDs
+#' \item If one (the first) of \code{c('OTU Id','#OTU ID','OTU ID','OTU_ID')} reside in the colnames of the OTU table,
+#' the corresponding column is used as the OTU IDs
+#' \item If \code{metadataCols} is not empty, the first of the specified columns regarded as the OTU ID (gives warning)
+#' \item The numeric row indicies are treated as the OTU IDs (gives warning)
+#' }
+#' }
+#'
+
 #'
 #' @export
 refine_data <-
@@ -118,6 +133,41 @@ refine_data <-
     else{
       refined_table <-
         remove_metadata(OTU_table, metadataCols = metadataCols)
+      if(inherits(OTU_table,'tbl_df')){
+        # If we are provided a tibble as the OTU table, we should proceed with care,
+        # the refined_table
+        # MUST be a base data frame (tidy data just makes a mess)
+        # First of all, we need to find the column in the OTU table containing the OTU Id
+        if(tibble::has_rownames(OTU_table)){
+        # Our first guess is that they already reside inside the OTU table (but are removed upon subsetting)
+          row_names <- rownames(OTU_table)
+        }
+        else{
+          if(length(metadataCols) == 0){
+            warning('No rownames of the OTU table are found, nor does the data have any metadata,
+                    using the numeric indicies of the rows as OTU IDs')
+            row_names <- seq_len(nrow(OTU_table))
+          }
+          else{
+          candidate_names <- c('OTU Id','#OTU ID','OTU ID','OTU_ID')
+          matched_candidates <- candidate_names[candidate_names %in% names(OTU_table)]
+          if(length(matched_candidates) == 0){
+            # Of cource, the column could have another name, so we assume it to be the first of the metadata columns
+            warning('OTU ID column could not be automatically determined,
+                    picking the first metadata column of the OTU table')
+
+          ID_col <- metadataCols[1]
+          }
+          else{
+            ID_col <- matched_candidates[1]
+          }
+          row_names <- OTU_table[[ID_col]]
+          }
+        }
+        refined_table <- data.frame(refined_table,row.names = names(OTU_table),check.names = FALSE,
+                                    stringsAsFactors = FALSE)
+        names(refined_table) <- row_names
+      }
     }
     # Cuts away the least abundant species
     cut_abundances(refined_table,

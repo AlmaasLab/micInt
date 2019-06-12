@@ -22,7 +22,8 @@ OTUs based on mean, median and maximum abundance, repectivly}
 metadata columns to remove from the table}
 }
 \value{
-A data frame with the metadata columns removed, and the OTUs
+A data frame (always a base data frame even though a tibble is supplied)
+with the metadata columns removed, and the OTUs
 below the cutoff are filtered away. Additionally, in the refined table
 the OTUs constitute the rows, while the rows are the samples (transposed
 compared to the original OTU table).
@@ -32,6 +33,7 @@ Removes metadata from OTU table and cuts off the least abundant
 species, defined by the cutoff parameter
 }
 \details{
+\subsection{Critera for OTU tables}{
 In order for an OTU-table to be valid, the following criteria must hold:
 
 \itemize{
@@ -50,4 +52,16 @@ sample names
 }
 Of course, this does not apply to the case when a \code{phyloseq} object is provided as everything
  will be handled automatically
+}
+\subsection{Tibbles}{
+Tibbles are troublesome in this context as the do not support rownames. In order to obtain the OTU IDs, the function
+looks through the following in order and proceed with the next until successfull:
+\enumerate{
+\item If the original OTU table has rownames, they are used as the OTU IDs
+\item If one (the first) of \code{c('OTU Id','#OTU ID','OTU ID','OTU_ID')} reside in the colnames of the OTU table,
+the corresponding column is used as the OTU IDs
+\item If \code{metadataCols} is not empty, the first of the specified columns regarded as the OTU ID (gives warning)
+\item The numeric row indicies are treated as the OTU IDs (gives warning)
+}
+}
 }

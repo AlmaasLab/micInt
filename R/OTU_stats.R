@@ -20,9 +20,6 @@
 #' non-zero abundance
 #' \item \code{taxonomy} collapsed into a single string, may be missing
 #' }
-#'
-#'
-#' @import matrixStats
 #' @export
 OTU_stats <- function(refined_table, taxonomy = NULL) {
   if (inherits(refined_table, "phyloseq")) {
@@ -38,11 +35,11 @@ OTU_stats <- function(refined_table, taxonomy = NULL) {
     refined_data <- refined_table %>% as.matrix()
   }
   ID <- colnames(refined_data)
-  meanAbundance <- colMeans(refined_data)
-  medianAbundance <- colMedians(refined_data)
-  maxAbundance <- colMaxs(refined_data)
-  numberNonZero <- colSums(refined_data != 0)
-  proportionNonZero <- colMeans(refined_data != 0)
+  meanAbundance <- base::colMeans(refined_data)
+  medianAbundance <- matrixStats::colMedians(refined_data)
+  maxAbundance <- matrixStats::colMaxs(refined_data)
+  numberNonZero <- base::colSums(refined_data != 0)
+  proportionNonZero <- base::colMeans(refined_data != 0)
   res <- data.frame(
     ID, meanAbundance, medianAbundance, maxAbundance,
     numberNonZero, proportionNonZero
