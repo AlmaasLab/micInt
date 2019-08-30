@@ -74,6 +74,10 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' }
 #' If missing, the cross validation is carried out over a quadratic grid from 0 to 10 in steps of 0.1
 #'
+#' @param show_progress
+#'
+#' Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate
+#'
 #' @details
 #'
 #' In this setting, each time series is a ``data point'' in the cross-validation procedure, meaning that each
@@ -96,7 +100,8 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #'
 #' @export
 cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
-                  weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100)) {
+                  weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
+                  show_progress = TRUE) {
   # We first find the number of time series
   # the total number of systems
   n_time_series <- length(time_series)
@@ -105,10 +110,17 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
   list_weights <- lapply(1:n_combinations, function(i) weights[i, ] %>% as.numeric())
   # We cache the systems in order to avoid re-calculating them
   systems <- lapply(time_series, function(x) integralSystem(x, kind = kind))
+  n_weights <- length(list_weights)
+  this_index <- 1
   errors <- lapply(list_weights, FUN = function(weights) {
     # At this level, the weights are fixed and we assign the time series
     # into different folds
     names(weights) <- c("self", "interaction")
+    if(show_progress){
+      message(glue::glue("Cross-validating with weight combination {this_index} of {n_weights}
+                         self: {weights['self']}  interaction: {weights['interaction']}"))
+
+    }
     fold <- sample(rep(1:n_folds, length.out = n_time_series))
     number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
     fold_errors <- lapply(1:n_folds, function(i) {
@@ -128,6 +140,7 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
     RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
     MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
     as.data.frame(list(RMSE = RMSE, MAE = MAE))
+    this_index <<- this_index + 1
   })
   results <- do.call(rbind, errors)
   return(cbind(weights, results))
