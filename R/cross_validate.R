@@ -139,8 +139,8 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
     # has lower precedence than the piping operator
     RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
     MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
-    as.data.frame(list(RMSE = RMSE, MAE = MAE))
     this_index <<- this_index + 1
+    return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
   })
   results <- do.call(rbind, errors)
   return(cbind(weights, results))
