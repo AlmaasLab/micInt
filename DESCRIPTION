@@ -4,7 +4,7 @@ Title: Find microbial interactions
 Version: 0.5.2
 Depends: R (>= 3.3.0), ggplot2, ggfortify
 Imports: methods, ccrepe,infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
-    phyloseq, igraph, tibble, dplyr, rlang, glue
+    phyloseq, igraph, tibble, dplyr, rlang, glue, viridis
 Suggests: readxl, ggrepel, ggdendro, kableExtra, cluster,
     testthat
 Date: 2019-09-06

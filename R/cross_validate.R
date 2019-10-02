@@ -90,7 +90,7 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #'
 #' @return
 #'
-#' A data.frame containing the parameter values, and the two columns of cross-validation error:
+#' An object of class \code{cvLV}, inheiriting \code{data.frame} containing the parameter values, and the two columns of cross-validation error:
 #'  \itemize{
 #' \item \code{'RMSE'} The root mean square error of the right sides
 #' \item \code{'MAE'} The mean absolute error of the right sides
@@ -143,5 +143,24 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
     return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
   })
   results <- do.call(rbind, errors)
-  return(cbind(weights, results))
+  result_frame <- cbind(weights, results)
+  class(result_frame) <- c("cvLV",class(result_frame))
+  return(result_frame)
+}
+
+#' @title Create cross-validation colorplot
+#'
+#' @description This function views the cross-validation error in a colorplot as a function
+#' of the regularization weights. Hence, this approach is suitable to detect whether the cross-validation
+#' procedure contains a reasonable optimum.
+#'
+#' @param object A \code{cvLV} object returned from \code{\link{cv.LV}}
+#' @param target The cross-validation target to pick, one of \code{'RMSE'} or \code{'MAE'}
+#'
+#' @return A \link{ggplot} colorplots cross-validation errors for the different weights combination
+#' @export
+#'
+autoplot.cvLV <- function(object,target = 'RMSE'){
+  ggplot(object,mapping=aes(x=self,y=interaction,z=!! rlang::sym(target)))+
+    geom_raster(aes(fill=!! rlang::sym(target)))+scale_fill_gradientn(colours= viridis::viridis(10))
 }

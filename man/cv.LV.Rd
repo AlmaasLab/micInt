@@ -25,7 +25,7 @@ If missing, the cross validation is carried out over a quadratic grid from 0 to 
 \item{show_progress}{Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate}
 }
 \value{
-A data.frame containing the parameter values, and the two columns of cross-validation error:
+An object of class \code{cvLV}, inheiriting \code{data.frame} containing the parameter values, and the two columns of cross-validation error:
  \itemize{
 \item \code{'RMSE'} The root mean square error of the right sides
 \item \code{'MAE'} The mean absolute error of the right sides
