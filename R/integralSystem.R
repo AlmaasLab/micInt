@@ -61,10 +61,12 @@ extract_integral_system <- function(time_series, removeZeros) {
   # Tolerance for determining zero rows
   tol <- 2 * .Machine$double.eps
   # Finds the system for each OTU
-  systems <- lapply(1:n_OTUs, FUN = function(i) {
+  systems <- lapply(seq_len(n_OTUs), FUN = function(i) {
     # The coefficient matrix of the system
-    A <- (diag(timediff) / 2) %*% (diag(start_matrix[, i]) %*% start_matrix +
-      diag(end_matrix[, i]) %*% end_matrix)
+    # Notice that the first column of start_matrix and end_matrix are columns with ones,
+    # so we have to increment the index by one when adressing those matrices
+    A <- (diag(timediff) / 2) %*% (diag(start_matrix[, i + 1]) %*% start_matrix +
+      diag(end_matrix[, i + 1]) %*% end_matrix)
     colnames(A) <- c("self", colnames(OTU_matrix))
     # The right side of the system
     b <- OTU_diff[, i]
@@ -97,8 +99,8 @@ extract_log_integral_system <- function(time_series) {
   twos <- rep(2, n_timesteps)
   A_full <- (diag(timediff) / 2) %*% cbind(
     twos,
-    OTU_matrix[1:n_timesteps, ] +
-      OTU_matrix[1:n_timesteps + 1, ]
+    OTU_matrix[seq_len(n_timesteps), ] +
+      OTU_matrix[seq_len(n_timesteps) + 1, ]
   )
   colnames(A_full) <- c("self", colnames(OTU_matrix))
   # Finds the system for each OTU
