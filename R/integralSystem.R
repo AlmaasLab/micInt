@@ -104,11 +104,11 @@ extract_log_integral_system <- function(time_series) {
   )
   colnames(A_full) <- c("self", colnames(OTU_matrix))
   # Finds the system for each OTU
-  systems <- lapply(1:n_OTUs, FUN = function(i) {
+  systems <- lapply(seq_len(n_OTUs), FUN = function(i) {
     # Finds the applicable equations (where the right side is finite)
-    valid_equations <- which(is.finite(OTU_diff[, i]))
+    valid_equations <- which(is.finite(log_OTU_diff[, i]))
     # The right side of the system
-    b <- OTU_diff[valid_equations, i]
+    b <- log_OTU_diff[valid_equations, i]
     # The coefficient matrix of the system
     A <- A_full[valid_equations, ]
     return(list(A = A, b = b))
