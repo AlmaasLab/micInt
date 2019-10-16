@@ -118,6 +118,36 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
   systems <- lapply(time_series, function(x) integralSystem(x, kind = kind))
   n_weights <- length(list_weights)
   this_index <- 1
+  errorFUN <- function(weights) {
+    # At this level, the weights are fixed and we assign the time series
+    # into different folds
+    names(weights) <- c("self", "interaction")
+    if(show_progress){
+      message(glue::glue("Cross-validating with weight combination {this_index} of {n_weights}
+                         self: {weights['self']}  interaction: {weights['interaction']}"))
+
+    }
+    fold <- sample(rep(1:n_folds, length.out = n_time_series))
+    number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
+    fold_errors <- lapply(1:n_folds, function(i) {
+      train_equations <- systems[fold != i] %>% stack_equations()
+      test_equations <- systems[fold == i] %>% stack_equations()
+      # We have to consider the cases where at least one of the systems are
+      # singular
+      fit <- tryCatch(ridge_fit(train_equations, weights), error = function(e) {
+        NA_real_
+      })
+      CV_res <- as.data.frame(test_LV_fit(test_equations = test_equations, solution_matrix = fit))
+    })
+    summary_statistics <- do.call(rbind, fold_errors)
+    # Note the parentesis the next two lines. Without them, the expression
+    # is not evaluated correctly as the multiplicator operator
+    # has lower precedence than the piping operator
+    RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
+    MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
+    this_index <<- this_index + 1
+    return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
+  }
   if(!parallel){
   errors <- lapply(list_weights, FUN = errorFUN)
   }
@@ -156,36 +186,7 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
   return(result_frame)
   }
 
-errorFUN <- function(weights) {
-  # At this level, the weights are fixed and we assign the time series
-  # into different folds
-  names(weights) <- c("self", "interaction")
-  if(show_progress){
-    message(glue::glue("Cross-validating with weight combination {this_index} of {n_weights}
-                       self: {weights['self']}  interaction: {weights['interaction']}"))
 
-  }
-  fold <- sample(rep(1:n_folds, length.out = n_time_series))
-  number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
-  fold_errors <- lapply(1:n_folds, function(i) {
-    train_equations <- systems[fold != i] %>% stack_equations()
-    test_equations <- systems[fold == i] %>% stack_equations()
-    # We have to consider the cases where at least one of the systems are
-    # singular
-    fit <- tryCatch(ridge_fit(train_equations, weights), error = function(e) {
-      NA_real_
-    })
-    CV_res <- as.data.frame(test_LV_fit(test_equations = test_equations, solution_matrix = fit))
-  })
-  summary_statistics <- do.call(rbind, fold_errors)
-  # Note the parentesis the next two lines. Without them, the expression
-  # is not evaluated correctly as the multiplicator operator
-  # has lower precedence than the piping operator
-  RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
-  MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
-  this_index <<- this_index + 1
-  return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
-}
 
 #' @title Create cross-validation colorplot
 #'
