@@ -255,6 +255,7 @@ output_ccrepe_data <-
 #' (given that they are available in the input):
 #' \itemize{
 #' \item \code{OTU_1}, \code{OTU_2} The IDs of the two interacting OTUs
+#' \item \code{sim.score} The similarity measure score for the interaction
 #' \item \code{z.stat} The \eqn{z}{z}-value of the interaction
 #' \item \code{p.value} The p-value of the interaction (based only on the interaction itself)
 #' \item \code{q.value} The q-value of the interaction (corrected for multiple testing)
@@ -366,7 +367,7 @@ create_interaction_table <-
       attr(significant_interactions, "measure_name") <-
         score_attributes@string
       attr(significant_interactions, "signed") <-
-        signed <- score_attributes@signed
+         score_attributes@signed
       attr(significant_interactions, "measure_type") <-
         score_attributes@type_measure
     }

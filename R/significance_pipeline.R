@@ -166,6 +166,8 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #' its abundance
 #' \item \code{'ab_prod'} Plots the product of the abundances of each significant pairs of
 #' OTUs against the q- or p-value of the interaction
+#' \item \code{'sim_cor'} Plots the absolute value of \code{sim.score} of each significant interactions against
+#' the q- or p-value of the interaction
 #' }
 #'
 #' @param cutoff_type
@@ -178,10 +180,14 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #'
 #' @param abundance_type The type of abundance to use in the plots. One of \code{c('mean','median','max')}.
 #'
-#' @param ... Further arguments to be passed from or to other methods.
+#'
+#' @param ... Currently ignored
 #'
 #'
 #' @description Makes a diagnostic plot of an \code{interaction_table}
+#'
+#' @details Note that if \code{type='sim_cor'}, a column named \code{sign}, indicating the sign of the interaction,
+#' is available even though the plotting function does not use this feature.
 #'
 #' @import ggplot2
 #'
@@ -203,10 +209,10 @@ autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutof
       "max" = "Max abundance",
       "median" = "Median abundance"
     )
-    return(ggplot() + geom_point(aes_string(x = "plot_after", y = "num_int")) + scale_x_continuous(name = xlab, trans = "log10") +
+    return(ggplot() + geom_point(aes(x = plot_after, y = num_int)) + scale_x_continuous(name = xlab, trans = "log10") +
       scale_y_continuous(name = "Number of interactions"))
   }
-  else {
+  else if(type == "ab_prod" || type == "sim_cor"){
     if (cutoff_type == "q") {
       description <- "q-value"
       valueColumn <- "q.value"
@@ -215,11 +221,22 @@ autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutof
       description <- "p-value"
       valueColumn <- "p.value"
     }
+    if(type == 'ab_prod'){
     abundance_product <- abundanceProduct(object, OTU_stat, type = abundance_type)
     y <- abundance_product
     x <- object[[valueColumn]]
-    return(ggplot() + geom_point(aes_string(x = "x", y = "y")) + xlab(description) + ylab("Abundance product") +
+    return(ggplot() + geom_point(aes(x = x, y = y)) + xlab(description) + ylab("Abundance product") +
       scale_x_continuous(trans = "log10") + scale_y_continuous(trans = "log10"))
+    }
+    else{
+      plot_frame <- object %>% dplyr::transmute(sim.score, !! rlang::sym(valueColumn), sign = sign(sim.score))
+      return(ggplot(plot_frame) + geom_point(aes(x=!! rlang::sym(valueColumn), y = abs(sim.score))) + xlab(description) +
+        ylab('Absolute value of sim.score')+scale_x_log10())
+    }
+  }
+
+  else {
+    stop('Enter a valid plot type')
   }
 }
 

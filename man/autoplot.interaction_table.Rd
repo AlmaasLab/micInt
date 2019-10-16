@@ -17,6 +17,8 @@
 its abundance
 \item \code{'ab_prod'} Plots the product of the abundances of each significant pairs of
 OTUs against the q- or p-value of the interaction
+\item \code{'sim_cor'} Plots the absolute value of \code{sim.score} of each significant interactions against
+the q- or p-value of the interaction
 }}
 
 \item{cutoff_type}{One of the following:
@@ -28,11 +30,15 @@ This parameter is ignored if \code{type='num_int'}}
 
 \item{abundance_type}{The type of abundance to use in the plots. One of \code{c('mean','median','max')}.}
 
-\item{...}{Further arguments to be passed from or to other methods.}
+\item{...}{Currently ignored}
 }
 \value{
 A \link{ggplot} object showing the desired diagnostic plot
 }
 \description{
 Makes a diagnostic plot of an \code{interaction_table}
+}
+\details{
+Note that if \code{type='sim_cor'}, a column named \code{sign}, indicating the sign of the interaction,
+is available even though the plotting function does not use this feature.
 }

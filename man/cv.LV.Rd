@@ -6,7 +6,7 @@
 \usage{
 cv.LV(time_series, n_folds = length(time_series), kind = "integral",
   weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
-  show_progress = TRUE)
+  show_progress = TRUE, parallel = FALSE)
 }
 \arguments{
 \item{time_series}{A list of \code{\link{OTU_time_series}} to be cross-validated}
@@ -22,7 +22,11 @@ described in the article cited.}
 }
 If missing, the cross validation is carried out over a quadratic grid from 0 to 10 in steps of 0.1}
 
-\item{show_progress}{Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate}
+\item{show_progress}{Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate, ignored
+if \code{parallel=TRUE}}
+
+\item{parallel}{Logical, should the cross-valdiations be preformed in parallel. Alternatively, it can be an integer, specifying
+the number of cores to use.}
 }
 \value{
 An object of class \code{cvLV}, inheiriting \code{data.frame} containing the parameter values, and the two columns of cross-validation error:

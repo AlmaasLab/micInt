@@ -76,7 +76,13 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #'
 #' @param show_progress
 #'
-#' Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate
+#' Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate, ignored
+#' if \code{parallel=TRUE}
+#'
+#' @param parallel
+#'
+#' Logical, should the cross-valdiations be preformed in parallel. Alternatively, it can be an integer, specifying
+#' the number of cores to use.
 #'
 #' @details
 #'
@@ -101,7 +107,7 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' @export
 cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
                   weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
-                  show_progress = TRUE) {
+                  show_progress = TRUE, parallel = FALSE) {
   # We first find the number of time series
   # the total number of systems
   n_time_series <- length(time_series)
@@ -112,40 +118,73 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
   systems <- lapply(time_series, function(x) integralSystem(x, kind = kind))
   n_weights <- length(list_weights)
   this_index <- 1
-  errors <- lapply(list_weights, FUN = function(weights) {
-    # At this level, the weights are fixed and we assign the time series
-    # into different folds
-    names(weights) <- c("self", "interaction")
-    if(show_progress){
-      message(glue::glue("Cross-validating with weight combination {this_index} of {n_weights}
-                         self: {weights['self']}  interaction: {weights['interaction']}"))
-
+  if(!parallel){
+  errors <- lapply(list_weights, FUN = errorFUN)
+  }
+  else{
+    n_cores_available <- detectCores()
+    if(!is.logical(parallel)){
+      n_cores <- min(n_cores_available, parallel)
     }
-    fold <- sample(rep(1:n_folds, length.out = n_time_series))
-    number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
-    fold_errors <- lapply(1:n_folds, function(i) {
-      train_equations <- systems[fold != i] %>% stack_equations()
-      test_equations <- systems[fold == i] %>% stack_equations()
-      # We have to consider the cases where at least one of the systems are
-      # singular
-      fit <- tryCatch(ridge_fit(train_equations, weights), error = function(e) {
-        NA_real_
+    else{
+      n_cores <- n_cores_available
+    }
+    cluster <- makeCluster(n_cores)
+    clusterEvalQ(cluster, {
+      require(micInt)
+      require(magrittr)
+      RhpcBLASctl::blas_set_num_threads(1L)
       })
-      CV_res <- as.data.frame(test_LV_fit(test_equations = test_equations, solution_matrix = fit))
-    })
-    summary_statistics <- do.call(rbind, fold_errors)
-    # Note the parentesis the next two lines. Without them, the expression
-    # is not evaluated correctly as the multiplicator operator
-    # has lower precedence than the piping operator
-    RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
-    MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
-    this_index <<- this_index + 1
-    return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
-  })
+    clusterExport(cl = cluster,
+                  varlist = c("systems","this_index","show_progress","n_weights","n_folds",
+                              "n_time_series"), envir = environment())
+      errors <-
+        tryCatch({
+          parLapply(
+            cl = cluster, X = list_weights,
+            fun = errorFUN)
+          },
+          finally = {
+            # Makes sure the cluster shuts down even though an error has occured
+            stopCluster(cluster)
+          }
+        )
+    }
   results <- do.call(rbind, errors)
   result_frame <- cbind(weights, results)
   class(result_frame) <- c("cvLV",class(result_frame))
   return(result_frame)
+  }
+
+errorFUN <- function(weights) {
+  # At this level, the weights are fixed and we assign the time series
+  # into different folds
+  names(weights) <- c("self", "interaction")
+  if(show_progress){
+    message(glue::glue("Cross-validating with weight combination {this_index} of {n_weights}
+                       self: {weights['self']}  interaction: {weights['interaction']}"))
+
+  }
+  fold <- sample(rep(1:n_folds, length.out = n_time_series))
+  number_in_fold <- sapply(1:n_folds, function(i) sum(fold == i))
+  fold_errors <- lapply(1:n_folds, function(i) {
+    train_equations <- systems[fold != i] %>% stack_equations()
+    test_equations <- systems[fold == i] %>% stack_equations()
+    # We have to consider the cases where at least one of the systems are
+    # singular
+    fit <- tryCatch(ridge_fit(train_equations, weights), error = function(e) {
+      NA_real_
+    })
+    CV_res <- as.data.frame(test_LV_fit(test_equations = test_equations, solution_matrix = fit))
+  })
+  summary_statistics <- do.call(rbind, fold_errors)
+  # Note the parentesis the next two lines. Without them, the expression
+  # is not evaluated correctly as the multiplicator operator
+  # has lower precedence than the piping operator
+  RMSE <- (summary_statistics$RMSE^2 * number_in_fold) %>% mean() %>% sqrt()
+  MAE <- (summary_statistics$MAE * number_in_fold) %>% mean()
+  this_index <<- this_index + 1
+  return(as.data.frame(list(RMSE = RMSE, MAE = MAE)))
 }
 
 #' @title Create cross-validation colorplot
