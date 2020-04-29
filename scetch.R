@@ -83,3 +83,7 @@ scaled_sample <- micInt::scale_by_column(soilrep,s)
 new <- scale(otu_table(soilrep),center = FALSE,scale = s)
 otu_table(scaled_sample)
 test_phyloseq = phyloseq()
+x <- c(1,1)
+y <- c(1,1)
+cos_sim <- similarity_measures()[['cosine']]
+cos_sim@FUN(x,y)

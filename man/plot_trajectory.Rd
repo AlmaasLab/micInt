@@ -4,9 +4,15 @@
 \alias{plot_trajectory}
 \title{Plot trajectory for time series}
 \usage{
-plot_trajectory(time_series_list, distance = "bray",
-  subset = names(time_series_list), label = FALSE, label_size = 3,
-  color = NULL, linetype = NULL)
+plot_trajectory(
+  time_series_list,
+  distance = "bray",
+  subset = names(time_series_list),
+  label = FALSE,
+  label_size = 3,
+  color = NULL,
+  linetype = NULL
+)
 }
 \arguments{
 \item{time_series_list}{A list of \link{OTU_time_series} objects}

@@ -4,8 +4,14 @@
 \alias{autoplot.interaction_table}
 \title{autoplot.interaction_table}
 \usage{
-\method{autoplot}{interaction_table}(object, OTU_stat, type = "num_int",
-  cutoff_type = "q", abundance_type = "mean", ...)
+\method{autoplot}{interaction_table}(
+  object,
+  OTU_stat,
+  type = "num_int",
+  cutoff_type = "q",
+  abundance_type = "mean",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{interaction_table}}

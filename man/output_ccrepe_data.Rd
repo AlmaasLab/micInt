@@ -4,10 +4,18 @@
 \alias{output_ccrepe_data}
 \title{output_ccrepe_data}
 \usage{
-output_ccrepe_data(data, taxonomy = NULL, threshold.type = "q",
-  threshold.value = 0.05, output.file = FALSE, filename = NULL,
-  return.value = TRUE, csv_option = "2", removeDuplicates = TRUE,
-  score_attributes = NULL)
+output_ccrepe_data(
+  data,
+  taxonomy = NULL,
+  threshold.type = "q",
+  threshold.value = 0.05,
+  output.file = FALSE,
+  filename = NULL,
+  return.value = TRUE,
+  csv_option = "2",
+  removeDuplicates = TRUE,
+  score_attributes = NULL
+)
 }
 \arguments{
 \item{data}{The results from ccrepe}

@@ -4,11 +4,21 @@
 \alias{runAnalysis}
 \title{runAnalysis}
 \usage{
-runAnalysis(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05,
-  parallel = TRUE, returnVariables = NULL, subset = NULL,
-  sim.scores = NULL, file = FALSE, magnitude_factor = 10,
-  prefix = NULL, metadataCols = c("OTU Id", "taxonomy"),
-  postfix = "", renormalize = TRUE)
+runAnalysis(
+  OTU_table,
+  abundance_cutoff = 1e-04,
+  q_crit = 0.05,
+  parallel = TRUE,
+  returnVariables = NULL,
+  subset = NULL,
+  sim.scores = NULL,
+  file = FALSE,
+  magnitude_factor = 10,
+  prefix = NULL,
+  metadataCols = c("OTU Id", "taxonomy"),
+  postfix = "",
+  renormalize = TRUE
+)
 }
 \arguments{
 \item{OTU_table}{The raw OTU table (if a \code{data.frame} is supplied) to be treated

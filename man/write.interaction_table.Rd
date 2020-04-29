@@ -4,8 +4,7 @@
 \alias{write.interaction_table}
 \title{write.interaction_table}
 \usage{
-write.interaction_table(significant_interactions, filename,
-  csv_option = "2")
+write.interaction_table(significant_interactions, filename, csv_option = "2")
 }
 \arguments{
 \item{significant_interactions}{An \code{interaction_table} returned from \code{\link{create_interaction_table}}}

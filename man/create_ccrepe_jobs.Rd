@@ -4,8 +4,11 @@
 \alias{create_ccrepe_jobs}
 \title{create_ccrepe_jobs}
 \usage{
-create_ccrepe_jobs(sim.scores = similarity_measures(),
-  prefix = "significant_interactions", postfix = ".csv")
+create_ccrepe_jobs(
+  sim.scores = similarity_measures(),
+  prefix = "significant_interactions",
+  postfix = ".csv"
+)
 }
 \arguments{
 \item{sim.scores}{The similarity measures of class \link{sim.measure}

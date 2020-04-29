@@ -4,8 +4,7 @@
 \alias{ccrepe_analysis}
 \title{Conduct ccrepe analysis}
 \usage{
-ccrepe_analysis(ccrepe_job, commonargs, parallel = TRUE,
-  verbose = TRUE)
+ccrepe_analysis(ccrepe_job, commonargs, parallel = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments

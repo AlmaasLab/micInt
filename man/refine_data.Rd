@@ -4,8 +4,13 @@
 \alias{refine_data}
 \title{Refine raw OTU table}
 \usage{
-refine_data(OTU_table, abundance_cutoff = 0, cutoff_type = "mean",
-  renormalize = TRUE, metadataCols = c("OTU Id", "taxonomy"))
+refine_data(
+  OTU_table,
+  abundance_cutoff = 0,
+  cutoff_type = "mean",
+  renormalize = TRUE,
+  metadataCols = c("OTU Id", "taxonomy")
+)
 }
 \arguments{
 \item{OTU_table}{The raw OTU table, either as a \code{data.frame}, a \code{matrix} or a \code{phyloseq} object}

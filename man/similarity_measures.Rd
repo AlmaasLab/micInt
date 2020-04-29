@@ -2,18 +2,21 @@
 % Please edit documentation in R/similarity_measures.R
 \name{similarity_measures}
 \alias{similarity_measures}
-\title{similarity_measures}
+\title{Get premade similarity measure objects}
 \usage{
-similarity_measures(subset = NULL)
+similarity_measures(
+  subset = c("pearson", "spearman", "kendall", "bray_curtis", "jaccard", "gen_jaccard",
+    "mutual_information", "nc.score", "euclidean", "cosine")
+)
 }
 \arguments{
-\item{subset}{The subset of the similarity measures to be returned. \
+\item{subset}{The subset of the similarity measures to be returned.
 By default, all similarity measures are returned}
 }
 \value{
 A list of the \link{sim.measure} objects defined by the function
 }
 \description{
-Similarity measures passed as functions to ccrepe and
-output_ccrepe_data
+This function allows retriving the ten ready-made similarity measure
+provided by this package. Custom similarity measures can also be made \link{sim.measure-class}.
 }

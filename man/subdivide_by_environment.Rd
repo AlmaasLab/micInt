@@ -4,8 +4,14 @@
 \alias{subdivide_by_environment}
 \title{Nest phyloseq objects according to sample variables}
 \usage{
-subdivide_by_environment(physeq, variables, keep_variables = TRUE,
-  keep_empty = TRUE, extract_list = FALSE, ...)
+subdivide_by_environment(
+  physeq,
+  variables,
+  keep_variables = TRUE,
+  keep_empty = TRUE,
+  extract_list = FALSE,
+  ...
+)
 }
 \arguments{
 \item{physeq}{A \linkS4class{phyloseq} object}

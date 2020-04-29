@@ -4,9 +4,14 @@
 \alias{create_interaction_table}
 \title{Create table of significant interactions}
 \usage{
-create_interaction_table(data, taxonomy = NULL, threshold.type = "q",
-  threshold.value = 0.05, removeDuplicates = TRUE,
-  score_attributes = NULL)
+create_interaction_table(
+  data,
+  taxonomy = NULL,
+  threshold.type = "q",
+  threshold.value = 0.05,
+  removeDuplicates = TRUE,
+  score_attributes = NULL
+)
 }
 \arguments{
 \item{data}{The results from ccrepe}

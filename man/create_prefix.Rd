@@ -4,8 +4,13 @@
 \alias{create_prefix}
 \title{create_prefix}
 \usage{
-create_prefix(q_crit = NULL, p_crit = NULL, cutoff = NULL,
-  magfac = NULL, digits = 2)
+create_prefix(
+  q_crit = NULL,
+  p_crit = NULL,
+  cutoff = NULL,
+  magfac = NULL,
+  digits = 2
+)
 }
 \arguments{
 \item{q_crit}{critical q-value. Ignored if not set}

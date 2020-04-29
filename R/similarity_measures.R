@@ -1,10 +1,10 @@
-#' @title similarity_measures
+#' @title Get premade similarity measure objects
 #'
 #' @description
-#' Similarity measures passed as functions to ccrepe and
-#' output_ccrepe_data
+#' This function allows retriving the ten ready-made similarity measure
+#'provided by this package. Custom similarity measures can also be made \link{sim.measure-class}.
 #'
-#' @param subset The subset of the similarity measures to be returned. \
+#' @param subset The subset of the similarity measures to be returned.
 #' By default, all similarity measures are returned
 #'
 #' @return A list of the \link{sim.measure} objects defined by the function
@@ -14,7 +14,10 @@
 #' @import infotheo
 #' @importFrom stats cor
 #' @export
-similarity_measures <- function(subset = NULL) {
+similarity_measures <- function(subset = c("pearson", "spearman", "kendall",
+                                           "bray_curtis", "jaccard",  "gen_jaccard",
+                                           "mutual_information", "nc.score", "euclidean",
+                                           "cosine")) {
   measures <- list()
   #************************************************************
   # Pearson linear correlation
@@ -145,7 +148,8 @@ similarity_measures <- function(subset = NULL) {
   #******************************************************************************
   cosine_similarity <- function(x, y = NULL) {
     if (is.null(y)) {
-      ones <- rep(1, dim(x)[2])
+      # Note: As this is already a similarity, we do not need to subtract from a
+      # matrix of ones
       res <- as.matrix(designdist(t(x), method = "J/sqrt(A*B)", terms = "quadratic"))
     }
     else {
@@ -154,11 +158,11 @@ similarity_measures <- function(subset = NULL) {
     return(res)
   }
   measures$cosine <- sim.measure(FUN = cosine_similarity, string = "cosine", signed = TRUE, type = "parametric")
-
-  score_names <- lapply(measures, function(x) x@string)
-  if (!is.null(subset)) {
-    measures <- measures[score_names %in% subset]
+  if(is.null(subset)){
+    subset <- c("pearson", "spearman", "kendall", "bray_curtis", "jaccard",
+                "gen_jaccard", "mutual_information", "nc.score", "euclidean",  "cosine")
   }
+  measures <- measures[subset]
   return(measures)
 }
 

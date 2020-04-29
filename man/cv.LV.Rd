@@ -4,9 +4,14 @@
 \alias{cv.LV}
 \title{Cross-validate fit for Lotka-Volterra coefficients}
 \usage{
-cv.LV(time_series, n_folds = length(time_series), kind = "integral",
+cv.LV(
+  time_series,
+  n_folds = length(time_series),
+  kind = "integral",
   weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
-  show_progress = TRUE, parallel = FALSE)
+  show_progress = TRUE,
+  parallel = FALSE
+)
 }
 \arguments{
 \item{time_series}{A list of \code{\link{OTU_time_series}} to be cross-validated}

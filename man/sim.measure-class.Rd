@@ -6,8 +6,14 @@
 \alias{sim.measure}
 \title{Similarity measure}
 \usage{
-sim.measure(FUN, string, categorical = FALSE, mean_scaleable = FALSE,
-  signed = FALSE, type = "parametric")
+sim.measure(
+  FUN,
+  string,
+  categorical = FALSE,
+  mean_scaleable = FALSE,
+  signed = FALSE,
+  type = "parametric"
+)
 }
 \arguments{
 \item{FUN}{The similarity measure function to use, of the form \code{f(x,y)}.

@@ -4,9 +4,16 @@
 \alias{add_outputargs}
 \title{Add outputargs}
 \usage{
-add_outputargs(ccrepe_res, taxonomy = NULL, output.file = NULL,
-  return.value = NULL, threshold.type = NULL, threshold.value = NULL,
-  csv_option = NULL, removeDuplicates = NULL)
+add_outputargs(
+  ccrepe_res,
+  taxonomy = NULL,
+  output.file = NULL,
+  return.value = NULL,
+  threshold.type = NULL,
+  threshold.value = NULL,
+  csv_option = NULL,
+  removeDuplicates = NULL
+)
 }
 \arguments{
 \item{ccrepe_res}{A list of results from \code{\link{ccrepe}}}
