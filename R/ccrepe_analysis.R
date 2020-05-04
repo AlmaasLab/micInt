@@ -9,7 +9,7 @@
 #' @description
 #' A wrapper around the \code{ccrepe} function, provides parallel analysis
 #'
-#' @param ccrepe_job A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments
+#' @param ccrepe_job A list of jobs to be passed to \code{ccrepe}. The lists themselves are named lists with the arguments
 #' being passed to \code{\link{ccrepe}}
 #'
 #' @param commonargs \code{ccrepe} arguments common for all jobs
@@ -34,11 +34,17 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
   if (parallel) {
     n_cores <- detectCores()
     cluster <- makeCluster(n_cores)
-    clusterEvalQ(cluster, require(ccrepe))
+    clusterEvalQ(cluster,
+                 {require(ccrepe)
+                   RhpcBLASctl::blas_set_num_threads(1L)
+                   }
+      )
+    clusterSetRNGStream(cl=cluster)
   }
   else {
     n_cores <- 1
   }
+
   ccrepe_res <- list()
   start <- Sys.time()
   # ccrepe_res=mclapply(ccrepe_job,
@@ -50,7 +56,7 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
       tryCatch(
         parLapply(
           cl = cluster, X = ccrepe_job,
-          fun = function(x) list(res = do.call(ccrepe, c(x$ccrepe_args,commonargs)))
+          fun = function(x) list(res = do.call(ccrepe, c(x,commonargs)))
         ),
         finally = {
           # Makes sure the cluster shuts down even though an error has occured
@@ -62,8 +68,8 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
     ccrepe_res <- lapply(
       X = ccrepe_job,
       FUN = function(x) {
-        message(x$string)
-        list(res = do.call(ccrepe, c(x$ccrepe_args,commonargs)))
+        # message(x$string)
+        list(res = do.call(ccrepe, c(x,commonargs)))
       }
     )
   }
@@ -72,8 +78,6 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
     message("Time to execute the ccrepe analysis")
     message(stop - start)
   }
-  for (i in 1:length(ccrepe_job)) {
-    ccrepe_res[[i]] <- modifyList(ccrepe_res[[i]], ccrepe_job[[i]]$output_args)
-  }
+
   return(ccrepe_res)
 }

@@ -131,7 +131,12 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
     ccrepe_job <- ccrepe_job[subset]
   }
   stringlist <- lapply(ccrepe_job, function(x) list(string = x$string))
-  ccrepe_res <- ccrepe_analysis(ccrepe_job=ccrepe_job,commonargs=ccrepe_commonargs, parallel = parallel)
+  ccrepe_res <- ccrepe_analysis(ccrepe_job=lapply(ccrepe_job,function(x)
+    x$ccrepe_args),
+                                                  commonargs=ccrepe_commonargs, parallel = parallel)
+  for (i in 1:length(ccrepe_job)) {
+    ccrepe_res[[i]] <- modifyList(ccrepe_res[[i]], ccrepe_job[[i]]$output_args)
+  }
   outputargs <- add_outputargs(ccrepe_res)
   common_outputargs=list(threshold.value=q_crit,return.value=TRUE,taxonomy=taxonomy,output.file=file,
                          threshold.type='q',removeDuplicates = TRUE,csv_option='1')
