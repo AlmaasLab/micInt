@@ -19,8 +19,7 @@
 #' @param verbose Should the function display how much time it spent?
 #'
 #' @return  A list of the results of the various jobs.
-#' Each element of this list containings the ccrepe results in addition to the outputargs passed as the jobs
-#'
+#' Each element of this list containings the ccrepe results
 #' @seealso
 #'
 #' \link{ccrepe}
@@ -56,7 +55,7 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
       tryCatch(
         parLapply(
           cl = cluster, X = ccrepe_job,
-          fun = function(x) list(res = do.call(ccrepe, c(x,commonargs)))
+          fun = function(x) do.call(ccrepe, c(x,commonargs))
         ),
         finally = {
           # Makes sure the cluster shuts down even though an error has occured
@@ -69,7 +68,7 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
       X = ccrepe_job,
       FUN = function(x) {
         # message(x$string)
-        list(res = do.call(ccrepe, c(x,commonargs)))
+        do.call(ccrepe, c(x,commonargs))
       }
     )
   }

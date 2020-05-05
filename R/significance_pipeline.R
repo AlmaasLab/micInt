@@ -135,7 +135,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
     x$ccrepe_args),
                                                   commonargs=ccrepe_commonargs, parallel = parallel)
   for (i in 1:length(ccrepe_job)) {
-    ccrepe_res[[i]] <- modifyList(ccrepe_res[[i]], ccrepe_job[[i]]$output_args)
+    ccrepe_res[[i]] <- c(list(res=ccrepe_res[[i]]), ccrepe_job[[i]]$output_args)
   }
   outputargs <- add_outputargs(ccrepe_res)
   common_outputargs=list(threshold.value=q_crit,return.value=TRUE,taxonomy=taxonomy,output.file=file,
