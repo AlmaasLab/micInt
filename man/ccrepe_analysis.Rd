@@ -7,7 +7,7 @@
 ccrepe_analysis(ccrepe_job, commonargs, parallel = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The list themselves are named lists with the arguments
+\item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The lists themselves are named lists with the arguments
 being passed to \code{\link{ccrepe}}}
 
 \item{commonargs}{\code{ccrepe} arguments common for all jobs}
@@ -18,7 +18,7 @@ being passed to \code{\link{ccrepe}}}
 }
 \value{
 A list of the results of the various jobs.
-Each element of this list containings the ccrepe results in addition to the outputargs passed as the jobs
+Each element of this list containings the ccrepe results
 }
 \description{
 A wrapper around the \code{ccrepe} function, provides parallel analysis

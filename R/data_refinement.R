@@ -478,6 +478,7 @@ as.edgelist.interaction_table <- function(x, ...) {
 #' the function will return \code{NULL}.
 #'
 #' @return A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
+#' @export
 
 collapse_taxonomy <- function(phyloseq) {
   taxonomy_table <- tax_table(phyloseq, errorIfNULL = FALSE)
