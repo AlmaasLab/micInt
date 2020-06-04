@@ -277,10 +277,10 @@ create_interaction_table <-
            threshold.value = 0.05,
            removeDuplicates = TRUE,
            score_attributes = NULL) {
-    p.values <- as.data.frame(data$p.values)
-    z.stat <- as.data.frame(data$z.stat)
-    sim.score <- as.data.frame(data$sim.score)
-    q.values <- as.data.frame(data$q.values)
+    p.values <- data$p.values
+    z.stat <- data$z.stat
+    sim.score <- data$sim.score
+    q.values <- data$q.values
     if (threshold.type == "q") {
       threshold_matrix <- q.values
     }
@@ -295,9 +295,15 @@ create_interaction_table <-
     }
     significant_pairs <-
       which(threshold_matrix < threshold.value, arr.ind = TRUE)
+    # Removing duplicates
+    if (removeDuplicates) {
+      significant_pairs <-
+        significant_pairs[significant_pairs[,1] > significant_pairs[,2],]
+    }
+    significant_matrix <- matrix(colnames(threshold_matrix)[significant_pairs],
+           ncol = 2)
     significant_interactions <-
-      as.data.frame(matrix(colnames(threshold_matrix)[significant_pairs],
-                           ncol = 2), stringsAsFactors=FALSE)
+      as.data.frame(significant_matrix, stringsAsFactors=FALSE)
     colnames(significant_interactions) <- c("OTU_1", "OTU_2")
     if (nrow(significant_interactions) == 0) {
       significant_interactions$sim.score <- numeric()
@@ -311,34 +317,22 @@ create_interaction_table <-
       }
     }
     else {
-      # Removing duplicates
-      if (removeDuplicates) {
-        significant_interactions <-
-          significant_interactions[significant_interactions$OTU_1 > significant_interactions$OTU_2,]
-      }
+      subscript_matrix <- significant_pairs
       if (!is.null(sim.score) && nrow(sim.score) != 0) {
         significant_interactions$sim.score <-
-          apply(significant_interactions, 1, function(x) {
-            sim.score[x[1], x[2]]
-          })
+          sim.score[subscript_matrix]
       }
       if (!is.null(p.values) && nrow(p.values) != 0) {
         significant_interactions$p.value <-
-          apply(significant_interactions, 1, function(x) {
-            p.values[x[1], x[2]]
-          })
+          p.values[subscript_matrix]
       }
       if (!is.null(q.values) && nrow(q.values) != 0) {
         significant_interactions$q.value <-
-          apply(significant_interactions, 1, function(x) {
-            q.values[x[1], x[2]]
-          })
+          q.values[subscript_matrix]
       }
       if (!is.null(z.stat) && nrow(z.stat) != 0) {
         significant_interactions$z.stat <-
-          apply(significant_interactions, 1, function(x) {
-            z.stat[x[1], x[2]]
-          })
+          z.stat[subscript_matrix]
       }
       if (!is.null(taxonomy)) {
         # Add taxonomy if available
@@ -422,17 +416,24 @@ write.interaction_table <-
 #'
 #' @export
 summary.interaction_table <- function(object, ...) {
-  proportion_negative <- ifelse(attr(object, 'signed'),
+  signed_attribute <- attr(object, 'signed')
+  proportion_negative <- ifelse(is.null(signed_attribute) || signed_attribute,
                                 sum(object$sim.score < 0) / nrow(object),
                                 NA)
   number_significant <- nrow(object)
-  c(
+  res <- c(
     attributes(object)[c("measure_name", "signed", "measure_type")],
     list(
       number_significant = number_significant,
       proportion_negative = proportion_negative
     )
   )
+  lapply(res, function(attr) if(is.null(attr)){
+    NA
+  }
+  else{
+    attr
+  })
 }
 
 #'

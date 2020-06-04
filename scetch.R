@@ -87,3 +87,17 @@ x <- c(1,1)
 y <- c(1,1)
 cos_sim <- similarity_measures()[['cosine']]
 cos_sim@FUN(x,y)
+library(phyloseq)
+m <- enterotype@otu_table
+m[c(1,2,5),c(5,3),drop=TRUE]
+co <- cor(m)
+co[c(5,2),c(1,4)]
+large <- which(co > 0.5,arr.ind = TRUE)
+co[large]
+large[large[,1] > large[,2],]
+vec <- 1:26
+names(vec) <- letters
+i_index <- rep(26,1e+8)
+c_index <- rep('z',1e+8)
+system.time(vec[i_index])
+system.time(vec[c_index])
