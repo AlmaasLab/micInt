@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}ccrepe}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}General functionality}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Arguments}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Output}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Usage}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Example 1}{4}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Example 2}{6}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Example 3}{8}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Example 4}{10}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}Example 5}{11}{subsection.2.9}%
+\contentsline {section}{\numberline {3}nc.score}{12}{section.3}%
+\contentsline {subsection}{\numberline {3.1}General Functionality}{12}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Arguments}{13}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Output}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Usage}{13}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Example 1}{13}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Example 2}{15}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Example 3}{16}{subsection.3.7}%
+\contentsline {section}{\numberline {4}References}{17}{section.4}%
+\contentsfinish 

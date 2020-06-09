@@ -10,7 +10,6 @@
 #' @return A list of the \link{sim.measure} objects defined by the function
 #'
 #' @import vegan
-#' @import ccrepe
 #' @import infotheo
 #' @importFrom stats cor
 #' @export

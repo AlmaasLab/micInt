@@ -24,7 +24,6 @@
 #'
 #' \link{ccrepe}
 #'
-#' @import ccrepe
 #' @import parallel
 #' @importFrom utils modifyList
 #' @export
