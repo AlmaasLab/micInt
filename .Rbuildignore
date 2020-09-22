@@ -2,6 +2,6 @@
 ^\.Rproj\.user$
 ^debug.R$
 ^dependence_script.R$
-^scetch.R$
-
-
+^scetch.R$^
+^.github/*
+  
