@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE,repos=c("https://cloud.r-project.org","https://bioconductor.org/packages/release/bioc/"))
+          remotes::install_deps(dependencies = TRUE,repos=c("https://cloud.r-project.org","https://bioconductor.org/packages/3.11/bioc"))
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
