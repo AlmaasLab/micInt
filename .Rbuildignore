@@ -3,8 +3,7 @@
 ^debug.R$
 ^dependence_script.R$
 ^scetch.R$
+^.github/*
 ^vignettes/figure
 ^vignettes/*.blg
 ^vignettes/*.toc
-
-
