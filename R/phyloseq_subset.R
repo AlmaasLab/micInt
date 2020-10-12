@@ -25,7 +25,8 @@
 #' @examples
 #' library(phyloseq)
 #' data("soilrep")
-#' subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped'),keep_variables=FALSE,keep_empty=FALSE)
+#' subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped'),
+#' keep_variables=FALSE,keep_empty=FALSE)
 subdivide_by_environment <- function(physeq,variables,keep_variables=TRUE,keep_empty=TRUE,extract_list=FALSE,...){
 if(!is.character(variables)){
   stop('The variables argument must be a character string of the variables to split by')
@@ -58,7 +59,8 @@ if(variables %in% names(sample_data) %>% all() %>% magrittr::not()){
   subsetted_phyloseq <- phyloseq::prune_samples(samples = selected_samples_names,x = physeq)
   if(!keep_variables){
     sample_data(subsetted_phyloseq) <- sample_variables %in% variables %>% magrittr::not() %>%
-      which() %>% dplyr::select(phyloseq::sample_data(subsetted_phyloseq),.)
+      which() %>% {
+        phyloseq::sample_data(subsetted_phyloseq)[,.]}
   }
   res$phyloseq[[i]] <- subsetted_phyloseq
   }

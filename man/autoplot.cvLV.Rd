@@ -4,12 +4,14 @@
 \alias{autoplot.cvLV}
 \title{Create cross-validation colorplot}
 \usage{
-\method{autoplot}{cvLV}(object, target = "RMSE")
+\method{autoplot}{cvLV}(object, target = "RMSE", ...)
 }
 \arguments{
 \item{object}{A \code{cvLV} object returned from \code{\link{cv.LV}}}
 
 \item{target}{The cross-validation target to pick, one of \code{'RMSE'} or \code{'MAE'}}
+
+\item{...}{other arguments passed to methods}
 }
 \value{
 A \link{ggplot} colorplots cross-validation errors for the different weights combination

@@ -44,5 +44,6 @@ If only one variable is provided, the element of the \code{phyloseq} column is n
 \examples{
 library(phyloseq)
 data("soilrep")
-subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped'),keep_variables=FALSE,keep_empty=FALSE)
+subdivide_by_environment(soilrep,variables=c('Treatment','warmed','clipped'),
+keep_variables=FALSE,keep_empty=FALSE)
 }

@@ -3,5 +3,8 @@
 ^debug.R$
 ^dependence_script.R$
 ^scetch.R$
+^vignettes/figure
+^vignettes/*.blg
+^vignettes/*.toc
 
 

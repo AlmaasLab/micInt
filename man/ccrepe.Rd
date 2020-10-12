@@ -13,7 +13,7 @@
         The p-values can be calculated for all appropriate (passing certain quality-control measures) pairwise comparisons,
         or for a subset of user-specified ones.\cr
         Q-values are additionally calculated using the Benjamin-Hochberg-Yekutieli procedure (see References)
-		
+
  }
 \usage{
  ccrepe(
@@ -23,8 +23,8 @@
  sim.score.args = list(),
  min.subj = 20,
  iterations = 1000,
- subset.cols.x = NULL,				 
- subset.cols.y = NULL, 
+ subset.cols.x = NULL,
+ subset.cols.y = NULL,
  errthresh  = 1e-04,
  verbose = FALSE,
  iterations.gap = 100,
@@ -35,13 +35,13 @@
  renormalize = TRUE,
  memory.optimize = FALSE
  )
- 
+
 }
 \arguments{
   \item{x}{
    First dataframe or matrix containing the relative or absolute abundances in cavity1 : columns are bugs, rows are samples.
    (Rows should therefore sum to a constant.)\cr
-   The subjectIDs, if present, are assumed to be the row names and NOT the first column of data.\cr 
+   The subjectIDs, if present, are assumed to be the row names and NOT the first column of data.\cr
 }
   \item{y}{
    Second dataframe or matrix (optional) containing the relative or absolute abundances in cavity2: columns are bugs, rows are samples. \cr
@@ -49,7 +49,7 @@
    If both x and y are specified, they will be merged by row names.  If no row names are specified for either or both datasets,
    the default is to use the row numbers as subject IDs.
 }
- 
+
   \item{sim.score}{
    A function defining a similarity measure, such as cor or nc.score.  This similarity measure can be a pre-defined R function or user-defined.  If the latter,
    certain properties should be satisfied as detailed below (also see examples).  The default similarity measure is Spearman correlation.\cr
@@ -63,7 +63,7 @@
   \item{sim.score.args}{
 	A list of arguments for the measurement function.
 	For example:  In the case of cor, the following would be acceptable:
-	sim.score.args = list(method='spearman',use='complete.obs'	).\cr	
+	sim.score.args = list(method='spearman',use='complete.obs'	).\cr
 }
   \item{min.subj}{
   Minimum number of samples that must be non-missing in a bug/feature/column in order to apply the similarity measure
@@ -76,13 +76,13 @@
   A vector of column indices from x to indicate which features to compare
 }
  \item{subset.cols.y}{
-  A vector of column indices from y to indicate which features to compare  
+  A vector of column indices from y to indicate which features to compare
 }
   \item{errthresh}{
-       If feature has number of zeros greater than  errthresh^(1/n)  , that feature is excluded 
+       If feature has number of zeros greater than  errthresh^(1/n)  , that feature is excluded
 }
 
-  
+
   \item{verbose}{
 	Logical: an indicator whether the user requested verbose output, which prints periodic progress of the algorithm through the dataset(s),
         as well as including more detailed output.  (default:FALSE)
@@ -111,20 +111,20 @@
 Logical, should data be renormalized when preforming permutations? For relative data, it is strongly recommended to renormalize.
 However, when using absolute data, this argument must be set to \code{FALSE}.
 }
-\item{memory.optimze}{
+\item{memory.optimize}{
 Logical, should the computations be run a memory-saving and highly vectorizing algorithm? Currently, this is only implemented in the case where \code{y=NULL}. The downsides of this option is that output to file and concurrent output is disabled with this option. In addition, you should expect more numerical instability by enabling this option. However, this option is recommended with datasets with many OTUs
 }
 }
- 
+
 \value{
 	Returns a list containing the calculation results and the parameters used.\cr
 	Default parameters shown:\cr
         \item{min.subj}{Description above}
 	\item{errThresh}{Description same as errthresh above}
 	\item{sim.score}{A matrix of the simliarity scores for all the requested comparisons.  The (i,j)th
-        element of sim.score correponds to the similarity score of column i (or the ith column of subset.cols.1) 
+        element of sim.score correponds to the similarity score of column i (or the ith column of subset.cols.1)
         and column j (or the jth column of subset.cols.1) in one dataset, or
-        to the similarity score of column i (or the ith column of subset.cols.1) in dataset x 
+        to the similarity score of column i (or the ith column of subset.cols.1) in dataset x
         and column j (or the jth column of subset.cols.2)in dataset y in the case of two datasets.}
 	\item{p.values}{A  matrix of the p-values for all the requested comparisons.  The (i,j)th element of p.values
         corresponds to the p-value of the (i,j)th element of sim.score.}
@@ -132,7 +132,7 @@ Logical, should the computations be run a memory-saving and highly vectorizing a
         of q.values corresponds to the q-value fo the (i,j)th element of
 	sim.score.}
         \item{z.stat}{A matrix of the z-statistics for all the
-	  requested comparisons.  The (i,j)th element corresponds	
+	  requested comparisons.  The (i,j)th element corresponds
 	  to the z-statistic which gave rise to the (i,j)th p-value.}
         \item{output.table}{(Only if make.output.table=TRUE) A table
 	where each row is one comparision.  Each row contains the
@@ -149,7 +149,7 @@ Logical, should the computations be run a memory-saving and highly vectorizing a
 
 }
 \author{
-  Emma Schwager <emma.schwager@gmail.com>, Jakob Peder Pettersen <jakobpeder.pettersen@gmail.com> 
+  Emma Schwager <emma.schwager@gmail.com>, Jakob Peder Pettersen <jakobpeder.pettersen@gmail.com>
 }
 \examples{
 data <- matrix(rlnorm(40,meanlog=0,sdlog=1),nrow=10)

@@ -2,7 +2,7 @@
 `micInt` is an R package designed for analyzing microbial co-occurences. It takes in OTU tables was either pure dataFrames or as experiment-level `phyloseq` objects.
 
 # Install
-First, ensure the following packages are installed:
+This package have the following dependencies which must be installed prior to installing this package:
 
 From CRAN:
   * `infotheo`
@@ -22,11 +22,17 @@ From CRAN:
 From Bioconductor:
 * `phyloseq`
 
-Then, use:
+If all dependencies are satisfied, the package can we installed from GitHub as follows:
 ```
-# instal.packages("devtools")
+install.packages("devtools")
 library(devtools)
 install_github("AlmaasLab/micInt")
+```
+
+For a quit start automatically installing all dependencies, consider:
+```
+install.packages("BiocManager","devtools")
+devtools::install_github("AlmaasLab/micInt",repos=BiocManager::BiocManager::repositories())
 ```
 
 # Useage
