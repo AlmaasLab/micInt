@@ -143,7 +143,6 @@ jobs:
         run: |
           ## Edit below if you have any Windows system dependencies
           choco install texlive
-        shell: Rscript {0}
 
       - name: Install BiocManager
         run: |
