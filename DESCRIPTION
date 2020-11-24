@@ -6,7 +6,7 @@ Depends: R (>= 3.3.0), ggplot2, ggfortify
 Imports: methods, infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph, tibble, dplyr, rlang, glue, viridis, RhpcBLASctl
 Suggests: readxl, ggrepel, ggdendro, kableExtra, cluster,
-    testthat, BiocStyle, knitr
+    testthat, BiocStyle, knitr, covr
 Date: 2020-10-12
 Author: Jakob Peder Pettersen with code constributions from Emma Schwager,Craig Bielski, George Weingart
 Maintainer: Jakob Peder Pettersen <jakobpeder.pettersen@gmail.com>
