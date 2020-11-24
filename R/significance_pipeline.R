@@ -3,8 +3,9 @@
 #' @description
 #' Runs an automized processing of the OTU table or phyloseq object, passes the jobs to \code{ccrepe} and saves the results
 #'
-#' @param OTU_table The raw OTU table (if a \code{data.frame} is supplied) to be treated
-#' \emph{or} a \code{phyloseq} object containing the data (the latter is recommended)
+#' @param OTU_table The raw OTU table (if a \code{data.frame} or a \code{phyloseq} \code{otu_table} is supplied) to be treated
+#' \emph{or} an experiment level \code{phyloseq} object containing the data (the latter is recommended).
+#' Note that in the case of a \code{phyloseq} \code{otu_table}, no taxonomy can be handled.
 #'
 #' @param abundance_cutoff The mean abundance cutoff for the OTUs. If it is \code{NULL}, the there will be not filtering.
 #'
@@ -81,7 +82,7 @@
 #' \item The row names of the table are the OTU names and the column names are the
 #' sample names
 #' }
-#' For \code{phyloseq} objects, you do not need to care about this, it is automatically handeled
+#' For \code{phyloseq} objects (both experiment level and \code{otu_table}), you do not need to care about this, it is automatically handeled
 #'
 #' @seealso \link{output_ccrepe_data}
 #'
@@ -103,6 +104,15 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
       OTU_table <- t(OTU_table) %>% data.frame()
     }
     metadataCols <- NULL
+  }
+  else if (inherits(OTU_table,"otu_table")){
+    phyloseq_otu_table <- OTU_table
+    taxonomy <- NULL
+    metadataCols <- NULL
+    OTU_table <- OTU_table %>% data.frame()
+    if (!phyloseq::taxa_are_rows(phyloseq_otu_table)) {
+      OTU_table <- t(OTU_table) %>% data.frame()
+    }
   }
   # In case we are provided with a data frame instead
   else {
@@ -195,6 +205,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #' is available even though the plotting function does not use this feature.
 #'
 #' @import ggplot2
+#' @importFrom rlang .data
 #'
 #' @return A \link{ggplot} object showing the desired diagnostic plot
 #'
@@ -234,8 +245,8 @@ autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutof
       scale_x_continuous(trans = "log10") + scale_y_continuous(trans = "log10"))
     }
     else{
-      plot_frame <- object %>% dplyr::transmute(sim.score, !! rlang::sym(valueColumn), sign = sign(sim.score))
-      return(ggplot(plot_frame) + geom_point(aes(x=!! rlang::sym(valueColumn), y = abs(sim.score))) + xlab(description) +
+      plot_frame <- object %>% dplyr::transmute(.data$sim.score, !! rlang::sym(valueColumn), sign = sign(.data$sim.score))
+      return(ggplot(plot_frame) + geom_point(aes(x=!! rlang::sym(valueColumn), y = abs(.data$sim.score))) + xlab(description) +
         ylab('Absolute value of sim.score')+scale_x_log10())
     }
   }

@@ -109,12 +109,6 @@ Optional output file for detailed log (if given) of all intermediate permutation
 \item[\Rcode{compare.within.x}]
   A boolean value indicating whether to do comparisons given by taking all subsets of size 2 from \Rcode{subset.cols.x} or to do comparisons given by taking all possible combinations of \Rcode{subset.cols.x} and \Rcode{subset.cols.y}.  If \Rcode{TRUE} but \Rcode{subset.cols.y=NA}, returns all comparisons involving any features in \Rcode{subset.cols.x}.  This argument is only used when \Rcode{y=NA}.
 
-\item[\Rcode{concurrent.output}]
-    Optional output file to which each comparison will be written as it is calculated.
-
-\item[\Rcode{make.output.table}]
-      A boolean value indicating whether to include table-formatted output.
-
 \end{description}
 
 \subsection{Output}
@@ -155,8 +149,6 @@ ccrepe(
  iterations.gap = 100,
  distributions = NA,
  compare.within.x = TRUE,
- concurrent.output = NA,
- make.output.table = FALSE,
  memory.optimize = FALSE)
 @
 

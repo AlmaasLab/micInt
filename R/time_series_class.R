@@ -5,18 +5,20 @@
 #' @description This class provides a way to integrate measurements of time
 #' to OTU tables, useful for time series analysis
 #'
-#' @slot table The refined OTU table representing the community
+#' @slot table Data frame, the refined OTU table representing the community
 #'
 #'
 #' @slot time_points Numeric, the time from the start of the
 #' experiment or any other arbitrary time reference
 #'
-#' @param table A refined table returned form \code{\link{refine_data}} or a \code{phyloseq} object
+#' @param table A refined table returned form \code{\link{refine_data}},
+#'  an experiment level \code{phyloseq} object or
+#'  a \code{phyloseq} \code{otu_table}.
 #'
-#' @param time_points A numeric vector of the start point. If a \code{phyloseq} object is provided, it can be a
+#' @param time_points A numeric vector of the start point. If an experiment level \code{phyloseq} object is provided, it can be a
 #' character vector of length one, specifying which column in the sample data to use for the time points.
 #'
-#' @details If you provide a \code{phyloseq} object, you might want to split it into groups before
+#' @details If you provide an experiment level \code{phyloseq} object, you might want to split it into groups before
 #' using the constructor function.
 #'
 #' @export
@@ -42,7 +44,15 @@ setMethod('OTU_time_series',signature = c(table='data.frame','numeric'),definiti
 #' @export
 setMethod('OTU_time_series',signature = c(table='phyloseq','numeric'),
           definition = function(table, time_points){
-  table_refined <- phyloseq::otu_table(table) %>% data.frame()
+            table <- phyloseq::otu_table(table)
+            OTU_time_series(table,time_points)
+          })
+
+#' @rdname OTU_time_series-class
+#' @export
+setMethod('OTU_time_series',signature = c(table='otu_table','numeric'),
+          definition = function(table, time_points){
+  table_refined <- table %>% data.frame()
   if (phyloseq::taxa_are_rows(table)) {
     table_refined <- t(table_refined) %>% data.frame()
   }

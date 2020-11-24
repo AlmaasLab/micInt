@@ -7,7 +7,8 @@
 OTU_stats(refined_table, taxonomy = NULL)
 }
 \arguments{
-\item{refined_table}{The refined OTU table returned from \link{refine_data} or a \code{phyloseq} object.}
+\item{refined_table}{The refined OTU table returned from \link{refine_data} or
+a \code{phyloseq} (experiment level or \code{otu_table}) object.}
 
 \item{taxonomy}{Named character, with the names being those of the OTUs and the values
 their taxonomy collapased into a single string (for each OTU)}

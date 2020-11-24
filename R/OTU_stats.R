@@ -4,7 +4,8 @@
 #' This function returns a summary of OTU statistics for the OTUs of
 #' an OTU table
 #'
-#' @param refined_table The refined OTU table returned from \link{refine_data} or a \code{phyloseq} object.
+#' @param refined_table The refined OTU table returned from \link{refine_data} or
+#'  a \code{phyloseq} (experiment level or \code{otu_table}) object.
 #' @inheritParams  output_ccrepe_data
 #'
 #' @return
@@ -23,12 +24,20 @@
 #' @export
 OTU_stats <- function(refined_table, taxonomy = NULL) {
   if (inherits(refined_table, "phyloseq")) {
+    phyloseq_object <- refined_table
     refined_data <- refined_table %>% phyloseq::otu_table() %>% as.matrix()
-    if (phyloseq::taxa_are_rows(refined_table)) {
+    if (phyloseq::taxa_are_rows(phyloseq_object)) {
       refined_data <- t(refined_data)
     }
     if (is.null(taxonomy)) {
       taxonomy <- collapse_taxonomy(refined_table)
+    }
+  }
+  else if (inherits(refined_table, "otu_table")){
+    phyloseq_otu_table <- refined_table
+    refined_table <-  refined_table %>% as.matrix()
+    if (phyloseq::taxa_are_rows(phyloseq_otu_table)) {
+      refined_data <- t(refined_data)
     }
   }
   else {

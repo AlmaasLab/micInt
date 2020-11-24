@@ -30,8 +30,6 @@
  iterations.gap = 100,
  distributions = NA,
  compare.within.x = TRUE,
- concurrent.output = NA,
- make.output.table = FALSE,
  renormalize = TRUE,
  memory.optimize = FALSE
  )
@@ -100,19 +98,12 @@
 	subset.cols.x or subset.cols.y. If TRUE but subset.cols.y=NA,
 	returns all comparisons involving any features in subset.cols.x.  This argument is only used when y=NA.
 }
-\item{concurrent.output}{
-       Optional output file to which each comparison will be written as
-	it is calculated.
-}
-\item{make.output.table}{
-  A boolean value indicating whether to include table-formatted output.
-}
 \item{renormalize}{
 Logical, should data be renormalized when preforming permutations? For relative data, it is strongly recommended to renormalize.
 However, when using absolute data, this argument must be set to \code{FALSE}.
 }
 \item{memory.optimize}{
-Logical, should the computations be run a memory-saving and highly vectorizing algorithm? Currently, this is only implemented in the case where \code{y=NULL}. The downsides of this option is that output to file and concurrent output is disabled with this option. In addition, you should expect more numerical instability by enabling this option. However, this option is recommended with datasets with many OTUs
+Logical, should the computations be run a memory-saving and highly vectorizing algorithm? Currently, this is only implemented in the case where \code{y=NULL}. The downside of this option is that printing of distributions is not supported. In addition, you should expect more numerical instability by enabling this option. However, this option is recommended with datasets with many OTUs
 }
 }
 
@@ -134,10 +125,6 @@ Logical, should the computations be run a memory-saving and highly vectorizing a
         \item{z.stat}{A matrix of the z-statistics for all the
 	  requested comparisons.  The (i,j)th element corresponds
 	  to the z-statistic which gave rise to the (i,j)th p-value.}
-        \item{output.table}{(Only if make.output.table=TRUE) A table
-	where each row is one comparision.  Each row contains the
-	features being compared with their similarity scores,
-	z-statistics, p-values and q-values}
         Additional parameters if verbose=TRUE:
 	\item{iterations}{Description Above}
 	\item{subset.cols.x}{Description Above}
@@ -145,8 +132,6 @@ Logical, should the computations be run a memory-saving and highly vectorizing a
 	\item{iterations.gap}{Description Above}
 	\item{sim.score.parameters}{Description Above}
 	\item{compare.within.x}{Description Above}
-	\item{make.output.table}{Description Above}
-
 }
 \author{
   Emma Schwager <emma.schwager@gmail.com>, Jakob Peder Pettersen <jakobpeder.pettersen@gmail.com>

@@ -90,12 +90,12 @@ function(
 process_wrapper_input <- function(CA,
                                      input.min.abundance,
                                      input.min.samples){
-        CA <-list()		
+        CA <-list()
 	CA <- process_min_abundance_min_samples( CA,                  #Process minimum abundance and min samples
 			input.min.abundance,
-			input.min.samples)								 
+			input.min.samples)
 
- 
+
 	#*********************************************************
 	#* Filter                                                *
 	#*********************************************************
@@ -123,7 +123,7 @@ qc_filter <- function(var_name,CA){
         }
     } else if (is.matrix(var_values) || is.data.frame(var_values)){
         CA[[paste0(var_name,".features.filtered")]] <- which(
-            apply(x,2,
+            apply(var_values,2,
                   function(col){
                       sum(col[which(!is.na(col))] >= CA$min.abundance)/length(col[which(!is.na(col))])
                   }
@@ -137,14 +137,14 @@ qc_filter <- function(var_name,CA){
                 ))
         }
         CA[[paste0(var_name,".filtered")]] <- var_values[,-CA[[paste0(var_name,".features.filtered")]]]
-    } else if (is.null(var_values)){ 
+    } else if (is.null(var_values)){
         CA[[paste0(var_name,".filtered")]] <- var_values
         CA[[paste0(var_name,".features.filtered")]] <- c()
     } else {
         stop(paste0("Unrecognized input type for variable '",var_name,"'"))
     }
     return(CA)
-    
+
 }
 
 process_min_abundance_min_samples <-function(   CA,

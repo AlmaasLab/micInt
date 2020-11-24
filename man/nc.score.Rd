@@ -4,23 +4,23 @@
 
 
   nc.score
-  
-  
+
+
 }
 \description{
 
 
   nc.score calculates species-level co-variation and co-exclusion patterns based on an extension of the checkerboard score to ordinal data.
-  
+
   It is an extension to Diamond's checkerboard score (See references below) to ordinal data and implements a
   framework for robust detection of species-level association patterns in metagenomic data.
-     
+
   }
 \usage{
 nc.score(x,
- y = NULL, 
+ y = NULL,
  use = "everything",
- nbins = NULL, 
+ nbins = NULL,
  bin.cutoffs = NULL
 )
 }
@@ -29,7 +29,7 @@ nc.score(x,
    A numeric vector, data frame, or matrix.  The first entity to be processed.   Columns are bugs, rows are samples.
  }
   \item{y}{
-   NULL(default) or a umeric vector, data frame, or matrix with
+   NULL(default) or a numeric vector, data frame, or matrix with
    compatible dimensions to x.  Columns are features, rows
    are samples.
 }
@@ -48,7 +48,7 @@ nc.score(x,
    performed using the findInterval function.
 	}
 }
-\value{ 
+\value{
 	Matrix or vector of normalized scores.
 }
 
@@ -63,7 +63,7 @@ nc.score(x,
   data. In Progress.
 
 }
-\examples{	
+\examples{
 data <- matrix(rlnorm(40,meanlog=0,sdlog=1),nrow=10)
 data.rowsum <- apply(data,1,sum)
 data.norm <- data/data.rowsum

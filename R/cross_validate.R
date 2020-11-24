@@ -198,10 +198,11 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
 #' @param target The cross-validation target to pick, one of \code{'RMSE'} or \code{'MAE'}
 #' @param ... other arguments passed to methods
 #'
+#' @importFrom rlang .data
 #' @return A \link{ggplot} colorplots cross-validation errors for the different weights combination
 #' @export
 #'
 autoplot.cvLV <- function(object,target = 'RMSE',...){
-  ggplot(object,mapping=aes(x=self,y=interaction,z=!! rlang::sym(target)))+
+  ggplot(object,mapping=aes(x=.data$self,y=.data$interaction,z=!! rlang::sym(target)))+
     geom_raster(aes(fill=!! rlang::sym(target)))+scale_fill_gradientn(colours= viridis::viridis(10))
 }

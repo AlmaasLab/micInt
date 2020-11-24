@@ -21,8 +21,9 @@ runAnalysis(
 )
 }
 \arguments{
-\item{OTU_table}{The raw OTU table (if a \code{data.frame} is supplied) to be treated
-\emph{or} a \code{phyloseq} object containing the data (the latter is recommended)}
+\item{OTU_table}{The raw OTU table (if a \code{data.frame} or a \code{phyloseq} \code{otu_table} is supplied) to be treated
+\emph{or} an experiment level \code{phyloseq} object containing the data (the latter is recommended).
+Note that in the case of a \code{phyloseq} \code{otu_table}, no taxonomy can be handled.}
 
 \item{abundance_cutoff}{The mean abundance cutoff for the OTUs. If it is \code{NULL}, the there will be not filtering.}
 
@@ -104,7 +105,7 @@ taxonomy.
 \item The row names of the table are the OTU names and the column names are the
 sample names
 }
-For \code{phyloseq} objects, you do not need to care about this, it is automatically handeled
+For \code{phyloseq} objects (both experiment level and \code{otu_table}), you do not need to care about this, it is automatically handeled
 }
 \seealso{
 \link{output_ccrepe_data}

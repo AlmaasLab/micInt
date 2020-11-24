@@ -124,7 +124,8 @@ refine_data <-
            cutoff_type = "mean",
            renormalize = TRUE,
            metadataCols = c("OTU Id", "taxonomy")) {
-    if (inherits(OTU_table, 'phyloseq')) {
+    if (inherits(OTU_table, 'phyloseq') || inherits(OTU_table,'otu_table'))
+      {
       refined_table <- phyloseq::otu_table(OTU_table) %>% data.frame()
       if (phyloseq::taxa_are_rows(OTU_table)) {
         refined_table %<>% t()

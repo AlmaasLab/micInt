@@ -17,8 +17,6 @@ function(
 	iterations.gap = 100,				#If output is verbose - after how many iterations issue a status message?
 	distributions = NA,					#Output Distribution file - For ccrepe
 	compare.within.x=TRUE,				#Boolean of whether to do comparisons within subset.cols.x or between subset.cols.x and subset.cols.y
-	concurrent.output = NA,				#If specified, file for concurrent output of the table
-	make.output.table = FALSE,			#Whether to have the output in table format
 	renormalize = TRUE,           # Specifies whether we want to renormalize the data. Should be disabled when handling absolute abundances
 	memory.optimize = FALSE  #Specifies whether we want to optimize to reduce memory usage. Currently only works on the case with one dataset.
 	)
@@ -42,8 +40,6 @@ function(
 			verbose=verbose,
 			iterations.gap=iterations.gap,
 			outdist=distributions,
-			concurrent.output=concurrent.output,
-			make.output.table=make.output.table,
 			renormalize=renormalize,
 			memory.optimize = memory.optimize
 			)
