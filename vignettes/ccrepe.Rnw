@@ -16,7 +16,7 @@ BiocStyle::latex(width=78, use.unsrturl=FALSE)
 @
 
 <<echo=FALSE>>=
-library(micInt)
+suppressPackageStartupMessages(library(micInt))
 @
 
 \title{CCREPE: Compositionality Corrected by PErmutation and REnormalization}
