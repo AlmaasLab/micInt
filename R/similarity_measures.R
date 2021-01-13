@@ -233,10 +233,7 @@ noisify <- function(sim.scores = mean_scale(), magnitude = 1e-5, noise = c("none
         )
     )
 
-    names(uniform_functions) <- sapply(
-      names(sim.scores),
-      function(name) paste0(name, "_uniform")
-    )
+    names(uniform_functions) <- paste0(names(sim.scores), "_uniform")
     res <- c(res, uniform_functions)
   }
   if ("normal" %in% noise) {
@@ -252,10 +249,7 @@ noisify <- function(sim.scores = mean_scale(), magnitude = 1e-5, noise = c("none
           type = sim.score@type
         )
     )
-    names(normal_functions) <- sapply(
-      names(sim.scores),
-      function(name) paste0(name, "_normal")
-    )
+    names(normal_functions) <- paste0(names(sim.scores), "_normal")
     res <- c(res, normal_functions)
   }
   return(res)
@@ -307,10 +301,7 @@ mean_scale <- function(sim.scores = similarity_measures(), append = TRUE) {
         type = sim.score@type
       )
   )
-  names(scaled_scores) <- sapply(
-    names(measures_to_scale),
-    function(name) paste0(name, "_scaled")
-  )
+  names(scaled_scores) <- paste0(names(measures_to_scale), "_scaled")
   if (append) {
     return(c(sim.scores, scaled_scores))
   }

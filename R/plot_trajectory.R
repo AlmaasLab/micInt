@@ -25,9 +25,10 @@
 #' @export
 plot_trajectory <- function(time_series_list, distance = "bray", subset = names(time_series_list), label = FALSE, label_size = 3,
                             color = NULL, linetype = NULL) {
-  if (!is.list(time_series_list) || !all(sapply(
+  if (!is.list(time_series_list) || !all(vapply(
     X = time_series_list,
-    function(x) inherits(x, "OTU_time_series")
+    function(x) inherits(x, "OTU_time_series"),
+    logical(length = length(time_series_list))
   ))) {
     stop("Input must be a list of elements of class OTU_time_series")
   }

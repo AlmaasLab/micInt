@@ -119,6 +119,7 @@ jobs:
           echo $sysreqs
           sudo -s eval "$sysreqs"
           apt-get install -y ghostscript
+          apt-get install -y texlive-full
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
@@ -146,9 +147,11 @@ jobs:
 
 
       - name: Install TinyTeX to compile vignettes and install required packages
+        if: runner.os != 'Linux'
         uses: r-lib/actions/setup-tinytex@v1
 
       - name: Installing required LaTeX package for vignettes
+        if: runner.os != 'Linux'
         run: |
           tlmgr --version
           tlmgr install float
