@@ -159,6 +159,33 @@ jobs:
           tlmgr install marginfix
           tlmgr install nowidow
           tlmgr install parnotes
+          tlmgr install titlesec
+          tlmgr install href
+          tlmgr install ifthen
+          tlmgr install hyperref
+          tlmgr install geometry
+          tlmgr install etoolbox
+          tlmgr install fontenc
+          tlmgr install graphicx
+          tlmgr install changepage
+          tlmgr install titletoc
+          tlmgr install xstring
+          tlmgr install mathtools
+          tlmgr install color
+          tlmgr install sectsty
+          tlmgr install framed
+          tlmgr install fancyhdr
+          tlmgr install enumitem
+          tlmgr install parskip
+          tlmgr install authblk
+          tlmgr install soul
+          tlmgr install placeins
+          tlmgr install ragged2e
+          tlmgr install footmisc
+
+
+
+
 
       - name: Install BiocManager
         run: |
