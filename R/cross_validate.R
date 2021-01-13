@@ -129,7 +129,7 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
     }
     fold <- sample(rep(1:n_folds, length.out = n_time_series))
     number_in_fold <- vapply(1:n_folds, function(i) sum(fold == i),
-                             numeric(length = n_folds))
+                             numeric(1))
     fold_errors <- lapply(1:n_folds, function(i) {
       train_equations <- systems[fold != i] %>% stack_equations()
       test_equations <- systems[fold == i] %>% stack_equations()
