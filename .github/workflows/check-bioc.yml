@@ -160,18 +160,16 @@ jobs:
           tlmgr install nowidow
           tlmgr install parnotes
           tlmgr install titlesec
-          tlmgr install href
-          tlmgr install ifthen
           tlmgr install hyperref
+          tlmgr install ifthen
           tlmgr install geometry
           tlmgr install etoolbox
           tlmgr install fontenc
-          tlmgr install graphicx
+          tlmgr install latex-graphics
           tlmgr install changepage
           tlmgr install titletoc
           tlmgr install xstring
           tlmgr install mathtools
-          tlmgr install color
           tlmgr install sectsty
           tlmgr install framed
           tlmgr install fancyhdr
@@ -182,6 +180,8 @@ jobs:
           tlmgr install placeins
           tlmgr install ragged2e
           tlmgr install footmisc
+          tlmgr install caption
+
 
 
 
