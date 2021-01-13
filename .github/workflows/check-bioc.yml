@@ -172,7 +172,7 @@ jobs:
           tlmgr install fancyhdr
           tlmgr install enumitem
           tlmgr install parskip
-          tlmgr install authblk
+          tlmgr install preprint
           tlmgr install soul
           tlmgr install placeins
           tlmgr install ragged2e
