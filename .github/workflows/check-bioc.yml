@@ -141,16 +141,26 @@ jobs:
         run: |
           ## Edit below if you have any Windows system dependencies'
 
+<<<<<<< HEAD
       - name: Install TinyTeX to compile vignettes and install required packages
         uses: actions/checkout@master
         uses: r-lib/actions/setup-tinytex@v1
         run: |
+=======
+      - name: Install TinyTeX to compile vignettes
+        - uses: actions/checkout@master
+        - uses: r-lib/actions/setup-tinytex@v1
+        - run: |
+>>>>>>> fdbbdb189da57da8d06f2c3747d224385a5555a8
           tlmgr --version
           tlmgr install float
           tlmgr install natbib
           tlmgr install amsmath
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fdbbdb189da57da8d06f2c3747d224385a5555a8
 
       - name: Install BiocManager
         run: |
