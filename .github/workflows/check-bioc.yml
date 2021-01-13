@@ -118,7 +118,6 @@ jobs:
           sysreqs=$(Rscript -e 'cat("apt-get update -y && apt-get install -y", paste(gsub("apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04")), collapse = " "))')
           echo $sysreqs
           sudo -s eval "$sysreqs"
-          sudo apt-get install -y texlive-full
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
@@ -136,13 +135,22 @@ jobs:
 
           ## See if this helps get RCurl installed
           brew uninstall curl
-          brew cask install mactex
 
       - name: Install Windows system dependencies
         if: runner.os == 'Windows'
         run: |
-          ## Edit below if you have any Windows system dependencies
-          choco install texlive
+          ## Edit below if you have any Windows system dependencies'
+
+      - name: Install TinyTeX to compile vignettes and install required packages
+        uses: actions/checkout@master
+        uses: r-lib/actions/setup-tinytex@v1
+        run: |
+          tlmgr --version
+          tlmgr install float
+          tlmgr install natbib
+          tlmgr install amsmath
+
+
 
       - name: Install BiocManager
         run: |
@@ -163,7 +171,6 @@ jobs:
           ## https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016675.html
           ## https://github.com/r-lib/remotes/issues/296
           ## Ideally, all dependencies should get installed in the first pass.
-
           ## Temporary for now due to https://github.com/ropensci/RefManageR/issues/79
           remotes::install_github("ropensci/bibtex")
           remotes::install_github("ropensci/RefManageR")
