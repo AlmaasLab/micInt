@@ -177,6 +177,7 @@ jobs:
           tlmgr install footmisc
           tlmgr install caption
           tlmgr install ms
+          tlmgr install grfext
 
 
 
