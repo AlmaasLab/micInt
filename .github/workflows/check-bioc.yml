@@ -162,7 +162,6 @@ jobs:
           tlmgr install hyperref
           tlmgr install geometry
           tlmgr install etoolbox
-          tlmgr install fontenc
           tlmgr install changepage
           tlmgr install titletoc
           tlmgr install xstring
@@ -172,7 +171,7 @@ jobs:
           tlmgr install fancyhdr
           tlmgr install enumitem
           tlmgr install parskip
-          tlmgr install authblk
+          tlmgr install preprint
           tlmgr install soul
           tlmgr install placeins
           tlmgr install ragged2e
