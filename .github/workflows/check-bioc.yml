@@ -153,7 +153,6 @@ jobs:
           tlmgr --version
           tlmgr install float
           tlmgr install natbib
-          tlmgr install amsmath
           tlmgr install pdfcrop
           tlmgr install bera
           tlmgr install marginfix
@@ -161,11 +160,9 @@ jobs:
           tlmgr install parnotes
           tlmgr install titlesec
           tlmgr install hyperref
-          tlmgr install ifthen
           tlmgr install geometry
           tlmgr install etoolbox
           tlmgr install fontenc
-          tlmgr install latex-graphics
           tlmgr install changepage
           tlmgr install titletoc
           tlmgr install xstring
