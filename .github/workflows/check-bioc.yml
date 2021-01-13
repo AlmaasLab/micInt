@@ -163,7 +163,6 @@ jobs:
           tlmgr install geometry
           tlmgr install etoolbox
           tlmgr install changepage
-          tlmgr install titletoc
           tlmgr install xstring
           tlmgr install mathtools
           tlmgr install sectsty
