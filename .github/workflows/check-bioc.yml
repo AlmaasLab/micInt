@@ -144,11 +144,6 @@ jobs:
       - name: Install TinyTeX to compile vignettes and install required packages
         steps:
              - uses: r-lib/actions/setup-tinytex@v1
-             - run: |
-                 tlmgr --version
-                 tlmgr install float
-                 tlmgr install natbib
-                 tlmgr install amsmath
 
       - name: Install BiocManager
         run: |
