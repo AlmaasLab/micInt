@@ -176,6 +176,7 @@ jobs:
           tlmgr install ragged2e
           tlmgr install footmisc
           tlmgr install caption
+          tlmgr install ms
 
 
 
