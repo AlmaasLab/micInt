@@ -76,4 +76,15 @@ estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
 \code{\link{predict.LV}} Predict the development of a microbial community by
 estimated Lotka-Volterra coeffcients
 }
+\author{
+\strong{Maintainer}: Jakob Peder Pettersen \email{jakobpeder.pettersen@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Emma Schwager [contributor]
+  \item Craig Bielski [contributor]
+  \item George Weingart [contributor]
+}
+
+}
 \keyword{internal}

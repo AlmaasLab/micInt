@@ -19,3 +19,11 @@ Else, the decimal delimer is point and comma the delimer between numbers.}
 Takes an \code{interaction_table} and writes it to a file. For information about parameters,
 see \link{output_ccrepe_data}
 }
+\examples{
+library(micInt)
+data("seawater")
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
+}

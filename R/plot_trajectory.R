@@ -22,6 +22,13 @@
 #' @return A \link{ggplot} object showing the trajectory in the two first principal components
 #' @importFrom vegan vegdist
 #' @import ggfortify
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("seawater")
+#' phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+#' time_series <- OTU_time_series(phyloseq_list,"Week")
+#' plot_trajectory(time_series,distance = "euclidean")
 #' @export
 plot_trajectory <- function(time_series_list, distance = "bray",
                             subset = names(time_series_list), label = FALSE, label_size = 3,

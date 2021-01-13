@@ -34,6 +34,14 @@ will be minimized where \eqn{\beta} is the estimated solution, \eqn{\beta_{\math
 maximal growth rate of the OTU and \eqn{\beta_{\mathrm{inteaction}}} are the estimated effect of the interactions
 with the other OTUs (and itself).
 }
+\examples{
+library(micInt)
+library(phyloseq)
+data("seawater")
+subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+fit <- ridge_fit(systems,weights = c(self = 10,interaction = 1))
+}
 \references{
 Richard R. Stein et al. ``Ecological Modeling from Time-Series Inference: Insight into Dy-
 namics and Stability of Intestinal Microbiota.'' In: \emph{PLoS Comput. Biol. 9.12 (desember

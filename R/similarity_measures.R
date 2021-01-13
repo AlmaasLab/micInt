@@ -9,6 +9,19 @@
 #'
 #' @return A list of the \link{sim.measure} objects defined by the function
 #'
+#' @seealso sim.measure-class
+#'
+#' @examples
+#' library(micInt)
+#' x <- rnorm(10,mean = 1, sd = 1)
+#' y <- 0.5 * x + 0.5 * nrom(10, mean =0,sd = sqrt(0.5))
+#' sim_measures <- similarity_measures(subset = c("pearson","spearman"))
+#' pearson_cor <- sim_measures[["pearson"]]
+#' pearson_cor
+#'
+#'
+#'
+#'
 #' @import vegan
 #' @import infotheo
 #' @importFrom stats cor
@@ -165,9 +178,10 @@ similarity_measures <- function(subset = c("pearson", "spearman", "kendall",
   return(measures)
 }
 
-#' @title create_ccrepe_jobs
-#' @description  Creates ccrepe jobs out of sim.score functions
-#' @inheritParams runAnalysis
+# @title create_ccrepe_jobs
+# @description  Creates ccrepe jobs out of sim.score functions. This function
+#  is not useful by itself, but is a part of the significance pipeline.
+# @inheritParams runAnalysis
 create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
                                  "significant_interactions", postfix = ".csv") {
   jobs <- lapply(sim.scores, function(sim.score) list(
@@ -208,7 +222,12 @@ create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
 #' added
 #'
 #' @importFrom stats rnorm runif
-#'
+#' @examples
+#' library(micInt)
+#' sim_measures <- similarity_measures(subset = c("pearson","spearman","jaccard"))
+#' noised_sim_measures <- noisify(sim_measures,magnitude = 1e-3,noise = c("normal"))
+#' noised_sim_measures
+#' # Notice that jaccard_normal is missing
 #' @export
 noisify <- function(sim.scores = mean_scale(), magnitude = 1e-5, noise = c("none", "uniform", "normal")) {
   res <- list()
@@ -286,6 +305,15 @@ noisificationTemplate <- function(FUN, noiseFUN) {
 #'
 #' @description Creates \code{sim.measure} objects which devide each compontent of by its mean before performing
 #' the calculations
+#' #' @examples
+#' library(micInt)
+#' sim_measures <- similarity_measures(subset = c("pearson","spearman","jaccard","bray_curtis))
+#' mean_scaled_sim_measures <- noisify(sim_measures,append = FALSE)
+#' mean_scaled_sim_measures
+#' The Bray-Curtis similarity is the only one returned due to its properties
+#' mean_scaled_sim_measures_append <- noisify(sim_measures,append = TRUE)
+#' mean_scaled_sim_measures_append
+
 #' @export
 mean_scale <- function(sim.scores = similarity_measures(), append = TRUE) {
   scaled_scores <- list()

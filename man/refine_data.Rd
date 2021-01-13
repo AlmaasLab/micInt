@@ -25,6 +25,8 @@ OTUs based on mean, median and maximum abundance, repectivly}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}
+
+\item{refined_table}{A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed}
 }
 \value{
 A data frame (always a base data frame even though a tibble is supplied)
@@ -69,4 +71,11 @@ the corresponding column is used as the OTU IDs
 \item The numeric row indicies are treated as the OTU IDs (gives warning)
 }
 }
+}
+\examples{
+library(micInt)
+data("seawater")
+refine_data(seawater,cutoff_type = "max")
+
+
 }

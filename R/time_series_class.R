@@ -21,6 +21,13 @@
 #' @details If you provide an experiment level \code{phyloseq} object, you might want to split it into groups before
 #' using the constructor function.
 #'
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("seawater")
+#' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+#' OTU_time_series(subsetted_seawater,"Week")
+#'
 #' @export
 setClass(Class = "OTU_time_series", slots = c(table = "data.frame", time_points = "numeric"))
 

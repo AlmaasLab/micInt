@@ -29,6 +29,13 @@ A list of lists (one for each OTU) with two elements:
 This function accepts time series of OTU measurements
 and the linear equation system for its coefficients, as described in cited article.
 }
+\examples{
+library(micInt)
+library(phyloseq)
+data("seawater")
+subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+}
 \references{
 P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}

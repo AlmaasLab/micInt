@@ -17,3 +17,8 @@ A named character vector, where the names are the OTU names and the values are t
 Given a phyloseq object with a taxonomy table, this function extracts the taxonomy of each OTU and
 collapse the result into a single string
 }
+\examples{
+library(micInt)
+collapsed <- collapse_taxonomy(seawater)
+collapsed
+}

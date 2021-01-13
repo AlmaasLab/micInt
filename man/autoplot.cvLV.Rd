@@ -21,3 +21,17 @@ This function views the cross-validation error in a colorplot as a function
 of the regularization weights. Hence, this approach is suitable to detect whether the cross-validation
 procedure contains a reasonable optimum.
 }
+\examples{
+library(micInt)
+library(phyloseq)
+data("seawater")
+phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+time_series <- OTU_time_series(subsetted_seawater,"Week")
+cv_res <- cv.LV(time_series,n_folds = 3,
+kind = "integral",
+weights = expand.grid(self= c(1,2),
+interaction = c(1,2)
+)
+)
+autoplot(cv_res, target = "MAE")
+}

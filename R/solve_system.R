@@ -20,8 +20,17 @@
 #' table is a matrix of type \code{\link{deSolve}}
 #' @seealso \link{ridge_fit}, \link{deSolve-package}
 #' @importFrom deSolve ode
-#'
-#'
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("seawater")
+#' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+#' systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+#' fit_1 <- ridge_fit(systems,weights = c(self = 10,interaction = 1))
+#' fit_2 <- ridge_fit(systems,weights = c(self = 1,interaction = 1))
+#' prediction_1 <- predict(fit_1,start = rep(1,ncol(fit)),times = c(1,2,3,4,5))
+#' prediction_2 <- predict(fit_2,start = rep(1,ncol(fit)),times = c(1,2,3,4,5))
+#' plot_trajectory(list(fit_1=prediction_1,fit_2 =prediction_2))
 #'
 #'
 #' @export
@@ -30,12 +39,12 @@ predict.LV <- function(object, start, times, ...) {
   OTU_time_series(table = sol[, -1] %>% as.data.frame(), time_points = sol[, 1])
 }
 
-#' @title The ODE function for the Lotka-Volterra system
-#' @param t Numeric, the time point a which the function is evaluated, ignored as the equation is
-#' autonomous
-#' @param y Numeric, the current state of the system
-#' @param parms Matrix, the Lotka-Volterra parameters. The maximum growth rate is in the first column,
-#' while the interaction-based parameters consitute the rest of the matrix.
+# @title The ODE function for the Lotka-Volterra system
+# @param t Numeric, the time point a which the function is evaluated, ignored as the equation is
+# autonomous
+# @param y Numeric, the current state of the system
+# @param parms Matrix, the Lotka-Volterra parameters. The maximum growth rate is in the first column,
+# while the interaction-based parameters consitute the rest of the matrix.
 system_equation <- function(t, y, parms) {
   self_growth_rate <- parms[, 1]
   interaction_matrix <- parms[, -1]

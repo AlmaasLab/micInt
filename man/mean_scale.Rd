@@ -14,4 +14,12 @@ mean_scale(sim.scores = similarity_measures(), append = TRUE)
 \description{
 Creates \code{sim.measure} objects which devide each compontent of by its mean before performing
 the calculations
+#' @examples
+library(micInt)
+sim_measures <- similarity_measures(subset = c("pearson","spearman","jaccard","bray_curtis))
+mean_scaled_sim_measures <- noisify(sim_measures,append = FALSE)
+mean_scaled_sim_measures
+The Bray-Curtis similarity is the only one returned due to its properties
+mean_scaled_sim_measures_append <- noisify(sim_measures,append = TRUE)
+mean_scaled_sim_measures_append
 }

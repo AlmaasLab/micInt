@@ -7,9 +7,21 @@
 countInteractions(IDs, interactions_table)
 }
 \arguments{
-\item{IDs}{The name of each OTU}
+\item{IDs}{Character vector, the name name of each OTU}
 
 \item{interactions_table}{An \code{interaction_table}}
+}
+\value{
+A named numeric vector showing the number of interactions for each OTU in the
+ IDs argument
+
+#' @examples
+library(micInt)
+data("seawater")
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+countInteractons(c("OTU_1","OTU_2","OTU_18"),int_table)
 }
 \description{
 Counts the number of interactions for each OTU

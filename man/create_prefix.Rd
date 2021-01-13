@@ -23,9 +23,16 @@ create_prefix(
 
 \item{digits}{The number of significant digits in the resulting string}
 }
+\value{
+A character vector of length one
+}
 \description{
 Standard function to create systematic prefixes from
 parameters. The output will be of the form
 \code{q_crit=(critical q-value)_cutoff=(the mean abundance cutoff)_magfac=(the magnitude factor)}
 in scientific notation.
+}
+\examples{
+create_prefix(q_crit = 1e-5,cutoff = 1e-4,magfac = 10, digits = 3)
+create_prefix(p_crit = 1e-5,cutoff = 1e-4,magfac = 10, digits = 5)
 }

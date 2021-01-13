@@ -86,6 +86,10 @@
 #'
 #' @seealso \link{output_ccrepe_data}
 #'
+#' @examples
+#' library(micInt)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
 #'
 #' @import phyloseq
 #' @export
@@ -209,7 +213,14 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #'
 #' @return A \link{ggplot} object showing the desired diagnostic plot
 #'
-#'
+#' #' @examples
+#' library(micInt)
+#' data("seawater")
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' stats <- OTU_stats(seawater)
+#' autoplot(int_stable,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 #' @export
 autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutoff_type = "q",
                                        abundance_type = "mean", ...) {
@@ -265,7 +276,13 @@ autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutof
 #'
 #' @return A matrix showing the Jaccard indecies of the number of significant interactions.
 #' Measures with no significant interactions are ignored.
-#'
+#' @examples
+#' library(micInt)
+#' data("seawater")
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_tables <- lapply(res,function(x) create_interaction_table(x$ccrepe_res)
+#' ratio_shared_interactions(int_tables)
 #' @export
 ratio_shared_interactions <- function(similarity_measures_significance) {
   # Ignores tables with zero columns

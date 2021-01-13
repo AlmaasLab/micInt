@@ -45,3 +45,11 @@ using the constructor function.
 experiment or any other arbitrary time reference}
 }}
 
+\examples{
+library(micInt)
+library(phyloseq)
+data("seawater")
+subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+OTU_time_series(subsetted_seawater,"Week")
+
+}

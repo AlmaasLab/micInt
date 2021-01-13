@@ -46,6 +46,13 @@ In addition, the information from the given similarity scores are also provided
 \description{
 Performs the actual process of making the table.
 }
+\examples{
+library(micInt)
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+create_interaction_table(res[[1]]$ccrepe_res)
+
+}
 \seealso{
 \link{collapse_taxonomy} \linkS4class{sim.measure.attributes}
 }

@@ -107,6 +107,12 @@ sample names
 }
 For \code{phyloseq} objects (both experiment level and \code{otu_table}), you do not need to care about this, it is automatically handeled
 }
+\examples{
+library(micInt)
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+
+}
 \seealso{
 \link{output_ccrepe_data}
 }

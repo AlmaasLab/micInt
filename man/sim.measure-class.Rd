@@ -43,7 +43,7 @@ else they are in the interval [0,1].}
 \item{type}{Character; the way the similarity measure processes the information. On of: \itemize{
 \item \code{"presence-absence"} Measures the similarity of OTUs solely by their presence-absence
 pattern
-#' \item \code{"non-parametric"} Measures the similarity based on the rank pattern, but besides this,
+\item \code{"non-parametric"} Measures the similarity based on the rank pattern, but besides this,
 no other information on the abudandances are used
 \item \code{"parameteric"} The actual values of the abundances matter in the calulations
 }}
@@ -87,6 +87,34 @@ no other information on the abudandances are used
 }}
 }}
 
+\examples{
+# This measures how well the arguments agree with the signs
+# This primary function accept two vectors only
+my_measure_simple <- function(x,y){
+ (sum((x > 0) & (y > 0)) + sum((x < 0) & (y < 0))) / (sum(x > 0) + sum(x < 0))
+}
+# We extend this function into acception a matrix argument when y is now supplied
+my_measure <- function(x,y=NULL){
+if(is.null(y)){
+n_vectors <- ncol(x)
+res <- matrix(NA_real_,n_vectors,n_vectors)
+for (i in seq_len(n_vectors)){
+    for(j in seq_len(n_vectors)){
+    res[i,j] <- my_measure_simple(x[,i],x[,j])
+    }
+}
+    res
+
+}
+else{
+my_measure_simple(x,y)
+}
+}
+
+my_sim_score <-sim.measure(my_measure,sting= "My measure", categorical = FALSE,
+ mean_scalable = FALSE, signed = FALSE, type = "non-paramtric")
+
+}
 \seealso{
 noisify
 }

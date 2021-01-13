@@ -21,6 +21,12 @@
 #' non-zero abundance
 #' \item \code{taxonomy} collapsed into a single string, may be missing
 #' }
+#' #' @examples
+#' library(micInt)
+#' data("seawater")
+#' OTU_stats(seawater)
+#'
+
 #' @export
 OTU_stats <- function(refined_table, taxonomy = NULL) {
   if (inherits(refined_table, "phyloseq")) {
@@ -65,9 +71,21 @@ OTU_stats <- function(refined_table, taxonomy = NULL) {
 #'
 #' @description  Counts the number of interactions for each OTU
 #'
-#' @param IDs The name of each OTU
+#' @param IDs Character vector, the name name of each OTU
 #'
 #' @param interactions_table An \code{interaction_table}
+#'
+#' @return A named numeric vector showing the number of interactions for each OTU in the
+#'  IDs argument
+#'
+#' #' @examples
+#' library(micInt)
+#' data("seawater")
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' countInteractons(c("OTU_1","OTU_2","OTU_18"),int_table)
+
 #'
 countInteractions <- function(IDs, interactions_table) {
   dataset_OTUs <- c(interactions_table$`OTU_1`, interactions_table$`OTU_2`)

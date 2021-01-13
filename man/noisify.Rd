@@ -32,3 +32,10 @@ Creates similarity measure functions which adds random noise
 at certain magnitude to the data before calculating
 the similarity score
 }
+\examples{
+library(micInt)
+sim_measures <- similarity_measures(subset = c("pearson","spearman","jaccard"))
+noised_sim_measures <- noisify(sim_measures,magnitude = 1e-3,noise = c("normal"))
+noised_sim_measures
+# Notice that jaccard_normal is missing
+}

@@ -2,14 +2,14 @@
 % Please edit documentation in R/data_refinement.R
 \name{as.edgelist.interaction_table}
 \alias{as.edgelist.interaction_table}
-\title{Create edge list from \code{interaction_table}}
+\title{Creates an \code{igraph} object from \code{interaction_table}}
 \usage{
 \method{as.edgelist}{interaction_table}(x, ...)
 }
 \arguments{
 \item{x}{An \code{interaction_table}}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Ignored}
 }
 \value{
 The result of this function can be fed directly into \link[igraph]{graph_from_edgelist}
@@ -19,4 +19,13 @@ for making interacting network
 Converts an interaction table to a two column character matrix
 where each row represent an edge between the OTUs. The entities in the each row are the name of the
 two interacting OTUs.
+}
+\examples{
+library(micInt)
+library(igraph)
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+edgelist <- as.edgelist(int_table)
+graph_from_adj_list(edgelist)
 }

@@ -43,3 +43,11 @@ The function utilzes the entire table to make the principal components,
 even if some data points are excluded. Note the columns \code{'time_series'} and \code{'time_points'}
 which are available in the object being returned.
 }
+\examples{
+library(micInt)
+library(phyloseq)
+data("seawater")
+phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+time_series <- OTU_time_series(phyloseq_list,"Week")
+plot_trajectory(time_series,distance = "euclidean")
+}

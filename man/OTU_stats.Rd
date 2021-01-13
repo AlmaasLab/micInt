@@ -26,6 +26,10 @@ elements:
 non-zero abundance
 \item \code{taxonomy} collapsed into a single string, may be missing
 }
+#' @examples
+library(micInt)
+data("seawater")
+OTU_stats(seawater)
 }
 \description{
 This function returns a summary of OTU statistics for the OTUs of

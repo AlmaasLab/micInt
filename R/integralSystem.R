@@ -24,7 +24,12 @@
 #' P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 #' estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
 #' (Nov. 2013), pp. 817–825. ISSN: 0096-3003. DOI: \url{https://doi.org/10.1016/j.amc.2013.08.093}
-#'
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("seawater")
+#' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
+#' integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
 #' @export
 integralSystem <- function(time_series, kind = "integral", removeZeros = TRUE) {
   if (inherits(time_series,'OTU_time_series')) {

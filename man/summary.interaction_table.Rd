@@ -22,6 +22,12 @@ the \code{interaction.table}):
 \item \code{proportion_negative}: The proprotion of significant interactions which
 are negative
 }
+
+library(micInt)
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+summary(int_table)
 }
 \description{
 Create summary of \code{interaction_table}

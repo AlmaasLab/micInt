@@ -16,3 +16,11 @@ Measures with no significant interactions are ignored.
 \description{
 Finds the Jaccard index of number of shared interactions between the similarity measures
 }
+\examples{
+library(micInt)
+data("seawater")
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+int_tables <- lapply(res,function(x) create_interaction_table(x$ccrepe_res)
+ratio_shared_interactions(int_tables)
+}

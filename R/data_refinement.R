@@ -1,9 +1,10 @@
-#' @title Remove metadata from data set
-#' @description
-#' Removes desired metadata columns from dataset
-#' @param OTU_table The raw OTU table
-#' @param metadataCols The names (character vector) or position (integer) of the
-#' metadata columns to remove from the table
+# @title Remove metadata from data set
+# @description
+# Removes desired metadata columns from dataset
+# @param OTU_table The raw OTU table
+# @param metadataCols The names (character vector) or position (integer) of the
+# metadata columns to remove from the table
+#
 remove_metadata <-
   function(OTU_table,
            metadataCols = c("OTU Id", "taxonomy")) {
@@ -22,25 +23,25 @@ remove_metadata <-
     return(refined_table)
   }
 
-#' @title cut_abundances
-#'
-#' @description
-#' Removes metadata columns from dataset
-#'
-#' @param refined_table A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed
-#'
-#' @param abundance_cutoff
-#' Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
-#'
-#' @param cutoff_type
-#' The type of measure to base the cutoff on. Can be any
-#' of \code{'mean'}, \code{median}, \code{max} which cuts away
-#' OTUs based on mean, median and maximum abundance, repectivly
-#'
-#' @param renormalize
-#' Logical, should the abundances be renormalized after the procedyre?
-#'
-#'
+# @title cut_abundances
+#
+# @description
+# Removes metadata columns from dataset
+#
+# @param refined_table A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed
+#
+# @param abundance_cutoff
+# Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
+#
+# @param cutoff_type
+# The type of measure to base the cutoff on. Can be any
+# of \code{'mean'}, \code{median}, \code{max} which cuts away
+# OTUs based on mean, median and maximum abundance, repectivly
+#
+# @param renormalize
+# Logical, should the abundances be renormalized after the procedyre?
+#
+#
 cut_abundances <-
   function(refined_table,
            abundance_cutoff = 0,
@@ -72,7 +73,18 @@ cut_abundances <-
 #' species, defined by the cutoff parameter
 #'
 #' @param OTU_table The raw OTU table, either as a \code{data.frame}, a \code{matrix} or a \code{phyloseq} object
-#' @inheritParams cut_abundances
+#' @param refined_table A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed
+#'
+#' @param abundance_cutoff
+#' Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
+#'
+#' @param cutoff_type
+#' The type of measure to base the cutoff on. Can be any
+#' of \code{'mean'}, \code{median}, \code{max} which cuts away
+#' OTUs based on mean, median and maximum abundance, repectivly
+#'
+#' @param renormalize
+#' Logical, should the abundances be renormalized after the procedyre?
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 #'
@@ -114,6 +126,12 @@ cut_abundances <-
 #' \item The numeric row indicies are treated as the OTU IDs (gives warning)
 #' }
 #' }
+#'
+#' @examples
+#' library(micInt)
+#' data("seawater")
+#' refine_data(seawater,cutoff_type = "max")
+
 #'
 
 #'
@@ -213,6 +231,11 @@ renormalize <- function(table) {
 #'
 #' @param score_attributes An object of class \linkS4class{sim.measure.attributes} belonging to the similarity measure being used
 #'
+#' @examples
+#' library(micInt)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' output_ccrepe_data(res$ccrepe_res)
 #'
 #'
 #' @importFrom utils modifyList write.csv write.csv2
@@ -266,7 +289,11 @@ output_ccrepe_data <-
 #'
 #' @seealso \link{collapse_taxonomy} \linkS4class{sim.measure.attributes}
 #'
-#'
+#' @examples
+#' library(micInt)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' create_interaction_table(res[[1]]$ccrepe_res)
 #'
 #' @export
 #'
@@ -378,7 +405,14 @@ create_interaction_table <-
 #' @param significant_interactions An \code{interaction_table} returned from \code{\link{create_interaction_table}}
 #'
 #' @inheritParams output_ccrepe_data
-#'
+#' @examples
+#' library(micInt)
+#' data("seawater")
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
+
 #' @export
 write.interaction_table <-
   function(significant_interactions,
@@ -414,6 +448,12 @@ write.interaction_table <-
 #' are negative
 #' }
 #'
+#' library(micInt)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' summary(int_table)
+#'
 #'
 #' @export
 summary.interaction_table <- function(object, ...) {
@@ -437,27 +477,35 @@ summary.interaction_table <- function(object, ...) {
   })
 }
 
-#'
+#' @name edgelist
 #' @title Convert an object to a list of edges
 #'
 #' @description This is a S3 generic to convert a suitable object represetning (on some way) a graph to an
-#' egelist which can be inported to \code{igraph} by the function \link{graph_from_edgelist}.
+#' edgelist which can be inported to \code{igraph} by the function \link{graph_from_edgelist}.
 #'
 #' @param x The R object to convert to an edgelist
 #'
 #' @param ... further arguments passed to or from other methods.
 #'
+#' @examples
+#' library(micInt)
+#' library(igraph)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' edgelist <- as.edgelist(int_table)
+#' graph_from_adj_list(edgelist)
 #' @export
 as.edgelist <- function(x, ...) {
   UseMethod("as.edgelist")
 }
 
 #' @name as.edgelist.interaction_table
-#' @title Create edge list from \code{interaction_table}
+#' @title Creates an \code{igraph} object from \code{interaction_table}
 #'
 #' @param x An \code{interaction_table}
 #'
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Ignored
 #'
 #' @description Converts an interaction table to a two column character matrix
 #' where each row represent an edge between the OTUs. The entities in the each row are the name of the
@@ -466,10 +514,20 @@ as.edgelist <- function(x, ...) {
 #' @return The result of this function can be fed directly into \link[igraph]{graph_from_edgelist}
 #' for making interacting network
 #'
+#' @examples
+#' library(micInt)
+#' library(igraph)
+#' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' edgelist <- as.edgelist(int_table)
+#' graph_from_adj_list(edgelist)
 #' @export
 as.edgelist.interaction_table <- function(x, ...) {
   as.matrix(x[, c("OTU_1", "OTU_2")])
 }
+
+
 
 #' @title Collapse taxonomy into single strings
 #'
@@ -480,6 +538,10 @@ as.edgelist.interaction_table <- function(x, ...) {
 #' the function will return \code{NULL}.
 #'
 #' @return A named character vector, where the names are the OTU names and the values are the collapsed taxonomies.
+#' @examples
+#' library(micInt)
+#' collapsed <- collapse_taxonomy(seawater)
+#' collapsed
 #' @export
 
 collapse_taxonomy <- function(phyloseq) {
@@ -511,14 +573,13 @@ collapse_taxonomy <- function(phyloseq) {
 #' numeric vector which length is equal to the number of samples.
 #'
 #' @return A \code{phyloseq} object where the abundances in the OTU table are scaled
-#' @export
-#'
 #' @examples
 #' library(micInt)
 #' library(phyloseq)
 #' data("soilrep")
 #' s <- 1:nsamples(soilrep)
 #' scale_by_column(soilrep, s)
+#' @export
 scale_by_column <- function(object, column) {
   if (is.character(column)) {
     if (length(column) != 1) {

@@ -1,30 +1,30 @@
-#' @title Measure fit of Lotka-Volterra coefficients
-#'
-#' @description When using cross-validation to find the Lotka-Volterra
-#' coefficients, this function is used to determine the error of the cross-validation. It does
-#' so by applying the
-#'
-#' @param test_equations
-#' The list of list of equations to test, should be independent of the \code{solution_matrix}.
-#' For more information, see the description of \code{test_equation} in \link{ridge_fit}
-#'
-#' @param solution_matrix
-#' The proposed solution of which the fitness is found, such as the ones returned from
-#' \link{ridge_fit}
-#'
-#'
-#' @details
-#' The errors are combined and calculated among all differences between the actual right
-#' sides of the equations and the predicted ones
-#'
-#' @return
-#' A list of two:
-#'  \itemize{
-#' \item \code{'RMSE'} The root mean square error of the right sides
-#' \item \code{'MAE'} The mean absolute error of the right sides
-#' }
-#'
-#'
+# @title Measure fit of Lotka-Volterra coefficients
+#
+# @description When using cross-validation to find the Lotka-Volterra
+# coefficients, this function is used to determine the error of the cross-validation. It does
+# so by applying the
+#
+# @param test_equations
+# The list of list of equations to test, should be independent of the \code{solution_matrix}.
+# For more information, see the description of \code{test_equation} in \link{ridge_fit}
+#
+# @param solution_matrix
+# The proposed solution of which the fitness is found, such as the ones returned from
+# \link{ridge_fit}
+#
+#
+# @details
+# The errors are combined and calculated among all differences between the actual right
+# sides of the equations and the predicted ones
+#
+# @return
+# A list of two:
+#  \itemize{
+# \item \code{'RMSE'} The root mean square error of the right sides
+# \item \code{'MAE'} The mean absolute error of the right sides
+# }
+#
+#
 
 test_LV_fit <- function(test_equations, solution_matrix) {
   # If the solution is not available, it makes no sense to calculate the statistics
@@ -102,6 +102,21 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' \item \code{'MAE'} The mean absolute error of the right sides
 #' }
 #'
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' library(magrittr)
+#' data("seawater")
+#' phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+#' time_series <- OTU_time_series(subsetted_seawater,"Week")
+#' systems <- integralSystem(time_series,kind = "integral")
+#' cv_res <- cv.LV(time_series,n_folds = 3, kind = "integral",weights = expand.grid(self= c(1,2),
+#' interaction = c(1,2)
+#' )
+#' )
+#' best_parameters <- cv_res[which.min(cv_res$RMSE),c("self","interaction")] %>% unlist()
+#' fit <- ridge_fit(systems,best_parameters)
+#' predict(fit,start = rep(1,nrow(fit)),times = c(0,1,4,6,10,20))
 #'
 #'
 #' @export
@@ -201,6 +216,19 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
 #'
 #' @importFrom rlang .data
 #' @return A \link{ggplot} colorplots cross-validation errors for the different weights combination
+#' @examples
+#' library(micInt)
+#' library(phyloseq)
+#' data("seawater")
+#' phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+#' time_series <- OTU_time_series(subsetted_seawater,"Week")
+#' cv_res <- cv.LV(time_series,n_folds = 3,
+#' kind = "integral",
+#' weights = expand.grid(self= c(1,2),
+#' interaction = c(1,2)
+#' )
+#' )
+#' autoplot(cv_res, target = "MAE")
 #' @export
 #'
 autoplot.cvLV <- function(object,target = 'RMSE',...){

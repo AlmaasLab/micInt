@@ -47,6 +47,24 @@ The function preforms k-fold cross-validation on a grid of regularization parame
 In this setting, each time series is a ``data point'' in the cross-validation procedure, meaning that each
 fit is preformed on some of the time series and the other are used for validation.
 }
+\examples{
+library(micInt)
+library(phyloseq)
+library(magrittr)
+data("seawater")
+phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
+time_series <- OTU_time_series(subsetted_seawater,"Week")
+systems <- integralSystem(time_series,kind = "integral")
+cv_res <- cv.LV(time_series,n_folds = 3, kind = "integral",weights = expand.grid(self= c(1,2),
+interaction = c(1,2)
+)
+)
+best_parameters <- cv_res[which.min(cv_res$RMSE),c("self","interaction")] \%>\% unlist()
+fit <- ridge_fit(systems,best_parameters)
+predict(fit,start = rep(1,nrow(fit)),times = c(0,1,4,6,10,20))
+
+
+}
 \references{
 P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter
 estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
