@@ -17,7 +17,8 @@ runAnalysis(
   prefix = NULL,
   metadataCols = c("OTU Id", "taxonomy"),
   postfix = "",
-  renormalize = TRUE
+  renormalize = TRUE,
+  iterations = 1000
 )
 }
 \arguments{
@@ -74,6 +75,8 @@ metadata columns to remove from the table before analyzing it. Ignored if a \cod
 
 \item{renormalize}{Should the data be renormalized during filtering process and permutation?
 Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.}
+
+\item{iterations}{Integer of length one, the number of iterations to run}
 }
 \value{
 A list of the variables requested from the parameter \code{returnVariables}.
@@ -109,8 +112,10 @@ For \code{phyloseq} objects (both experiment level and \code{otu_table}), you do
 }
 \examples{
 library(micInt)
+data(seawater)
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = FALSE,
+iterations = 100)
 
 }
 \seealso{

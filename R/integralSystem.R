@@ -29,7 +29,7 @@
 #' library(phyloseq)
 #' data("seawater")
 #' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
-#' integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+#' integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral")
 #' @export
 integralSystem <- function(time_series, kind = "integral", removeZeros = TRUE) {
   if (inherits(time_series,'OTU_time_series')) {

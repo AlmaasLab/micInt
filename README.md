@@ -1,5 +1,13 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Overview
-`micInt` is an R package designed for analyzing microbial co-occurences. It takes in OTU tables was either pure dataFrames or as experiment-level `phyloseq` objects.
+`micInt` is an R package designed for analyzing microbial co-occurences. It takes in OTU tables was either pure dataFrames or as experiment-level `phyloseq` objects. Roughly, the package is composed of three major parts:
+   * CoNet-based analysis of pairwise co-occurences. Primary functions: `runAnalysis` (high level) and `ccrepe` (low level)
+   * Lotka-Volterra modelling of time dynamics. Primary functions: `integralSystem`, `cv.LV` and `ridge_fit`
+   * Utility functions, includes `refine_data`, `subset_by_environment`, `similarity_measures` and `scale_by_column`.
 
 # Install
 This package have the following dependencies which must be installed prior to installing this package:
@@ -36,4 +44,4 @@ devtools::install_github("AlmaasLab/micInt",repos=BiocManager::BiocManager::repo
 ```
 
 # Useage
-Unfortunately, I have not yet taken the effort to write a proper manual. However, if you are interested in using the package, don`t hasitate asking me for help, either as a github issue or directly (jakob.p.pettersen@ntnu.no).
+Unfortunately, I have not yet taken the effort to write a proper vignette. However, if you are interested in using the package, don`t hasitate asking me for help, either as a github issue or directly (jakob.p.pettersen@ntnu.no).

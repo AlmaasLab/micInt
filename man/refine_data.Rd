@@ -25,8 +25,6 @@ OTUs based on mean, median and maximum abundance, repectivly}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}
-
-\item{refined_table}{A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed}
 }
 \value{
 A data frame (always a base data frame even though a tibble is supplied)

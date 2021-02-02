@@ -73,7 +73,6 @@ cut_abundances <-
 #' species, defined by the cutoff parameter
 #'
 #' @param OTU_table The raw OTU table, either as a \code{data.frame}, a \code{matrix} or a \code{phyloseq} object
-#' @param refined_table A \code{data.frame} where OTUs are in columns and samples in rows with metadata removed
 #'
 #' @param abundance_cutoff
 #' Numeric, the threshold cutoff value. If it is \code{NULL}, the filtering process is skipped.
@@ -188,11 +187,11 @@ refine_data <-
         names(refined_table) <- row_names
       }
     }
-    # Cuts away the least abundant species
-    cut_abundances(refined_table,
-                   abundance_cutoff,
-                   cutoff_type = cutoff_type,
-                   renormalize = renormalize)
+  # Cuts away the least abundant species
+  cut_abundances(refined_table,
+                abundance_cutoff,
+                cutoff_type = cutoff_type,
+                renormalize = renormalize)
   }
 renormalize <- function(table) {
   matrix <- as.matrix(table)
@@ -234,8 +233,10 @@ renormalize <- function(table) {
 #' @examples
 #' library(micInt)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' output_ccrepe_data(res$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,
+#' sim.scores = sim.scores,returnVariable = 'ccrepe_res',
+#' iterations = 100,parallel = FALSE)
+#' output_ccrepe_data(res$ccrepe_res$spearman$res)
 #'
 #'
 #' @importFrom utils modifyList write.csv write.csv2
@@ -292,8 +293,9 @@ output_ccrepe_data <-
 #' @examples
 #' library(micInt)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+#' returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
+#' create_interaction_table(res$ccrepe_res$spearman$res)
 #'
 #' @export
 #'
@@ -409,8 +411,9 @@ create_interaction_table <-
 #' library(micInt)
 #' data("seawater")
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,iterations = 100,
+#' sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- res$similarity_measures_significance$spearman
 #' write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
 
 #' @export
@@ -450,8 +453,9 @@ write.interaction_table <-
 #'
 #' library(micInt)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+#' iterations = 100, parallel = FALSE)
+#' int_table <- res$similarity_measures_significance$spearman
 #' summary(int_table)
 #'
 #'
@@ -491,10 +495,10 @@ summary.interaction_table <- function(object, ...) {
 #' library(micInt)
 #' library(igraph)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,iterations = 100,sim.scores = sim.scores,parallel = FALSE)
+#' int_table <- res$similarity_measures_significance$spearman
 #' edgelist <- as.edgelist(int_table)
-#' graph_from_adj_list(edgelist)
+#' graph_from_edgelist(edgelist)
 #' @export
 as.edgelist <- function(x, ...) {
   UseMethod("as.edgelist")
@@ -518,10 +522,10 @@ as.edgelist <- function(x, ...) {
 #' library(micInt)
 #' library(igraph)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores, iterations = 100,parallel = FALSE)
+#' int_table <- res$similarity_measures_significance$spearman
 #' edgelist <- as.edgelist(int_table)
-#' graph_from_adj_list(edgelist)
+#' graph_from_data_frame(edgelist)
 #' @export
 as.edgelist.interaction_table <- function(x, ...) {
   as.matrix(x[, c("OTU_1", "OTU_2")])

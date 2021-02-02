@@ -23,7 +23,8 @@ see \link{output_ccrepe_data}
 library(micInt)
 data("seawater")
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,iterations = 100,
+sim.scores = sim.scores,parallel = FALSE)
+int_table <- res$similarity_measures_significance$spearman
 write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
 }

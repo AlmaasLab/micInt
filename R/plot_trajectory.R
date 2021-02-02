@@ -26,8 +26,9 @@
 #' library(micInt)
 #' library(phyloseq)
 #' data("seawater")
-#' phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
-#' time_series <- OTU_time_series(phyloseq_list,"Week")
+#' physeq_list <- subdivide_by_environment(seawater,"Reactor")
+#' time_series <- lapply(physeq_list$phyloseq,OTU_time_series,
+#' time_points = "Week")
 #' plot_trajectory(time_series,distance = "euclidean")
 #' @export
 plot_trajectory <- function(time_series_list, distance = "bray",

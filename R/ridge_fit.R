@@ -45,7 +45,7 @@
 #' library(phyloseq)
 #' data("seawater")
 #' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
-#' systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+#' systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral")
 #' fit <- ridge_fit(systems,weights = c(self = 10,interaction = 1))
 #' @export
 

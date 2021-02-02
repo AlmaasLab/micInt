@@ -50,8 +50,10 @@ Takes input from ccrepe and transforms it into a convenient table
 \examples{
 library(micInt)
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-output_ccrepe_data(res$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,
+sim.scores = sim.scores,returnVariable = 'ccrepe_res',
+iterations = 100,parallel = FALSE)
+output_ccrepe_data(res$ccrepe_res$spearman$res)
 
 
 }

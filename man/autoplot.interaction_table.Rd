@@ -45,8 +45,8 @@ A \link{ggplot} object showing the desired diagnostic plot
 library(micInt)
 data("seawater")
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
+int_table <- create_interaction_table(res$ccrepe_res$spearman$res)
 stats <- OTU_stats(seawater)
 autoplot(int_stable,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 }

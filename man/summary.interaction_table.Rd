@@ -25,8 +25,9 @@ are negative
 
 library(micInt)
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+iterations = 100, parallel = FALSE)
+int_table <- res$similarity_measures_significance$spearman
 summary(int_table)
 }
 \description{

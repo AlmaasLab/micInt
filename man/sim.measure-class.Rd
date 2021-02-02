@@ -91,7 +91,8 @@ no other information on the abudandances are used
 # This measures how well the arguments agree with the signs
 # This primary function accept two vectors only
 my_measure_simple <- function(x,y){
- (sum((x > 0) & (y > 0)) + sum((x < 0) & (y < 0))) / (sum(x > 0) + sum(x < 0))
+ (sum((x > 0) & (y > 0)) + sum((x < 0) & (y < 0))) /
+  (sum(x > 0) + sum(x < 0))
 }
 # We extend this function into acception a matrix argument when y is now supplied
 my_measure <- function(x,y=NULL){
@@ -111,8 +112,11 @@ my_measure_simple(x,y)
 }
 }
 
-my_sim_score <-sim.measure(my_measure,sting= "My measure", categorical = FALSE,
- mean_scalable = FALSE, signed = FALSE, type = "non-paramtric")
+my_sim_score <-sim.measure(my_measure,string= "My measure", categorical = FALSE,
+ mean_scaleable = FALSE, signed = FALSE, type = "non-paramtric")
+sim_fun <- sim_measure_function(my_sim_score)
+sim_fun(c(1,0,-1),c(2,-1,-1))
+sim.measure.attributes(my_sim_score)
 
 }
 \seealso{

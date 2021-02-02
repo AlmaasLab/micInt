@@ -56,6 +56,8 @@
 #' @param renormalize Should the data be renormalized during filtering process and permutation?
 #' Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.
 #'
+#' @param iterations Integer of length one, the number of iterations to run
+#'
 #' @return A list of the variables requested from the parameter \code{returnVariables}.
 #'
 #' @details
@@ -88,15 +90,17 @@
 #'
 #' @examples
 #' library(micInt)
+#' data(seawater)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
+#' runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = FALSE,
+#' iterations = 100)
 #'
 #' @import phyloseq
 #' @export
 runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = TRUE,
                         returnVariables = NULL, subset = NULL, sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
                         metadataCols = c("OTU Id", "taxonomy"),
-                        postfix = "", renormalize=TRUE) {
+                        postfix = "", renormalize=TRUE,iterations = 1000) {
   if (is.null(prefix)) {
     prefix <- create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
   }
@@ -129,17 +133,20 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
       taxonomy <- NULL
     }
   }
-  refined_table <- refine_data(OTU_table, abundance_cutoff = abundance_cutoff, metadataCols = metadataCols,renormalize=renormalize)
+  refined_table <- refine_data(OTU_table, abundance_cutoff = abundance_cutoff,
+                               metadataCols = metadataCols,renormalize=renormalize)
   # The smallest non-zero value in the data set
   min_dataset <- min(apply(refined_table, MARGIN = 2, function(x) min(x[x > 0])))
   magnitude <- magnitude_factor * min_dataset
   if (is.null(sim.scores)) {
     sim.scores <- noisify(magnitude = magnitude)
-    ccrepe_job <- create_ccrepe_jobs(sim.scores = sim.scores,
+  }
+  ccrepe_job <- create_ccrepe_jobs(sim.scores = sim.scores,
       prefix = prefix, postfix = paste0(postfix, ".csv")
     )
-  }
-  ccrepe_commonargs <- list(x = refined_table, min.subj = 10, verbose = FALSE, renormalize=renormalize)
+  ccrepe_commonargs <- list(x = refined_table, min.subj = 10,
+                            verbose = FALSE,iterations = iterations,
+                            renormalize=renormalize)
   if (!is.null(subset)) {
     sim.scores <- sim.scores[subset]
     ccrepe_job <- ccrepe_job[subset]
@@ -217,8 +224,8 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #' library(micInt)
 #' data("seawater")
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
+#' int_table <- create_interaction_table(res$ccrepe_res$spearman$res)
 #' stats <- OTU_stats(seawater)
 #' autoplot(int_stable,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 #' @export
@@ -280,8 +287,9 @@ autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutof
 #' library(micInt)
 #' data("seawater")
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-#' int_tables <- lapply(res,function(x) create_interaction_table(x$ccrepe_res)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+#' iterations = 100,parallel = FALSE)
+#' int_tables <- res$similarity_measures_significance
 #' ratio_shared_interactions(int_tables)
 #' @export
 ratio_shared_interactions <- function(similarity_measures_significance) {

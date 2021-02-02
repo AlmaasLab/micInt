@@ -25,8 +25,9 @@ procedure contains a reasonable optimum.
 library(micInt)
 library(phyloseq)
 data("seawater")
-phyloseq_list <- subdivide_by_environment(seawater,"Reactor")
-time_series <- OTU_time_series(subsetted_seawater,"Week")
+physeq_list <- subdivide_by_environment(seawater,"Reactor")
+time_series <- lapply(physeq_list$phyloseq,OTU_time_series,
+time_points ="Week")
 cv_res <- cv.LV(time_series,n_folds = 3,
 kind = "integral",
 weights = expand.grid(self= c(1,2),

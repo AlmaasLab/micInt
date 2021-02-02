@@ -20,7 +20,8 @@ Finds the Jaccard index of number of shared interactions between the similarity 
 library(micInt)
 data("seawater")
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-int_tables <- lapply(res,function(x) create_interaction_table(x$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+iterations = 100,parallel = FALSE)
+int_tables <- res$similarity_measures_significance
 ratio_shared_interactions(int_tables)
 }

@@ -24,8 +24,8 @@ two interacting OTUs.
 library(micInt)
 library(igraph)
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,parallel = FALSE)
-int_table <- create_interaction_table(res[[1]]$ccrepe_res)
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores, iterations = 100,parallel = FALSE)
+int_table <- res$similarity_measures_significance$spearman
 edgelist <- as.edgelist(int_table)
-graph_from_adj_list(edgelist)
+graph_from_data_frame(edgelist)
 }

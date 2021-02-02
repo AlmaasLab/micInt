@@ -25,11 +25,11 @@
 #' library(phyloseq)
 #' data("seawater")
 #' subsetted_seawater <- subset_samples(seawater, Reactor == 2)
-#' systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+#' systems <- integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral")
 #' fit_1 <- ridge_fit(systems,weights = c(self = 10,interaction = 1))
 #' fit_2 <- ridge_fit(systems,weights = c(self = 1,interaction = 1))
-#' prediction_1 <- predict(fit_1,start = rep(1,ncol(fit)),times = c(1,2,3,4,5))
-#' prediction_2 <- predict(fit_2,start = rep(1,ncol(fit)),times = c(1,2,3,4,5))
+#' prediction_1 <- predict(fit_1,start = rep(1,nrow(fit_1)),times = c(1,2,3,4,5))
+#' prediction_2 <- predict(fit_2,start = rep(1,nrow(fit_2)),times = c(1,2,3,4,5))
 #' plot_trajectory(list(fit_1=prediction_1,fit_2 =prediction_2))
 #'
 #'

@@ -34,7 +34,7 @@ library(micInt)
 library(phyloseq)
 data("seawater")
 subsetted_seawater <- subset_samples(seawater, Reactor == 2)
-integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral"))
+integralSystem(OTU_time_series(subsetted_seawater,"Week"), kind = "log_integral")
 }
 \references{
 P. H. Kloppers and J. C. Greeff. ``Lotka-Volterra model parameter

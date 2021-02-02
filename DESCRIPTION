@@ -1,7 +1,7 @@
 Package: micInt
 Type: Package
 Title: Find microbial interactions
-Version: 0.15.2
+Version: 0.16.1
 Depends: R (>= 3.3.0), ggplot2, ggfortify
 Imports: methods, infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph, tibble, dplyr, rlang, glue, viridis, RhpcBLASctl
@@ -38,8 +38,7 @@ NeedsCompilation: no
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 biocViews: Microbiome, MicrobiomeDate, TimeCourse,
-     GraphAndNetwork, DimensionReduction
-    
+     GraphAndNetwork, DimensionReduction, SystemsBiology
 LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

@@ -14,7 +14,7 @@
 #' @examples
 #' library(micInt)
 #' x <- rnorm(10,mean = 1, sd = 1)
-#' y <- 0.5 * x + 0.5 * nrom(10, mean =0,sd = sqrt(0.5))
+#' y <- 0.5 * x + 0.5 * rnorm(10, mean =0,sd = sqrt(0.5))
 #' sim_measures <- similarity_measures(subset = c("pearson","spearman"))
 #' pearson_cor <- sim_measures[["pearson"]]
 #' pearson_cor
