@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # Overview
 `micInt` is an R package designed for analyzing microbial co-occurences. It takes in OTU tables was either pure dataFrames or as experiment-level `phyloseq` objects. Roughly, the package is composed of three major parts:
    * CoNet-based analysis of pairwise co-occurences. Primary functions: `runAnalysis` (high level) and `ccrepe` (low level)

@@ -181,6 +181,7 @@ jobs:
           tlmgr install caption
           tlmgr install ms
           tlmgr install grfext
+          tlmgr install everysel
 
 
 
