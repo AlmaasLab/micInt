@@ -220,7 +220,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #'
 #' @return A \link{ggplot} object showing the desired diagnostic plot
 #'
-#' #' @examples
+#' @examples
 #' library(micInt)
 #' data("seawater")
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))

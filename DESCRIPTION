@@ -37,7 +37,7 @@ Description: This packages utilizes different approaches to find and analyze mic
 NeedsCompilation: no
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
-biocViews: Microbiome, MicrobiomeDate, TimeCourse,
+biocViews: Microbiome, MicrobiomeData, TimeCourse,
      GraphAndNetwork, DimensionReduction, SystemsBiology
 LazyData: true
 VignetteBuilder: knitr

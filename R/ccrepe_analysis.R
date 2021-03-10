@@ -43,7 +43,7 @@ ccrepe_analysis <- function(ccrepe_job,commonargs,
     n_cores <- detectCores()
     cluster <- makeCluster(n_cores)
     clusterEvalQ(cluster,
-                 {require(ccrepe)
+                 {require(micInt)
                    RhpcBLASctl::blas_set_num_threads(1L)
                    }
       )
