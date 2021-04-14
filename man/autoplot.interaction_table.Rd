@@ -40,15 +40,6 @@ This parameter is ignored if \code{type='num_int'}}
 }
 \value{
 A \link{ggplot} object showing the desired diagnostic plot
-
-#' @examples
-library(micInt)
-data("seawater")
-sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
-int_table <- create_interaction_table(res$ccrepe_res$spearman$res)
-stats <- OTU_stats(seawater)
-autoplot(int_stable,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 }
 \description{
 Makes a diagnostic plot of an \code{interaction_table}
@@ -56,4 +47,14 @@ Makes a diagnostic plot of an \code{interaction_table}
 \details{
 Note that if \code{type='sim_cor'}, a column named \code{sign}, indicating the sign of the interaction,
 is available even though the plotting function does not use this feature.
+}
+\examples{
+library(micInt)
+data("seawater")
+sim.scores <- similarity_measures(subset= c("spearman","pearson"))
+res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
+int_table <- create_interaction_table(res$ccrepe_res$spearman$res)
+stats <- OTU_stats(seawater)
+autoplot(int_table,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 }

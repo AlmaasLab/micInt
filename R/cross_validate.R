@@ -79,10 +79,7 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate, ignored
 #' if \code{parallel=TRUE}
 #'
-#' @param parallel
-#'
-#' Logical, should the cross-valdiations be preformed in parallel. Alternatively, it can be an integer, specifying
-#' the number of cores to use.
+#' @inheritParams runAnalysis
 #'
 #' @details
 #'
@@ -124,7 +121,8 @@ test_LV_fit <- function(test_equations, solution_matrix) {
 #' @export
 cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
                   weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
-                  show_progress = TRUE, parallel = FALSE) {
+                  show_progress = TRUE, parallel = FALSE,
+                  ncpus = getOption("micInt.ncpus", 1L), cl = NULL) {
   # We first find the number of time series
   # the total number of systems
   n_time_series <- length(time_series)
@@ -170,19 +168,19 @@ cv.LV <- function(time_series, n_folds = length(time_series), kind = "integral",
   errors <- lapply(list_weights, FUN = errorFUN)
   }
   else{
-    n_cores_available <- detectCores()
-    if(!is.logical(parallel)){
-      n_cores <- min(n_cores_available, parallel)
+    n_cores <- min(detectCores(), ncpus)
+    if(!is.null(cl)){
+      cluster <- cl
     }
     else{
-      n_cores <- n_cores_available
+      cluster <- makeCluster(n_cores)
     }
-    cluster <- makeCluster(n_cores)
     clusterEvalQ(cluster, {
       require(micInt)
       require(magrittr)
       RhpcBLASctl::blas_set_num_threads(1L)
-      })
+      }
+      )
     clusterExport(cl = cluster,
                   varlist = c("systems","this_index","show_progress","n_weights","n_folds",
                               "n_time_series"), envir = environment())

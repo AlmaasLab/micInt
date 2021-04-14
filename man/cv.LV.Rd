@@ -10,7 +10,9 @@ cv.LV(
   kind = "integral",
   weights = expand.grid(self = 0.1 * 0:100, interaction = 0.1 * 0:100),
   show_progress = TRUE,
-  parallel = FALSE
+  parallel = FALSE,
+  ncpus = getOption("micInt.ncpus", 1L),
+  cl = NULL
 )
 }
 \arguments{
@@ -30,8 +32,11 @@ If missing, the cross validation is carried out over a quadratic grid from 0 to 
 \item{show_progress}{Logical, if \code{TRUE}, the progress is printed for each combination of weights is is to cross-validate, ignored
 if \code{parallel=TRUE}}
 
-\item{parallel}{Logical, should the cross-valdiations be preformed in parallel. Alternatively, it can be an integer, specifying
-the number of cores to use.}
+\item{parallel}{Should the analysis be run in parallel?}
+
+\item{ncpus}{If \code{parallel = TRUE}, how many cores should be used? Defaults to one.}
+
+\item{cl}{Custom cluster to use if \code{parallel = TRUE}.}
 }
 \value{
 An object of class \code{cvLV}, inheiriting \code{data.frame} containing the parameter values, and the two columns of cross-validation error:

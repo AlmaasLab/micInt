@@ -8,7 +8,9 @@ runAnalysis(
   OTU_table,
   abundance_cutoff = 1e-04,
   q_crit = 0.05,
-  parallel = TRUE,
+  parallel = FALSE,
+  ncpus = getOption("micInt.ncpus", 1L),
+  cl = NULL,
   returnVariables = NULL,
   subset = NULL,
   sim.scores = NULL,
@@ -18,7 +20,8 @@ runAnalysis(
   metadataCols = c("OTU Id", "taxonomy"),
   postfix = "",
   renormalize = TRUE,
-  iterations = 1000
+  iterations = 1000,
+  ccrepe_args = list()
 )
 }
 \arguments{
@@ -31,6 +34,10 @@ Note that in the case of a \code{phyloseq} \code{otu_table}, no taxonomy can be 
 \item{q_crit}{Numeric, the q-value cutoff when construction interaction tables}
 
 \item{parallel}{Should the analysis be run in parallel?}
+
+\item{ncpus}{If \code{parallel = TRUE}, how many cores should be used? Defaults to one.}
+
+\item{cl}{Custom cluster to use if \code{parallel = TRUE}.}
 
 \item{returnVariables}{Which variables should the function return (character vector)?
 Available options are: \itemize{
@@ -77,6 +84,9 @@ metadata columns to remove from the table before analyzing it. Ignored if a \cod
 Should be \code{TRUE} when used on relative abundances, but must be \code{FALSE} if absolute abundances are used.}
 
 \item{iterations}{Integer of length one, the number of iterations to run}
+
+\item{ccrepe_args}{A named list of custom arguments to \code{\link{ccrepe}} if it is necessary to fine-tune the workings. This argument list
+will override the effects of the other arguments.}
 }
 \value{
 A list of the variables requested from the parameter \code{returnVariables}.
@@ -114,7 +124,7 @@ For \code{phyloseq} objects (both experiment level and \code{otu_table}), you do
 library(micInt)
 data(seawater)
 sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = FALSE,
+runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = TRUE, ncpus = 2,
 iterations = 100)
 
 }

@@ -11,6 +11,10 @@
 #'
 #' @param parallel Should the analysis be run in parallel?
 #'
+#' @param ncpus If \code{parallel = TRUE}, how many cores should be used? Defaults to one.
+#'
+#' @param cl Custom cluster to use if \code{parallel = TRUE}.
+#'
 #' @param sim.scores The similarity measures of class \link{sim.measure}
 #' to use. If it is \code{NULL}, all measures available in the package
 #' will be used (recommanded for most purposes).
@@ -58,6 +62,9 @@
 #'
 #' @param iterations Integer of length one, the number of iterations to run
 #'
+#' @param ccrepe_args A named list of custom arguments to \code{\link{ccrepe}} if it is necessary to fine-tune the workings. This argument list
+#' will override the effects of the other arguments.
+#'
 #' @return A list of the variables requested from the parameter \code{returnVariables}.
 #'
 #' @details
@@ -92,15 +99,16 @@
 #' library(micInt)
 #' data(seawater)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = FALSE,
+#' runAnalysis(OTU_table = seawater, sim.scores = sim.scores, parallel = TRUE, ncpus = 2,
 #' iterations = 100)
 #'
 #' @import phyloseq
 #' @export
-runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = TRUE,
+runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, parallel = FALSE, ncpus = getOption("micInt.ncpus", 1L),
+                        cl = NULL,
                         returnVariables = NULL, subset = NULL, sim.scores = NULL, file = FALSE, magnitude_factor = 10, prefix = NULL,
                         metadataCols = c("OTU Id", "taxonomy"),
-                        postfix = "", renormalize=TRUE,iterations = 1000) {
+                        postfix = "", renormalize=TRUE,iterations = 1000, ccrepe_args = list()) {
   if (is.null(prefix)) {
     prefix <- create_prefix(q_crit = q_crit, cutoff = abundance_cutoff, magfac = magnitude_factor)
   }
@@ -144,9 +152,11 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
   ccrepe_job <- create_ccrepe_jobs(sim.scores = sim.scores,
       prefix = prefix, postfix = paste0(postfix, ".csv")
     )
-  ccrepe_commonargs <- list(x = refined_table, min.subj = 10,
+  ccrepe_default_commonargs <- list(x = refined_table, min.subj = 10,
                             verbose = FALSE,iterations = iterations,
                             renormalize=renormalize)
+  ccrepe_commonargs <- modifyList(ccrepe_default_commonargs, ccrepe_args)
+
   if (!is.null(subset)) {
     sim.scores <- sim.scores[subset]
     ccrepe_job <- ccrepe_job[subset]
@@ -154,7 +164,7 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
   stringlist <- lapply(ccrepe_job, function(x) list(string = x$string))
   ccrepe_res <- ccrepe_analysis(ccrepe_job=lapply(ccrepe_job,function(x)
     x$ccrepe_args),
-                                                  commonargs=ccrepe_commonargs, parallel = parallel)
+                                                  commonargs=ccrepe_commonargs, parallel = parallel, ncpus = ncpus, cl = cl)
   for (i in 1:length(ccrepe_job)) {
     ccrepe_res[[i]] <- c(list(res=ccrepe_res[[i]]), ccrepe_job[[i]]$output_args)
   }
@@ -224,10 +234,11 @@ runAnalysis <- function(OTU_table, abundance_cutoff = 1e-04, q_crit = 0.05, para
 #' library(micInt)
 #' data("seawater")
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
-#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
+#' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
+#' returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
 #' int_table <- create_interaction_table(res$ccrepe_res$spearman$res)
 #' stats <- OTU_stats(seawater)
-#' autoplot(int_stable,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
+#' autoplot(int_table,stats,type = "ab_prod",cutoff_type = "p",abundance_type = "max")
 #' @export
 autoplot.interaction_table <- function(object, OTU_stat, type = "num_int", cutoff_type = "q",
                                        abundance_type = "mean", ...) {

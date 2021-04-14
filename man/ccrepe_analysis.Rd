@@ -4,7 +4,14 @@
 \alias{ccrepe_analysis}
 \title{Conduct ccrepe analysis}
 \usage{
-ccrepe_analysis(ccrepe_job, commonargs, parallel = TRUE, verbose = TRUE)
+ccrepe_analysis(
+  ccrepe_job,
+  commonargs,
+  parallel = FALSE,
+  ncpus = getOption("micInt.ncpus", 1L),
+  cl = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{ccrepe_job}{A list of jobs to be passed to \code{ccrepe}. The lists themselves are named lists with the arguments
@@ -12,7 +19,11 @@ being passed to \code{\link{ccrepe}}}
 
 \item{commonargs}{\code{ccrepe} arguments common for all jobs}
 
-\item{parallel}{Should the jobs be run in parallel?}
+\item{parallel}{Should the analysis be run in parallel?}
+
+\item{ncpus}{If \code{parallel = TRUE}, how many cores should be used? Defaults to one.}
+
+\item{cl}{Custom cluster to use if \code{parallel = TRUE}.}
 
 \item{verbose}{Should the function display how much time it spent?}
 }
@@ -34,7 +45,7 @@ memory.optimize = TRUE
 , min.subj = 5)
 ccrepe_job <- list(spearman=list(sim.score = sim_funs[["spearman"]]),
 pearson = list(sim.score = sim_funs[["pearson"]]))
-ccrepe_analysis(ccrepe_job,ccrepe_commonargs, parallel = FALSE)
+ccrepe_analysis(ccrepe_job,ccrepe_commonargs, parallel = TRUE, ncpus = 2)
 }
 \seealso{
 \link{ccrepe}

@@ -9,12 +9,11 @@
 #' @description
 #' A wrapper around the \code{ccrepe} function, provides parallel analysis
 #'
+#' @inheritParams runAnalysis
 #' @param ccrepe_job A list of jobs to be passed to \code{ccrepe}. The lists themselves are named lists with the arguments
 #' being passed to \code{\link{ccrepe}}
 #'
 #' @param commonargs \code{ccrepe} arguments common for all jobs
-#'
-#' @param parallel Should the jobs be run in parallel?
 #'
 #' @param verbose Should the function display how much time it spent?
 #'
@@ -33,21 +32,28 @@
 #' , min.subj = 5)
 #' ccrepe_job <- list(spearman=list(sim.score = sim_funs[["spearman"]]),
 #' pearson = list(sim.score = sim_funs[["pearson"]]))
-#' ccrepe_analysis(ccrepe_job,ccrepe_commonargs, parallel = FALSE)
+#' ccrepe_analysis(ccrepe_job,ccrepe_commonargs, parallel = TRUE, ncpus = 2)
 #' @import parallel
 #' @importFrom utils modifyList
 #' @export
 ccrepe_analysis <- function(ccrepe_job,commonargs,
-                            parallel = TRUE, verbose = TRUE) {
+                            parallel = FALSE,
+                            ncpus = getOption("micInt.ncpus", 1L), cl = NULL, verbose = TRUE) {
   if (parallel) {
-    n_cores <- detectCores()
-    cluster <- makeCluster(n_cores)
+    n_cores <- min(detectCores(), ncpus)
+    if(!is.null(cl)){
+      cluster <- cl
+    }
+    else{
+      cluster <- makeCluster(n_cores)
+    }
     clusterEvalQ(cluster,
                  {require(micInt)
                    RhpcBLASctl::blas_set_num_threads(1L)
                    }
       )
     clusterSetRNGStream(cl=cluster)
+    clusterExport(cl = cluster, varlist = "commonargs", envir = environment())
   }
   else {
     n_cores <- 1
