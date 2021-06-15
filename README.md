@@ -19,6 +19,7 @@ From CRAN:
   * `viridis`
   * `RhpcBLASctl`
   * `ggplot2`
+  * `ggfortify`
 
 [//]: # (Hello)
 

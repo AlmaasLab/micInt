@@ -38,7 +38,7 @@
 
 #'
 #'
-#' @seealso noisify
+#' @seealso \link{noisify}
 #'
 #' @export
 setClass(Class = "sim.measure", slots = c(
@@ -130,7 +130,6 @@ sim.measure <- function(FUN, string, categorical = FALSE, mean_scaleable = FALSE
 #' in \link{sim.measure})
 #' @slot signed Logical, does this similarity measure return signed results?
 #' @examples
-#' #' @examples
 #' # This measures how well the arguments agree with the signs
 #' # This primary function accept two vectors only
 #' my_measure_simple <- function(x,y){

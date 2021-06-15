@@ -1,8 +1,8 @@
 Package: micInt
 Type: Package
 Title: Find microbial interactions
-Version: 0.17.0
-Depends: R (>= 3.3.0), ggplot2, ggfortify
+Version: 0.17.1
+Depends: R (>= 3.5.0), ggplot2, ggfortify
 Imports: methods, infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph, tibble, dplyr, rlang, glue, viridis, RhpcBLASctl
 Suggests: readxl, ggrepel, ggdendro, kableExtra, cluster,
@@ -37,7 +37,7 @@ Description: This packages utilizes different approaches to find and analyze mic
 NeedsCompilation: no
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
-biocViews: Microbiome, MicrobiomeData, TimeCourse,
+biocViews: Microbiome, TimeCourse,
      GraphAndNetwork, DimensionReduction, SystemsBiology
 LazyData: true
 VignetteBuilder: knitr

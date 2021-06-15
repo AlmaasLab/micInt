@@ -1,4 +1,4 @@
-#' @title runAnalysis
+#' @title Run an integrated co-occurence analysis for a microbial dataset
 #'
 #' @description
 #' Runs an automized processing of the OTU table or phyloseq object, passes the jobs to \code{ccrepe} and saves the results

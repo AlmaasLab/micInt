@@ -9,7 +9,7 @@
 #'
 #' @return A list of the \link{sim.measure} objects defined by the function
 #'
-#' @seealso sim.measure-class
+#' @seealso \link{sim.measure-class}
 #'
 #' @examples
 #' library(micInt)
@@ -230,6 +230,9 @@ create_ccrepe_jobs <- function(sim.scores = similarity_measures(), prefix =
 #' # Notice that jaccard_normal is missing
 #' @export
 noisify <- function(sim.scores = mean_scale(), magnitude = 1e-5, noise = c("none", "uniform", "normal")) {
+  # This looks indeed strange, but the magnitude is otherwise not evaluated which may
+  # cause scoping problems when transferring function between computers
+  force(magnitude)
   res <- list()
   if ("none" %in% noise) {
     res <- c(res, sim.scores)
@@ -275,7 +278,7 @@ noisify <- function(sim.scores = mean_scale(), magnitude = 1e-5, noise = c("none
 }
 
 #*************************************************************
-# Helper function for nosify, creates the acutual noised
+# Helper function for nosify, creates the actual noised
 # functions
 #*************************************************************
 noisificationTemplate <- function(FUN, noiseFUN) {

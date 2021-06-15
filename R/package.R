@@ -34,7 +34,7 @@
 #' Faust K and Raes J. CoNet app: inference of biological association networks using Cytoscape \emph{F1000Research 2016}, 5:1519
 #' (doi: \url{https://doi.org/10.12688/f1000research.9050.2})
 #'
-#' Karoline Faust et al. Microbial Co-occurrence Relationships in the Human Microbiome".
+#' Karoline Faust et al. "Microbial Co-occurrence Relationships in the Human Microbiome".
 #' In: \emph{PLoS Comput. Biol.} 8.7 (July 2012). issn: 1553-734X. doi: \url{https://doi.org/10.1371/journal.pcbi.
 #' 1002606}.
 #'
