@@ -1,7 +1,7 @@
 Package: micInt
 Type: Package
 Title: Find microbial interactions
-Version: 0.17.1
+Version: 0.18.0
 Depends: R (>= 3.5.0), ggplot2, ggfortify
 Imports: methods, infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph, tibble, dplyr, rlang, glue, viridis, RhpcBLASctl
@@ -12,7 +12,8 @@ Authors@R: c(
    person(given = "Jakob Peder",
    family = "Pettersen",
    role = c("aut","cre"),
-   email = "jakobpeder.pettersen@gmail.com"
+   email = "jakobpeder.pettersen@gmail.com",
+   comment = c(ORCID = "0000-0002-3485-1634")
    ),
    person(given = "Emma",
    family = "Schwager",
@@ -35,9 +36,9 @@ Description: This packages utilizes different approaches to find and analyze mic
     convenient comparison of different similarity measures and methods. The Lotka-Volterra approach is
     based on time series and estimates the Lotka-Volterra coefficients.
 NeedsCompilation: no
-License: GPL-3 | file LICENSE
+License: GPL-3
 Encoding: UTF-8
-biocViews: Microbiome, TimeCourse,
+biocViews: Software, Microbiome, TimeCourse,
      GraphAndNetwork, DimensionReduction, SystemsBiology
 LazyData: true
 VignetteBuilder: knitr

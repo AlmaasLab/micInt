@@ -2,7 +2,7 @@
 % Please edit documentation in R/significance_pipeline.R
 \name{runAnalysis}
 \alias{runAnalysis}
-\title{runAnalysis}
+\title{Run an integrated co-occurence analysis for a microbial dataset}
 \usage{
 runAnalysis(
   OTU_table,

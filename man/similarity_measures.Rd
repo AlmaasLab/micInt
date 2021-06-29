@@ -33,5 +33,5 @@ pearson_cor
 
 }
 \seealso{
-sim.measure-class
+\link{sim.measure-class}
 }

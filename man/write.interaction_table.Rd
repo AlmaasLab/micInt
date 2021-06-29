@@ -27,4 +27,6 @@ res <- runAnalysis(OTU_table = seawater,iterations = 100,
 sim.scores = sim.scores,parallel = FALSE)
 int_table <- res$similarity_measures_significance$spearman
 write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
+# Ensures the file is deleted after running example
+unlink("ccrepe_results.csv")
 }

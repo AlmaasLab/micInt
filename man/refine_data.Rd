@@ -8,7 +8,8 @@ refine_data(
   OTU_table,
   abundance_cutoff = 0,
   cutoff_type = "mean",
-  renormalize = TRUE,
+  raw_value_cutoff = TRUE,
+  renormalize = FALSE,
   metadataCols = c("OTU Id", "taxonomy")
 )
 }
@@ -21,7 +22,12 @@ refine_data(
 of \code{'mean'}, \code{median}, \code{max} which cuts away
 OTUs based on mean, median and maximum abundance, repectivly}
 
-\item{renormalize}{Logical, should the abundances be renormalized after the procedyre?}
+\item{raw_value_cutoff}{Logical, should filtering be based on the raw abundances? If not,
+the sample-wise relative abundances are used for filtering. Note that this
+parameter does not determine whether the \emph{results} of the function are
+relative abundances.}
+
+\item{renormalize}{Logical, should the abundances be renormalized (sample-wise) after the procedure?}
 
 \item{metadataCols}{The names (character vector) or position (integer) of the
 metadata columns to remove from the table}
@@ -73,7 +79,7 @@ the corresponding column is used as the OTU IDs
 \examples{
 library(micInt)
 data("seawater")
-refine_data(seawater,cutoff_type = "max")
+refine_data(seawater,abundance_cutoff = 1e-3,cutoff_type = "max")
 
 
 }

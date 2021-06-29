@@ -43,7 +43,7 @@ to predict future dynamics of a microbial community using \code{\link{predict.LV
 Faust K and Raes J. CoNet app: inference of biological association networks using Cytoscape \emph{F1000Research 2016}, 5:1519
 (doi: \url{https://doi.org/10.12688/f1000research.9050.2})
 
-Karoline Faust et al. Microbial Co-occurrence Relationships in the Human Microbiome".
+Karoline Faust et al. "Microbial Co-occurrence Relationships in the Human Microbiome".
 In: \emph{PLoS Comput. Biol.} 8.7 (July 2012). issn: 1553-734X. doi: \url{https://doi.org/10.1371/journal.pcbi.
 1002606}.
 
@@ -77,7 +77,7 @@ estimation using experiential data''. In: \emph{Appl. Math. Comput. 224}
 estimated Lotka-Volterra coeffcients
 }
 \author{
-\strong{Maintainer}: Jakob Peder Pettersen \email{jakobpeder.pettersen@gmail.com}
+\strong{Maintainer}: Jakob Peder Pettersen \email{jakobpeder.pettersen@gmail.com} (\href{https://orcid.org/0000-0002-3485-1634}{ORCID})
 
 Other contributors:
 \itemize{

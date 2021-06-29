@@ -47,7 +47,6 @@ in \link{sim.measure})}
 }}
 
 \examples{
-#' @examples
 # This measures how well the arguments agree with the signs
 # This primary function accept two vectors only
 my_measure_simple <- function(x,y){

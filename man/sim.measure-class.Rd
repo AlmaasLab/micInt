@@ -120,5 +120,5 @@ sim.measure.attributes(my_sim_score)
 
 }
 \seealso{
-noisify
+\link{noisify}
 }

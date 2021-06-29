@@ -515,16 +515,16 @@ concord_vec <-
   )), 2)), 1, function(row)
     (rank(A)[row[1]] - rank(A)[row[2]]) * (rank(B)[row[1]] - rank(B)[row[2]]))
 S <- (sum(concord_vec > 0) - sum(concord_vec < 0))
-t_vals <- unique(A[which(sapply(A, function(e)
-  sum(A == e)) > 1)])
-u_vals <- unique(B[which(sapply(B, function(e)
-  sum(B == e)) > 1)])
+t_vals <- unique(A[which(vapply(A, function(e)
+  sum(A == e),FUN.VALUE = integer(1L)) > 1)])
+u_vals <- unique(B[which(vapply(B, function(e)
+  sum(B == e),FUN.VALUE = integer(1L)) > 1)])
 T_val  <-
-  0.5 * sum(sapply(t_vals, function(e)
-    sum(A == e) * (sum(A == e) - 1)))
+  0.5 * sum(vapply(t_vals, function(e)
+    sum(A == e) * (sum(A == e) - 1),FUN.VALUE = numeric(length = 1L)))
 U_val  <-
-  0.5 * sum(sapply(u_vals, function(e)
-    sum(B == e) * (sum(B == e) - 1)))
+  0.5 * sum(vapply(u_vals, function(e)
+    sum(B == e) * (sum(B == e) - 1),FUN.VALUE = numeric(length = 1L)))
 D_sq   <- (0.5 * n * (n - 1) - T_val) * (0.5 * n * (n - 1) - U_val)
 cor_2 <-
   (sum(concord_vec > 0) - sum(concord_vec < 0)) / (0.5 * length(A) * (length(A) -

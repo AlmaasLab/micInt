@@ -46,12 +46,16 @@ cut_abundances <-
   function(refined_table,
            abundance_cutoff = 0,
            cutoff_type = "mean",
-           renormalize = TRUE) {
+           raw_value_cutoff = TRUE,
+           renormalize = FALSE) {
     if (is.null(abundance_cutoff)) {
       # If we do not set an abundance cutoff, we skip the process entierly
       return(refined_table)
     }
     m_refined_table <- as.matrix(refined_table)
+    if(!raw_value_cutoff){
+      m_refined_table <- renormalize(m_refined_table)
+    }
     abundances <- switch(
       cutoff_type,
       mean = base::colMeans(refined_table),
@@ -82,8 +86,16 @@ cut_abundances <-
 #' of \code{'mean'}, \code{median}, \code{max} which cuts away
 #' OTUs based on mean, median and maximum abundance, repectivly
 #'
+#' @param raw_value_cutoff
+#'
+#' Logical, should filtering be based on the raw abundances? If not,
+#' the sample-wise relative abundances are used for filtering. Note that this
+#' parameter does not determine whether the \emph{results} of the function are
+#' relative abundances.
+#'
 #' @param renormalize
-#' Logical, should the abundances be renormalized after the procedyre?
+#' Logical, should the abundances be renormalized (sample-wise) after the procedure?
+#'
 #' @param metadataCols The names (character vector) or position (integer) of the
 #' metadata columns to remove from the table
 #'
@@ -129,7 +141,7 @@ cut_abundances <-
 #' @examples
 #' library(micInt)
 #' data("seawater")
-#' refine_data(seawater,cutoff_type = "max")
+#' refine_data(seawater,abundance_cutoff = 1e-3,cutoff_type = "max")
 
 #'
 
@@ -139,7 +151,8 @@ refine_data <-
   function(OTU_table,
            abundance_cutoff = 0,
            cutoff_type = "mean",
-           renormalize = TRUE,
+           raw_value_cutoff = TRUE,
+           renormalize = FALSE,
            metadataCols = c("OTU Id", "taxonomy")) {
     if (inherits(OTU_table, 'phyloseq') || inherits(OTU_table,'otu_table'))
       {
@@ -190,6 +203,7 @@ refine_data <-
   # Cuts away the least abundant species
   cut_abundances(refined_table,
                 abundance_cutoff,
+                raw_value_cutoff = raw_value_cutoff,
                 cutoff_type = cutoff_type,
                 renormalize = renormalize)
   }
@@ -291,11 +305,13 @@ output_ccrepe_data <-
 #' @seealso \link{collapse_taxonomy} \linkS4class{sim.measure.attributes}
 #'
 #' @examples
-#' library(micInt)
 #' sim.scores <- similarity_measures(subset= c("spearman","pearson"))
 #' res <- runAnalysis(OTU_table = seawater,sim.scores = sim.scores,
 #' returnVariables = 'ccrepe_res',iterations = 100,parallel = FALSE)
-#' create_interaction_table(res$ccrepe_res$spearman$res)
+#' collapsed_taxonomy <- collapse_taxonomy(seawater)
+#' create_interaction_table(res$ccrepe_res$spearman$res,taxonomy = collapsed_taxonomy,
+#' threshold.value = 0.05, threshold.type = "q",
+#'  score_attributes = sim.measure.attributes(sim.scores[["spearman]]))
 #'
 #' @export
 #'
@@ -415,6 +431,8 @@ create_interaction_table <-
 #' sim.scores = sim.scores,parallel = FALSE)
 #' int_table <- res$similarity_measures_significance$spearman
 #' write.interaction_table(int_table,"ccrepe_results.csv",csv_option = "1")
+#' # Ensures the file is deleted after running example
+#' unlink("ccrepe_results.csv")
 
 #' @export
 write.interaction_table <-
