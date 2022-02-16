@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # Overview
 `micInt` is an R package designed for analyzing microbial co-occurences. It takes in OTU tables was either pure dataFrames or as experiment-level `phyloseq` objects. Roughly, the package is composed of three major parts:
    * CoNet-based analysis of pairwise co-occurences. Primary functions: `runAnalysis` (high level) and `ccrepe` (low level)
@@ -46,6 +41,6 @@ devtools::install_github("AlmaasLab/micInt",repos=BiocManager::BiocManager::repo
 
 # Useage
 
-Please read the article "Robust bacterial co-occurence community structures are independent of $r$- and $K$-selection history" (https://www.nature.com/articles/s41598-021-03018-z) where this package is used. The source code for the article is available on https://github.com/yaccos/Microbial-co-occurence.
+Please read the article "Robust bacterial co-occurence community structures are independent of r- and K-selection history" (https://www.nature.com/articles/s41598-021-03018-z) where this package is used. The source code for the article is available on https://github.com/yaccos/Microbial-co-occurence.
 
 Unfortunately, I have not yet taken the effort to write a proper vignette. However, if you are interested in using the package, don`t hasitate asking me for help, either as a github issue or directly (jakob.p.pettersen@ntnu.no).

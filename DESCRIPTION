@@ -1,7 +1,7 @@
 Package: micInt
 Type: Package
 Title: Find microbial interactions
-Version: 0.18.1
+Version: 0.18.2
 Depends: R (>= 3.5.0), ggplot2, ggfortify
 Imports: methods, infotheo, vegan, parallel, matrixStats, utils, magrittr, deSolve, 
     phyloseq, igraph, tibble, dplyr, rlang, glue, viridis, RhpcBLASctl
