@@ -1,0 +1,20 @@
+citHeader("To cite micInt in publications use:")
+
+bibentry(bibtype = "Article",
+         key = "Pettersen:2021vg",
+         author = c(person(given = c("Jakob", "Peder"),
+                           family = "Pettersen"),
+                    person(given = c("Madeleine", "S"),
+                           family = "Gundersen"),
+                    person(given = "Eivind",
+                           family = "Almaas")),
+         title = "Robust bacterial co-occurence community structures are independent of r- and K-selection history",
+         journal = "Sci Rep",
+         year = "2021",
+         month = "Dec",
+         volume = "11",
+         number = "1",
+         pages = "23497",
+         abstract = "Selection for bacteria which are K-strategists instead of r-strategists has been shown to improve fish health and survival in aquaculture. We considered an experiment where microcosms were inoculated with natural seawater and the selection regime was switched from K-selection (by continuous feeding) to r-selection (by pulse feeding) and vice versa. We found the networks of significant co-occurrences to contain clusters of taxonomically related bacteria having positive associations. Comparing this with the time dynamics, we found that the clusters most likely were results of similar niche preferences of the involved bacteria. In particular, the distinction between r- or K-strategists was evident. Each selection regime seemed to give rise to a specific pattern, to which the community converges regardless of its prehistory. Furthermore, the results proved robust to parameter choices in the analysis, such as the filtering threshold, level of random noise, replacing absolute abundances with relative abundances, and the choice of similarity measure. Even though our data and approaches cannot directly predict ecological interactions, our approach provides insights on how the selection regime affects the composition of the microbial community, providing a basis for aquaculture experiments targeted at eliminating opportunistic fish pathogens.",
+         doi = "10.1038/s41598-021-03018-z",
+         url = "https://doi.org/10.1038/s41598-021-03018-z")
