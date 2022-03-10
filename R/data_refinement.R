@@ -156,7 +156,7 @@ refine_data <-
            metadataCols = c("OTU Id", "taxonomy")) {
     if (inherits(OTU_table, 'phyloseq') || inherits(OTU_table,'otu_table'))
       {
-      refined_table <- phyloseq::otu_table(OTU_table) %>% data.frame()
+      refined_table <- phyloseq::otu_table(OTU_table) %>% data.frame(check.names = FALSE)
       if (phyloseq::taxa_are_rows(OTU_table)) {
         refined_table %<>% t()
       }
